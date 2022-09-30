@@ -14,7 +14,7 @@ import Layout from "@components/Layout";
 import TagList from "@components/post/TagList";
 import Title from "@components/post/Title";
 import UserView from "@components/post/UserView";
-import Tag from "@components/tag";
+import Tag from "@components/Tag";
 const Carousel = dynamic(() => import("@components/Carousel"), { ssr: false });
 const Comment = dynamic(() => import("@components/Comment"), { ssr: false });
 

@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Icons from "./Icons";
-import Tag from "./tag";
+import Tag from "./Tag";
 
 const SideContainer = styled.div`
   height: calc(100vh - 70px);
