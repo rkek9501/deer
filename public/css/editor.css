@@ -1,0 +1,13 @@
+.toastui-editor-contents p {
+  font-size: 1.6rem;
+}
+.toastui-editor-contents ol li:after,
+.toastui-editor-contents ol li:before {
+  font-size: 1.6rem;
+  margin-top: 0.3rem !important;
+}
+.toastui-editor-contents ul li:after,
+.toastui-editor-contents ul li:before {
+  font-size: 1.6rem;
+  margin-top: 1.2rem !important;
+}

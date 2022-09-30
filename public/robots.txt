@@ -1,0 +1,9 @@
+Sitemap: https://www.trident-blog.com/sitemap.xml
+User-agent: googlebot
+Disallow: /uploads/
+Disallow: /img/
+Disallow: /css/
+Disallow: /js/
+Disallow: /login
+Disallow: /user
+Disallow: /editor

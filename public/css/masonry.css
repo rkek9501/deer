@@ -1,0 +1,20 @@
+.my-masonry-grid {
+  display: -webkit-box; /* Not needed if autoprefixing */
+  display: -ms-flexbox; /* Not needed if autoprefixing */
+  display: flex;
+  justify-content: center;
+  margin-left: 1rem; /* gutter size offset */
+  margin-right: 1rem;
+  margin-top: 1rem;
+  width: 100%;
+}
+.my-masonry-grid_column {
+  padding-left: 1rem; /* gutter size */
+  background-clip: padding-box;
+}
+
+@media (min-width: 1px) and (max-width: 480px) {
+  .my-masonry-grid_column {
+    padding-left: 0;
+  }
+}

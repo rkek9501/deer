@@ -1,0 +1,69 @@
+html {
+  scroll-behavior: smooth;
+  margin: 0;
+  font-size: 62.5%;
+  min-height: -webkit-fill-available;
+}
+html #root {
+  min-width: 200px;
+  height: -webkit-fill-available;
+  flex: 1;
+}
+@media (min-width: 1px) and (max-width: 480px) {
+  html {
+    font-size: 50%;
+  }
+  html, body {
+    overscroll-behavior-y: none;
+    position: fixed;
+    overflow: hidden;
+    height: -webkit-fill-available;
+  }
+  body > #root {
+    width: 100vw;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+    height: -webkit-fill-available;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  body > #root #scroller {
+    width: 100vw;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+}
+body {
+  display: flex; 
+  flex-direction: column;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica-Bold",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: -webkit-fill-available;
+  width: 100vw;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+  -ms-overflow-style: none;
+}
+::-webkit-scrollbar { 
+  display: none !important;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+.title.title-trident {
+  font-family: Futura-Bold;
+}

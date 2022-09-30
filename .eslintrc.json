@@ -1,0 +1,38 @@
+{
+  "env": { "browser": true, "node": true },
+  "extends": [
+    "plugin:react/recommended",
+    "next",
+    "next/core-web-vitals"
+  ],
+  "settings": {
+    "import/parsers": { "@typescript-eslint/parser": [".ts", ".tsx"] },
+    "import/resolver": { "typescript": "./tsconfig.json" }
+  },
+  // "parser": "@typescript-eslint/parser",
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "project": ["./tsconfig.json", "./next.config.js"]
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "react",
+    "react-hooks"
+  ],
+  "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react/display-name": "warn",
+    "import/no-anonymous-default-export": "warn"
+  },
+  "ignorePatterns": [
+    "next-env.ts",
+    "next.config.js",
+    "*.json"
+  ]
+}

@@ -1,0 +1,66 @@
+@font-face {
+  font-family: "Arita-dotum-Bold";
+  src: url(../fonts/Arita-dotum-Bold.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Arita-dotum-Light";
+  src: url(../fonts/Arita-dotum-Light.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Arita-dotum-Medium";
+  src: url(../fonts/Arita-dotum-Medium.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Arita-dotum-SemiBold";
+  src: url(../fonts/Arita-dotum-SemiBold.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Arita-dotum-Thin";
+  src: url(../fonts/Arita-dotum-Thin.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "score1";
+  src: url(../fonts/SCDream1.otf) format("opentype");
+}
+@font-face {
+  font-family: "score2";
+  src: url(../fonts/SCDream2.otf) format("opentype");
+}
+@font-face {
+  font-family: "score3";
+  src: url(../fonts/SCDream3.otf) format("opentype");
+}
+@font-face {
+  font-family: "score4";
+  src: url(../fonts/SCDream4.otf) format("opentype");
+}
+@font-face {
+  font-family: "score5";
+  src: url(../fonts/SCDream5.otf) format("opentype");
+}
+@font-face {
+  font-family: "score6";
+  src: url(../fonts/SCDream6.otf) format("opentype");
+}
+@font-face {
+  font-family: "score7";
+  src: url(../fonts/SCDream7.otf) format("opentype");
+}
+@font-face {
+  font-family: "score8";
+  src: url(../fonts/SCDream8.otf) format("opentype");
+}
+@font-face {
+  font-family: "score9";
+  src: url(../fonts/SCDream9.otf) format("opentype");
+}
+
+@font-face {
+  font-family: "Futura-Bold";
+  src: url(../fonts/Futura-Bold.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Helvetica-Bold";
+  src: url(../fonts/Helvetica-Bold.ttf) format("truetype");
+}
