@@ -13,7 +13,7 @@ const timestampWithTimezone = winston.format((info, opts) => {
 });
 
 const customFormat = combine(
-  label({ label: "TRIDENT" }),
+  label({ label: "DEER" }),
   timestampWithTimezone({ tz: "Asia/Seoul" }),
   printf(({ level, message, label, timestamp }) => `${timestamp} [${label}] ${level}: ${message}`)
 );

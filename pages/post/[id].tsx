@@ -1,12 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
-import type { GetStaticProps, GetStaticPaths } from "next";
-import { useRouter } from "next/router";
-import dynamic from "next/dynamic";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useHistory } from "react-router";
+import type { GetStaticPaths, GetStaticProps } from "next";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 
-import BookMark from "@components/TableOfContents";
 import { Viewer } from "@components/Editor";
 import FloatingBtn from "@components/FloatingButton";
 import Icons from "@components/Icons";
@@ -14,7 +12,9 @@ import Layout from "@components/Layout";
 import TagList from "@components/post/TagList";
 import Title from "@components/post/Title";
 import UserView from "@components/post/UserView";
-import Tag from "@components/Tag";
+import BookMark from "@components/TableOfContents";
+import Tag from "@components/TagBlock";
+
 const Carousel = dynamic(() => import("@components/Carousel"), { ssr: false });
 const Comment = dynamic(() => import("@components/Comment"), { ssr: false });
 
@@ -154,7 +154,7 @@ const PostPage = (Props: any) => {
     });
   };
 
-  const goToTop = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const goToTop = (e: React.MouseEvent<HTMLElement>) => {
     document.getElementById("scroller")?.scrollTo(0, 0);
     e.stopPropagation();
     e.preventDefault();

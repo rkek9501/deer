@@ -1,9 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { createPopper, Placement } from "@popperjs/core";
+import { createPopper } from "@popperjs/core";
 import { useRouter } from "next/router";
-// import { useHistory, useLocation } from "react-router";
-// import { ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper } from "@mui/material";
 
 import { AppContext } from "@context/index";
 import RequestHelper from "@utils/requestHelper";
@@ -206,7 +204,7 @@ const HeaderMenu = () => {
             </div>
           )}
         </div>
-        <div id="menu-list-container">
+        <div id="menu-list-container" onClick={() => closeDropdownPopover()}>
           {session ? (
             <>
               {pathname !== "/editor" && (
@@ -229,7 +227,6 @@ const HeaderMenu = () => {
                   className="menu-item"
                   onClick={() => {
                     router.push("/user");
-                    location.reload();
                   }}
                 >
                   <Icons.User />

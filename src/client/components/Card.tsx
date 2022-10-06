@@ -1,9 +1,8 @@
-import React from "react";
-import Link from "next/link";
-import Image from "next/image";
 import moment from "moment";
+import Image from "next/image";
+import Link from "next/link";
 import styled, { css } from "styled-components";
-import Tag from "./tag";
+import Tag from "./TagBlock";
 
 const CardContainer = styled.a`
   background-color: #f9f9f9;

@@ -1,21 +1,32 @@
-import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-import { Box, Button, Modal } from "@mui/material";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
-import styled from "styled-components";
+import Modal from "react-modal";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 600,
-  // height: 600,
-  bgcolor: "white",
-  boxShadow: 24,
-  px: 4,
-  pb: 3
+import styled from "styled-components";
+import Button from "./Button";
+import Icons from "./Icons";
+
+Modal.setAppElement('#__next');
+
+const customStyles = {
+  overlay: {
+    zIndex: 10,
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 'calc(100vw - 200px)',
+    height: 'calc(100vh - 100px)',
+    minWidth: 600,
+  },
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
 };
 
 const ModalBody = styled.div`
@@ -148,27 +159,30 @@ const ImgCropModal = (Props: { open: boolean; onClose: any; file: any; callback:
 
   return (
     <div>
-      <Modal open={Props.open} onClose={Props.onClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-        <Box sx={{ ...style }}>
-          <ModalBody>
-            <div className="modal-header">
-              <div>프로필 이미지 편집</div>
-              <CloseOutlinedIcon onClick={Props.onClose} />
-            </div>
-            <div className="modal-body">
-              {src && (
-                <ReactCrop src={src} crop={crop} ruleOfThirds onImageLoaded={onImageLoaded} onComplete={onCropComplete} onChange={onCropChange} />
-              )}
-              <PrevArea>
-                미리보기
-                <ModalImg id="crop" className="crop-img" src={cropSrc} />
-              </PrevArea>
-            </div>
-            <div className="modal-footer">
-              <Button onClick={onClickSave}>저장</Button>
-            </div>
-          </ModalBody>
-        </Box>
+      <Modal
+        isOpen={Props.open}
+        onRequestClose={Props.onClose}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
+        <ModalBody>
+          <div className="modal-header">
+            <div>프로필 이미지 편집</div>
+            <div onClick={Props.onClose}><Icons.Close/></div>
+          </div>
+          <div className="modal-body">
+            {src && (
+              <ReactCrop src={src} crop={crop} ruleOfThirds onImageLoaded={onImageLoaded} onComplete={onCropComplete} onChange={onCropChange} />
+            )}
+            <PrevArea>
+              미리보기
+              <ModalImg id="crop" className="crop-img" src={cropSrc} />
+            </PrevArea>
+          </div>
+          <div className="modal-footer">
+            <Button onClick={onClickSave}>저장</Button>
+          </div>
+        </ModalBody>
       </Modal>
     </div>
   );

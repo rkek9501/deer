@@ -1,12 +1,11 @@
-import { AppContext } from "@context/index";
-import { Button, Checkbox, FormLabel } from "@mui/material";
-import requestHelper from "@utils/requestHelper";
-import { useCreateLink } from "@utils/useHooks";
-import { useRouter } from "next/router";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useHistory } from "react-router";
+import { useRouter } from "next/router";
 import styled from "styled-components";
+
+import Button from "@components/Button";
+import Checkbox from "@components/Checkbox";
+import requestHelper from "@utils/requestHelper";
 
 const PageContainer = styled.div`
   padding: 8rem 4rem 2rem;
@@ -30,6 +29,9 @@ const PageContainer = styled.div`
   .title {
     font-size: 2.4rem;
     font-family: score9;
+  }
+  .title.title-trident {
+    font-family: Futura-Bold;
   }
   .loginbtn {
     width: 100%;
@@ -104,7 +106,7 @@ const Login = () => {
         localStorage?.removeItem("id");
       }
       const { response, error } = await requestHelper.Post({ url: "/api/user/login", body: { id: id, pw: pw } });
-      // console.log({response})
+      console.log({response})
       if (error) {
         alert("로그인 실패");
         if (!isSaveId) setid("");
@@ -117,12 +119,9 @@ const Login = () => {
     })();
   }, [id, pw, isSaveId]);
 
-  const onChangeCheck = useCallback(
-    (e: any, checked: any) => {
-      setSaveId(checked);
-    },
-    [id]
-  );
+  const onChangeCheck = useCallback((checked: boolean) => {
+    setSaveId(checked);
+  }, [id]);
 
   const onKeyPressEnter = (key: string) => {
     if (key.toLowerCase() === "enter") btnclick();
@@ -145,13 +144,10 @@ const Login = () => {
             onChange={(e) => setpw(e.target.value)}
             onKeyPress={(e) => onKeyPressEnter(e.key)}
           />
-          <FormLabel>
-            <Checkbox checked={isSaveId} title="아이디 저장" size="small" onChange={onChangeCheck} />
-            <span className="save-id-text">아이디 저장하기</span>
-          </FormLabel>
+          <Checkbox checked={isSaveId} onChange={onChangeCheck} label="아이디 저장하기" />
           <br />
           <div>
-            <Button className="loginbtn" variant="contained" color="primary" onClick={btnclick}>
+            <Button className="loginbtn" color="primary" onClick={btnclick}>
               로그인
             </Button>
           </div>

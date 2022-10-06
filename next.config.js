@@ -8,11 +8,10 @@ const removeImports = require("next-remove-imports")({
 const path = require("path");
 require("dotenv").config({ path: path.join(process.cwd(), ".env") })
 
-const IS_DEV = Boolean(process.env.NODE_ENV !== "production");
+const IS_LOCAL = Boolean(process.env.IS_LOCAL === "yes");
 const SERVER_PORT = Number(process.env.SERVER_PORT) || 5000;
 const SERVER_URL = String(process.env.SERVER_URL) || "localhost"
-const HOST_URL = IS_DEV ? `https://${SERVER_URL}:${SERVER_PORT}` : `https://${SERVER_URL}`;
-console.log("[Build Client] HOST_URL", HOST_URL);
+const HOST_URL = IS_LOCAL ? `https://${SERVER_URL}:${SERVER_PORT}` : `https://${SERVER_URL}`;
 
 module.exports = removeImports({
   swcMinify: true,

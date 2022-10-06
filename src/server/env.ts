@@ -5,10 +5,10 @@ dotenv.config({ path: path.join(process.cwd(), ".env") });
 
 export const IS_DEV = Boolean(process.env.NODE_ENV !== "production");
 
-export const SESSION_KEY = String(process.env.SESSION_KEY) || "trident";
+export const IS_LOCAL = Boolean(process.env.IS_LOCAL === "yes");
 export const SERVER_PORT = Number(process.env.SERVER_PORT) || 5000;
 export const SERVER_URL = String(process.env.SERVER_URL) || "localhost"
-export const HOST_URL = IS_DEV ? `https://${SERVER_URL}:${SERVER_PORT}` : `https://${SERVER_URL}`;
+export const HOST_URL = IS_LOCAL ? `https://${SERVER_URL}:${SERVER_PORT}` : `https://${SERVER_URL}`;
 
 interface CONFIG {
   DATABASE: string;
@@ -25,6 +25,7 @@ export const DB_CONFIG: CONFIG = {
   PORT: process.env.DB_PORT || "3306"
 };
 
+export const SESSION_KEY = String(process.env.SESSION_KEY) || "deer";
 export const ACCESS_TOKEN_EXPIRES_IN = "24h";
 export const REFRESH_TOKEN_EXPIRES_IN = "2d";
 export const STATIC_FILE_MAX_AGE = 1000 * 60 * 60 * 24 * 30;

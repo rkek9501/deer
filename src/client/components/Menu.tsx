@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "@context/index";
 import { useRouter } from "next/router";
-import { useHistory, useLocation } from "react-router-dom";
+import { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Icons from "./Icons";
-import Tag from "./Tag";
+import Tag from "./TagBlock";
 
 const SideContainer = styled.div`
   height: calc(100vh - 70px);

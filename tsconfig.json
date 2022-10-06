@@ -33,10 +33,7 @@
     /* Additional Options */
     "strict": true,
     "skipLibCheck": true,
-    "types": [
-      "node",
-      "mocha"
-    ],
+    "types": ["node"],
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,

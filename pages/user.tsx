@@ -1,14 +1,14 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import { Button } from "@mui/material";
 
-import { AppContext } from "@context/index";
-import Layout from "@components/Layout";
+import Button from "@components/Button";
+import Icons from "@components/Icons";
 import ImgCropModal from "@components/ImgCropModal";
-import RequestHelper from "@utils/requestHelper";
+import Layout from "@components/Layout";
+import { AppContext } from "@context/index";
 import { base64 } from "@utils/crypto";
+import RequestHelper from "@utils/requestHelper";
 
 const UserPageContainer = styled.div`
   padding: 4rem;
@@ -180,7 +180,7 @@ const ChangePassView = React.memo(() => {
     <ExpendabelViewContainer>
       <div className="expendable-label" onClick={() => setOpen(!open)}>
         비밀번호 변경하기
-        <ExpandLessIcon className={`chevron-icon ${open ? "open" : "close"}`} />
+        <Icons.ExpandLess rotate={open ? 180 : 0} />
       </div>
       <div className={`expendable-area ${open ? "open" : "close"}`}>
         <Input label="현재 비밀번호" type="password" value={prevPw} setValue={setPrevPw} />
@@ -188,7 +188,7 @@ const ChangePassView = React.memo(() => {
         <Input label="비밀번호" type="password" value={nextPw} setValue={setNextPw} />
         <Input label="비밀번호 확인" type="password" value={nextPwChk} setValue={setNextPwChk} />
         <div className="change-err">{err}</div>
-        <Button variant="contained" onClick={() => changePw()}>
+        <Button onClick={() => changePw()}>
           비밀번호 변경하기
         </Button>
       </div>
@@ -213,6 +213,7 @@ const User = () => {
   useEffect(() => {
     (async () => {
       const { response, error } = await RequestHelper.Get({ url: "/api/user/profile" });
+      console.log({ response })
       if (response?.user) {
         const { name, email, image } = response.user;
         setOrigin({ name, email, image });
@@ -274,7 +275,7 @@ const User = () => {
             <div className="expendable-area">
               <Input label="이름" value={name} setValue={setName} />
               <Input label="이메일" value={email} setValue={setEmail} />
-              <Button variant="contained" onClick={() => save()}>
+              <Button onClick={() => save()}>
                 저장하기
               </Button>
             </div>
@@ -296,14 +297,15 @@ User.getInitialProps = async (ctx: any) => {
   if (initialCookies) ctx.res?.setHeader('Set-Cookie', initialCookies);
 
   const { response, error } = await RequestHelper.Get({ url: "/api/user/checkSession" }, initialCookies);
+  console.log("User", { response });
 
-  if (!response?.result || error) {
-    ctx.res?.writeHead(302, { Location: '/' });
-    ctx.res?.end();
-  }
+  // if (!response?.result || error) {
+  //   ctx.res?.writeHead(302, { Location: '/' });
+  //   ctx.res?.end();
+  // }
   return {
     props: { },
-  };
+};
 }
 
 export default User;

@@ -5,7 +5,7 @@ type FAB = {
   bottom: number;
   size?: number | null;
   bgColor?: string | null | undefined;
-  onClick?: any;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   children: React.ReactNode;
   isFixed?: boolean;
 };
