@@ -94,12 +94,9 @@ const SearchResult = (props: { posts: any }) => {
   const router = useRouter();
   const location = router.query;
 
-  // const parsed = queryString.parse(router?..);
-  const parsed = { search: false };
-
   useCreateLink("/css/masonry.css");
 
-  if (!parsed.search) {
+  if (!location.search) {
     return (
       <SearchContainer>
         <div className="result-header header-row my-masonry-grid">
@@ -111,13 +108,13 @@ const SearchResult = (props: { posts: any }) => {
     );
   } else {
     const filtered: any = props.posts.filter((elem: any) => {
-      const tagSearched = elem.tags.filter((tag: any) => tag.name === parsed.search).length !== 0;
-      return elem.title.indexOf(parsed.search) !== -1 || tagSearched;
+      const tagSearched = elem.tags.filter((tag: any) => tag.name === location.search).length !== 0;
+      return elem.title.indexOf(location.search) !== -1 || tagSearched;
     });
     return (
       <SearchContainer>
         <div className="result-header header-col my-masonry-grid">
-          <div className="article">&apos;{parsed.search}&apos; 검색결과</div>
+          <div className="article">&apos;{location.search}&apos; 검색결과</div>
           <div className="result-count">
             총 <b>{filtered.length}개</b>의 글이 있습니다.
           </div>
