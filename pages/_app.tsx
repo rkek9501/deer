@@ -1,7 +1,6 @@
-import React, { lazy, Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
-import type { AppContext } from "next/app";
 import styled from "styled-components";
 
 import Loading from "../src/client/components/Loading";
@@ -9,7 +8,7 @@ import Header from "@components/Header";
 import AppProvider from "@context/index";
 import "./globals.css";
 
-if (process.env.NODE_ENV === "production") {
+const setFirebase = () => {
   const firebaseConfig = {
     apiKey: process.env.FB_API_KEY,
     authDomain: process.env.FB_AUTH_DOMAIN,
@@ -38,6 +37,12 @@ if (process.env.LOG_MODE === "off") {
 
 const App = (appProps: any) => {
   const { Component, pageProps } = appProps;
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production") {
+      setFirebase();
+    }
+  }, []);
   return (
     <Suspense fallback={<Loading />}>
       <AppProvider>

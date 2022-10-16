@@ -170,6 +170,7 @@ const Textcard = (props: { post: PostType; size?: string }) => {
     <CardContainer small={props.size === "small"} >
       <div className="card-top">
         <Image
+          alt={props.post.title}
           className={`card-top-img ${props.post.openState && "secret"}`}
           width={225}
           height={150}
