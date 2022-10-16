@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from "react";
-// import { getAnalytics } from "firebase/analytics";
-// import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from "firebase/app";
 import type { AppContext } from "next/app";
 import styled from "styled-components";
 
@@ -9,19 +9,19 @@ import Header from "@components/Header";
 import AppProvider from "@context/index";
 import "./globals.css";
 
-// if (process.env.NODE_ENV === "production") {
-//   const firebaseConfig = {
-//     apiKey: process.env.FB_API_KEY,
-//     authDomain: process.env.FB_AUTH_DOMAIN,
-//     projectId: process.env.FB_PROJECT_ID,
-//     storageBucket: process.env.FB_STORAGE_BUCKET,
-//     messagingSenderId: process.env.FB_MSG_SENDER_ID,
-//     appId: process.env.FB_APP_ID,
-//     measurementId: process.env.FB_MEUSURE_ID
-//   };
-//   const app = initializeApp(firebaseConfig);
-//   const analytics = getAnalytics(app);
-// }
+if (process.env.NODE_ENV === "production") {
+  const firebaseConfig = {
+    apiKey: process.env.FB_API_KEY,
+    authDomain: process.env.FB_AUTH_DOMAIN,
+    projectId: process.env.FB_PROJECT_ID,
+    storageBucket: process.env.FB_STORAGE_BUCKET,
+    messagingSenderId: process.env.FB_MSG_SENDER_ID,
+    appId: process.env.FB_APP_ID,
+    measurementId: process.env.FB_MEUSURE_ID
+  };
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+}
 
 const Container = styled.div`
   width: 100vw;

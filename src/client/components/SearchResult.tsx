@@ -1,9 +1,9 @@
-import { useCreateLink } from "@utils/useHooks";
-import { useRouter } from "next/router";
 import React from "react";
+import { useRouter } from "next/router";
 import Masonry from "react-masonry-css";
-import { useHistory, useLocation } from "react-router";
 import styled from "styled-components";
+
+import { useCreateLink } from "@utils/useHooks";
 import Card from "./Card";
 
 const SearchContainer = styled.div`

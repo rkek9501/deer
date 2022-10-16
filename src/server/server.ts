@@ -61,6 +61,7 @@ const run = () => {
   server.use("/favicon.ico", express.static(path.join(process.cwd(), "/public/img/favi/favicon.ico"), { maxAge: STATIC_FILE_MAX_AGE }));
   server.use("/css", express.static(path.join(process.cwd(), "/public/css")));
   server.use("/fonts", express.static(path.join(process.cwd(), "/public/fonts")));
+  server.use("/sitemap.xml", express.static(path.join(process.cwd(), "/public/sitemap.xml")));
 
   server.use(async (req: Request, res: Response, next: NextFunction) => {
     console.log(JSON.stringify({ url: req.url, session: req.session, cookie: req.cookies }, null, 2));

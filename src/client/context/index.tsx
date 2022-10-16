@@ -1,17 +1,6 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 import { checkToken, clearToken } from "@utils/tokenManager";
 import requestHelper from "@utils/requestHelper";
-
-// const HistoryProvider = () => {
-//   const { page } = useContext(AppContext);
-//   const router = useRouter();
-
-//   useEffect(() => {
-//     if (router) router.push(page);
-//   }, [page]);
-
-//   return null;
-// };
 
 interface AppProviderProps {
   children: React.ReactNode;

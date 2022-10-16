@@ -1,6 +1,6 @@
 import axios from "axios";
 import https from "https";
-import { getToken } from "./tokenManager";
+import { getToken, getAllCookies } from "./tokenManager";
 
 type GetRequestType = {
   url: string;
@@ -32,7 +32,7 @@ const createQuery = (datas: any) => {
   }
   return body === "" ? "" : `?${body}`;
 };
-axios.defaults.withCredentials = true
+
 const axiosInstance = axios.create({
   withCredentials: true,
   baseURL: process.env.HOST_URL,
@@ -44,11 +44,8 @@ const axiosInstance = axios.create({
 const requestFetch = (url: string, options: object, setLoadMask: any) => {
   if (setLoadMask) setLoadMask(true);
 
-  console.log(process.env?.HOST_URL)
-
   return axiosInstance({ url, ...options })
     .then((response) => {
-      console.log({response});
       if (response.status !== 200 && !response.data) {
         return Promise.reject(response);
       }
@@ -81,6 +78,7 @@ const Get = async (request: GetRequestType, cookies?: string) => {
   if (cookies) {
     config.headers.Cookie = cookies;
   }
+  const token = getAllCookies();
 
   return requestFetch(path, config, setLoadMask);
 };

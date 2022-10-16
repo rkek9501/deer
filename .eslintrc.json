@@ -28,7 +28,7 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/display-name": "warn",
-    "import/no-anonymous-default-export": false
+    "import/no-anonymous-default-export": "off"
   },
   "ignorePatterns": [
     "next-env.ts",

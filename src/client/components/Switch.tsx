@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-// const SwitchContainer = styled.div`
-// `;
 const SwitchContainer = styled.div`
   display: flex;
   align-items: center;

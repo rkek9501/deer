@@ -1,4 +1,4 @@
-/** @type {import('next').NextConfig} */
+1/** @type {import('next').NextConfig} */
 const { ESBuildMinifyPlugin } = require("esbuild-loader");
 const Dotenv = require("dotenv-webpack");
 const removeImports = require("next-remove-imports")({
@@ -13,6 +13,9 @@ const SERVER_PORT = Number(process.env.SERVER_PORT) || 5000;
 const SERVER_URL = String(process.env.SERVER_URL) || "localhost"
 const HOST_URL = IS_LOCAL ? `https://${SERVER_URL}:${SERVER_PORT}` : `https://${SERVER_URL}`;
 
+const eslint = IS_LOCAL ? { dirs: ["./pages", "./src/client"] } : { ignoreDuringBuilds: true };
+const typescript = IS_LOCAL ? { } : { ignoreBuildErrors: true };
+
 module.exports = removeImports({
   swcMinify: true,
   reactStrictMode: false,
@@ -26,9 +29,8 @@ module.exports = removeImports({
       pure: true
     },
   },
-  eslint: {
-    dirs: ["./pages", "./src/client"]
-  },
+  typescript,
+  eslint,
   // distDir: ".next",
   env: {
     HOST_URL: HOST_URL,

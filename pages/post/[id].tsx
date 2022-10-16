@@ -211,11 +211,11 @@ const PostPage = (Props: any) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const { response, error } = await RequestHelper.Get({ url: "/api/post/paths" });
-  console.log({error})
+  // console.log({error})
   const paths = response.data?.map((post: any) => ({
     params: { id: `${post.subpath}` },
   }));
-  console.log(JSON.stringify(paths, null, 2));
+  // console.log(JSON.stringify(paths, null, 2));
   return { paths, fallback: "blocking" }
 }
 
@@ -224,7 +224,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const pageData = JSON.parse(utf8.decode(base64.decode(params?.id ? String(params?.id) : "")));
   
   const title = pageData.title
-  console.log(1111, "getStaticProp", params?.id, {pageData, title});
+  // console.log(1111, "getStaticProp", params?.id, {pageData, title});
   
   return {
     props: {

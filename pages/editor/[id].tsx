@@ -103,7 +103,6 @@ const EditorPage = (Props: any) => {
   const { tags: allTags } = useContext(AppContext);
   const { files } = useContext(EditorContext);
   const router = useRouter();
-  // const pathname = router.pathname;
   const contentId = router.query?.id || null;
   const editMode = !!contentId;
 
@@ -116,16 +115,23 @@ const EditorPage = (Props: any) => {
   // const [writter, setWritter] = useState(localStorage?.getItem("name") || "");
 
   useEffect(() => {
-    if (Props.data) {
-      console.log(222222, Props.data);
-      setId(Props.data?.id);
-      setTitle(Props.data?.title);
-      setOpenState(Props.data?.openState === "Y");
-      setContent(Props.data?.content);
-      setSelectedTags(Props.data?.tags?.map((tag: any) => ({ value: tag.id, label: tag.name, color: tag.color })));
-      // setWritter(Props.data?.writterId);
-    }
-  }, [Props.data]);
+    if (contentId) (async () => {
+      console.log("!!!!", router.query?.id)
+      const { response, error } = await RequestHelper.Get({ url: "/api/post/item/" + contentId });
+      console.log({ error,response });
+      if (response?.data) {
+        setId(response.data?.id);
+        setTitle(response.data?.title);
+        setOpenState(response.data?.openState === "Y");
+        setContent(response.data?.content);
+        setSelectedTags(response.data?.tags?.map((tag: any) => ({ value: tag.id, label: tag.name, color: tag.color })));
+        // setWritter(response.data?.writterId);
+      }
+      if (error) {
+        router.push("/404");
+      }
+    })();
+  }, [contentId]);
 
   useEffect(() => {
     if (allTags && allTags.length > 0) {
@@ -209,13 +215,6 @@ const EditorPage = (Props: any) => {
       </Container>
     </PageContainer>
   </EditorProvider></Suspense>);
-};
-
-export async function getInitialProps(Props: any) {
-  const { response, error } = await RequestHelper.Get({ url: "/api/post/item/" + Props.params.id });
-  return {
-    props: { data: response.data, error },
-  };
 };
 
 export default EditorPage;

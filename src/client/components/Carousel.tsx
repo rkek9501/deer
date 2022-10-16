@@ -1,9 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import dynamic from "next/dynamic";
 
 import Textcard from "@components/Card";
-import RequestHelper from "@utils/requestHelper";
 
 import SwiperCore, { A11y, Controller, Navigation, Thumbs } from "swiper";
 import "swiper/css";

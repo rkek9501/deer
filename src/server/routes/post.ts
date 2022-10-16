@@ -14,17 +14,35 @@ import models from "../models";
 import { accessCheck, authCheck } from "../utils/auth";
 import { base64, utf8 } from "../utils/crypt";
 import { sortDesc } from "../utils/func";
+import generateSiteMap from "../utils/sitemapGenerator";
 import upload from "../utils/upload";
 import { isValidHex } from "../utils/vaild";
 
 const { posts, tags, post_tag, files, users } = models;
 const appRouter = express.Router();
 
+const findPaths = async () => {
+  const list = await posts
+    .findAll({
+      where: { deletedAt: null },
+      order: [["createdAt", "DESC"]],
+      attributes: { exclude: ["content", "subtitle", "viewCount", "createdAt", "deletedAt"] },
+    })
+    .then((data: any) => JSON.parse(JSON.stringify(data)));
+  const pathMapping = list.map((item: any) => {
+    return {
+      ...item,
+      subpath: base64.encode(utf8.encode(JSON.stringify({ id: item.id, writterId: item.writterId, title: item.title })))
+    };
+  });
+  return pathMapping;
+}
+
 appRouter.get("/item/:content", authCheck, async (req, res) => {
   const { content } = req.params;
-  
-  const decode = JSON.parse(utf8.decode(base64.decode(content?.toString() ?? "")));
+
   try {
+    const decode = JSON.parse(utf8.decode(base64.decode(content?.toString() ?? "")));
     const item = await posts
       .findOne({
         where: {
@@ -86,6 +104,7 @@ appRouter.get("/paths", authCheck, async (req, res) => {
 appRouter.get("/list", authCheck, async (req, res) => {
   try {
     const userId = req.auth?.id;
+    console.log({ userId });
     const user = userId ? await users.findOne({ where: { id: userId }, raw: true }) : null;
 
     const list = await posts
@@ -133,8 +152,8 @@ appRouter.get("/list", authCheck, async (req, res) => {
 appRouter.get("/recommend/:content", authCheck, async (req, res) => {
   const { content } = req.params;
 
-  const decode = JSON.parse(utf8.decode(base64.decode(content?.toString() ?? "")));
   try {
+    const decode = JSON.parse(utf8.decode(base64.decode(content?.toString() ?? "")));
     const userId = req.auth?.id;
     const user = userId ? await users.findOne({ where: { id: userId }, raw: true }) : null;
 
@@ -329,6 +348,11 @@ appRouter.post("/create", accessCheck, async (req, res) => {
         await post_tag.bulkCreate(combin, { transaction });
       }
 
+      new Promise(async () => {
+        const paths = await findPaths();
+        generateSiteMap(paths);
+      })
+      
       return res.status(200).send({ result: true, message: "게시글이 작성되었습니다." });
     });
   } catch (exception) {
@@ -341,9 +365,11 @@ appRouter.put("/update", accessCheck, async (req, res) => {
   const { id, title, content, openState, tagList } = req.body;
   const userId = req.auth?.id;
   const verified = req.auth?.verified;
+  console.log({ userId, verified }, req.body);
   try {
     const user = await users.findOne({ where: { id: userId }, raw: true });
-    if (!id || !verified || !user) return res.status(200).send({ result: false, message: "you cannot upload posts." });
+    console.log({ user });
+    if (!userId || !verified || !user) return res.status(200).send({ result: false, message: "you cannot upload posts." });
 
     if (!title || title.trim().length === 0) return res.status(200).send({ result: false, message: "제목을 입력해주세요." });
     else if (!content || content.trim().length === 0) return res.status(200).send({ result: false, message: "내용을 입력해주세요." });
@@ -371,7 +397,7 @@ appRouter.put("/update", accessCheck, async (req, res) => {
           ]
         })
         .then((data: any) => JSON.parse(JSON.stringify(data)));
-
+        console.log({ post });
       // 태그 업데이트
       const postedTags = post?.tags?.map((tag: any) => tag.id).sort();
       const selectedTags = tagList
@@ -492,6 +518,12 @@ appRouter.put("/update", accessCheck, async (req, res) => {
           },
           { where: { id: post.id }, transaction }
         );
+
+        new Promise(async () => {
+          const paths = await findPaths();
+          generateSiteMap(paths);
+        })
+
         if (updated) return res.status(200).send({ result: true, message: "게시글이 수정되었습니다." });
       }
       return res.status(200).send({ result: false, message: "게시글 수정에 실패하였습니다." });
