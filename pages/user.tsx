@@ -1,6 +1,8 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import styled from "styled-components";
+import imageCompression from "browser-image-compression";
 
 import Button from "@components/Button";
 import Icons from "@components/Icons";
@@ -9,6 +11,8 @@ import Layout from "@components/Layout";
 import { AppContext } from "@context/index";
 import { base64 } from "@utils/crypto";
 import RequestHelper from "@utils/requestHelper";
+import { base64toFile } from "@utils/image";
+
 
 const UserPageContainer = styled.div`
   padding: 4rem;
@@ -20,20 +24,11 @@ const UserPageContainer = styled.div`
     border-radius: 50px;
     position: relative;
     z-index: 1;
-    input {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      right: 0;
-      left: 0;
-      z-index: 2;
-      opacity: 0;
-    }
-    img.user-img {
+    > *:first-child {
       position: relative;
       width: 100px;
       height: 100px;
-      border: solid 2px #ff708b;
+      border: solid 1px #ff708b !important;
       border-radius: 50px;
       top: 0;
       bottom: 0;
@@ -45,6 +40,18 @@ const UserPageContainer = styled.div`
   }
   .user-profiles {
     padding: 0 4rem;
+  }
+  .no-image-container {
+    border-radius: 50px;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg {
+      width: 60px;
+      height: 60px;
+    }
   }
   @media screen and (min-width: 1px) and (max-width: 480px) {
     flex-direction: column;
@@ -196,17 +203,10 @@ const ChangePassView = React.memo(() => {
   );
 });
 
-type ImageTypes = {
-  data: any;
-  url: string | null;
-};
-
 const User = () => {
-  const [origin, setOrigin] = useState({ name: null, email: null, image: null });
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [image, setImage] = useState(null);
-  const [file, setFile] = useState<ImageTypes>({ data: null, url: null });
   const [modal, setModal] = useState(false);
   const router = useRouter();
 
@@ -216,21 +216,17 @@ const User = () => {
       console.log({ response })
       if (response?.user) {
         const { name, email, image } = response.user;
-        setOrigin({ name, email, image });
         setName(name || "");
         setEmail(email || "");
         setImage(image);
       } else {
+        alert("프로필 변경 중 오류가 발생하였습니다. 잠시 후 다시시도해 주세요.")
       }
     })();
   }, []);
 
-  const onChangeFile = (e: any) => {
-    const data = e.target.files[0];
-    const blobUrl = URL.createObjectURL(data).toString();
-    setFile({ data, url: blobUrl });
-    setModal(true);
-  };
+  const openModal = () => setModal(true);
+  const closeModal = () => setModal(false);
 
   const save = useCallback(async () => {
     const params: { name?: string; email?: string } = {};
@@ -240,34 +236,82 @@ const User = () => {
     if (email && email.trim().length !== 0) {
       params.email = email;
     }
-    const { response, error } = await RequestHelper.Put({ url: "/api/user/changeProfile", body: params });
+    const { response } = await RequestHelper.Put({ url: "/api/user/changeProfile", body: params });
 
     if (response.result) {
       alert("수정되었습니다.");
       router.reload();
+    } else {
+      alert("프로필 변경 중 오류가 발생하였습니다. 잠시 후 다시시도해 주세요.")
     }
   }, [name, email]);
 
-  const imgChangeCallback = useCallback(
-    async (data: any) => {
-      setImage(data);
+  const requestChangeProfileImg = useCallback(async (data: any, name: string | null) => {
+    let blob = await fetch(data).then((r) => r.blob());
+    const temp = new File([blob], name || "jpg", {
+      type: blob.type
+    });
+    const options = {
+      maxSizeMB: 1, 
+      maxWidthOrHeight: 512,
+    }
+    
+    try {
+      const compressedBlob = await imageCompression(temp, options);
+      imageCompression.getDataUrlFromFile(compressedBlob)
+        .then(async (result) => {
+          const transfromedFile = base64toFile(result, name || "jpg");
+          const response = await RequestHelper.Upload(transfromedFile, "user");
+          if (response?.result) {
+            setImage(data);
+          } else {
+            alert("프로필 변경 중 오류가 발생하였습니다. 잠시 후 다시시도해 주세요.")
+          }
+        })
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
-      let blob = await fetch(data).then((r) => r.blob());
-      const temp = new File([blob], file.data.name, {
-        type: blob.type
-      });
-      const response = await RequestHelper.Upload(temp, "user");
-    },
-    [file]
-  );
+  const requestRemoveProfileImg = useCallback(async () => {
+      const { response } = await RequestHelper.Put({ url: "/api/user/removeProfileImg" });
+      if (response.result) {
+        setImage(null);
+      } else {
+        alert("프로필 이미지 삭제 중 오류가 발생하였습니다. 잠시 후 다시시도해 주세요.")
+      }
+  }, []);
 
+  const imgChangeCallback = (cb: { type: "close" | "remove" | "change"; data: any; name: string | null; }) => {
+    switch(cb.type) {
+      case "remove":
+        requestRemoveProfileImg();
+        break;
+      case "change":
+        requestChangeProfileImg(cb.data, cb.name);
+        break;
+      default: break;
+    }
+    closeModal();
+  };
+  
+  const CardImgLoader = ({ src }: { src: string }) => {
+    return `${src}`
+  }
   return (
     <Layout>
       <UserPageContainer>
-        <div className="user-img-view">
-          <input type="file" onChange={onChangeFile} accept="image/jpg,impge/png,image/jpeg,image/gif" />
-          {<img className="user-img" src={image || ""} />}
-          {modal && <ImgCropModal open={modal} onClose={() => setModal(false)} file={file} callback={imgChangeCallback} />}
+        <div className="user-img-view" onClick={openModal}>
+          {image
+            ? <Image
+              className="user-img" src={image}
+              width={100} height={100}
+              unoptimized={true} 
+              layout={"fixed"}
+              loader={CardImgLoader}
+              alt="profile-image" />
+            : <div className="no-image-container"><Icons.User /></div>}
+          {modal && <ImgCropModal open={modal} existImg={!!image} callback={imgChangeCallback} />}
         </div>
         <div className="user-profiles">
           <ExpendabelViewContainer>

@@ -10,7 +10,7 @@ import models from "../models";
 import { accessCheck, authCheck } from "../utils/auth";
 import { base64, compare, hash } from "../utils/crypt";
 import { setAccessToken, setRefreshToken } from "../utils/jwt";
-import upload from "../utils/upload";
+import upload, { remove } from "../utils/upload";
 import { passwordValidation } from "../utils/vaild";
 
 const appRouter = express.Router();
@@ -217,7 +217,7 @@ appRouter.get("/checkSession", authCheck, async (req, res) => {
 
 appRouter.get("/profile", accessCheck, async (req, res) => {
   const id = req.auth?.id;
-
+  console.log("/profile" ,{ id });
   try {
     const user = await models.users
       .findOne({
@@ -248,6 +248,23 @@ appRouter.put("/changeProfile", accessCheck, async (req, res) => {
       const user = await models.users.findOne({ where: { id } });
 
       await user.update(params, { where: { id }, transaction });
+      return res.status(200).send({ result: true });
+    });
+  } catch (e) {
+    return res.status(401).send(false);
+  }
+});
+
+appRouter.put("/removeProfileImg", accessCheck, async (req, res) => {
+  const id = req.auth?.id;
+  try {
+    await models.sequelize.transaction(async (transaction: Transaction) => {
+      const user = await models.users.findOne({ where: { id } });
+      if (user.image) {
+        console.log(id,"사용자의 기존의 프로필을 삭제합니다.")
+        await remove(user.image);
+        await user.update({ image: null }, { where: { id }, transaction });
+      }
       return res.status(200).send({ result: true });
     });
   } catch (e) {
