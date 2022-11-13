@@ -14,6 +14,7 @@ import Title from "@components/post/Title";
 import UserView from "@components/post/UserView";
 import BookMark from "@components/TableOfContents";
 import Tag from "@components/TagBlock";
+import AdsComponents from "@components/Adsense";
 
 const Carousel = dynamic(() => import("@components/Carousel"), { ssr: false });
 const Comment = dynamic(() => import("@components/Comment"), { ssr: false });
@@ -22,6 +23,8 @@ import RequestHelper from "@utils/requestHelper";
 import { useCreateLink } from "@utils/useHooks";
 import { checkToken } from "@utils/tokenManager";
 import { base64, utf8 } from "@utils/crypto";
+
+AdsComponents();
 
 const PageContainer = styled.div`
   height: inherit;
@@ -198,6 +201,7 @@ const PostPage = (Props: any) => {
             )}
           </div>
           <Carousel contents={Props.recomend || []} />
+          <AdsComponents />
           <Comment />
         </ContentContainer>
       ) : (
@@ -210,21 +214,17 @@ const PostPage = (Props: any) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const { response, error } = await RequestHelper.Get({ url: "/api/post/paths" });
-  // console.log({error})
+  const { response } = await RequestHelper.Get({ url: "/api/post/paths" });
   const paths = response.data?.map((post: any) => ({
     params: { id: `${post.subpath}` },
   }));
-  // console.log(JSON.stringify(paths, null, 2));
   return { paths, fallback: "blocking" }
 }
 
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const pageData = JSON.parse(utf8.decode(base64.decode(params?.id ? String(params?.id) : "")));
-  
-  const title = pageData.title
-  // console.log(1111, "getStaticProp", params?.id, {pageData, title});
+  const title = pageData.title;
   
   return {
     props: {

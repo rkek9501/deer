@@ -13,6 +13,7 @@ const SearchContainer = styled.div`
   height: auto;
   align-items: center;
   .empty-data {
+    font-size: 1.6rem;
     margin: 2rem;
     height: 100%;
   }
