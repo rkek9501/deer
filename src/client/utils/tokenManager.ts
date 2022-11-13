@@ -11,7 +11,6 @@ export const getToken = () => {
 }
 
 export const checkToken = () => {
-  console.log("checkToken", cookies?.get("accessToken"));
   return !!cookies.get("accessToken");
 }
 

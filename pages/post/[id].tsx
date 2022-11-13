@@ -200,7 +200,7 @@ const PostPage = (Props: any) => {
               </FloatingBtn>
             )}
           </div>
-          <Carousel contents={Props.recomend || []} />
+          <Carousel contents={recomend || []} />
           <AdsComponents />
           <Comment />
         </ContentContainer>
