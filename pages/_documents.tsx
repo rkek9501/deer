@@ -1,7 +1,5 @@
 import React from "react";
-
 import Document, { Head, Html, Main, NextScript } from "next/document";
-
 import { ServerStyleSheet } from "styled-components";
 
 class MyDocument extends Document {
@@ -31,16 +29,8 @@ class MyDocument extends Document {
           <link rel="icon" type="image/png" sizes="16x16" href="/img/favi/favicon-16x16.png" />
           <link rel="manifest" href="/img/favi/manifest.json" />
 
-          <link rel="stylesheet" href="css/fonts.css" />
-          <link rel="stylesheet" href="css/index.css" />
           <link rel="stylesheet" type="text/css" charSet="UTF-8" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
           <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
-          {/* <script
-            defer
-            src="https://code.jquery.com/jquery-3.6.0.min.js"
-            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-            crossOrigin="anonymous"
-          /> */}
         </Head>
         <body>
           <Main />

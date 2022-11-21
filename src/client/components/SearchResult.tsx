@@ -95,8 +95,6 @@ const SearchResult = (props: { posts: any }) => {
   const router = useRouter();
   const location = router.query;
 
-  useCreateLink("/css/masonry.css");
-
   if (!location.search) {
     return (
       <SearchContainer>

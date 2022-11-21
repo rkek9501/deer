@@ -14,7 +14,6 @@ import Title from "@components/post/Title";
 import UserView from "@components/post/UserView";
 import BookMark from "@components/TableOfContents";
 import Tag from "@components/TagBlock";
-import AdsComponents from "@components/Adsense";
 
 const Carousel = dynamic(() => import("@components/Carousel"), { ssr: false });
 const Comment = dynamic(() => import("@components/Comment"), { ssr: false });
@@ -23,8 +22,6 @@ import RequestHelper from "@utils/requestHelper";
 import { useCreateLink } from "@utils/useHooks";
 import { checkToken } from "@utils/tokenManager";
 import { base64, utf8 } from "@utils/crypto";
-
-AdsComponents();
 
 const PageContainer = styled.div`
   height: inherit;
@@ -111,9 +108,6 @@ const PostPage = (Props: any) => {
 
   // console.log("this is post page!!");
 
-  useCreateLink("/css/prism.css");
-  useCreateLink("/css/editor.css");
-
   useEffect(() => {
     setSession(checkToken());
   }, []);
@@ -163,7 +157,6 @@ const PostPage = (Props: any) => {
     e.preventDefault();
   };
 
-
   // return <div>404 Page Not Found</div> 
   
   // if(!data)
@@ -171,6 +164,17 @@ const PostPage = (Props: any) => {
     <PageContainer>
       <Helmet>
         <title>{`Trident | ${Props?.title}`}</title>
+
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <link rel="stylesheet" type="text/css" href="css/fonts.css" />
+        <link rel="stylesheet" type="text/css" href="css/prism.css" />
+        <link rel="stylesheet" type="text/css" href="css/editor.css" />
+
+        <script
+          async
+          crossOrigin="anonymous"
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.ADSENSE_CLIENT}`}
+        />
       </Helmet>
         {/* <link rel="stylesheet" href="css/prism.css" />
         <link rel="stylesheet" href="css/editor.css" /> */}
@@ -201,7 +205,6 @@ const PostPage = (Props: any) => {
             )}
           </div>
           <Carousel contents={recomend || []} />
-          <AdsComponents />
           <Comment />
         </ContentContainer>
       ) : (

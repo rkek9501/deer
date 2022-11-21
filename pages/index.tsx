@@ -4,19 +4,24 @@ import { Helmet } from "react-helmet";
 import Layout from "@components/Layout";
 import SearchResult from "@components/SearchResult";
 import RequestHelper from "@utils/requestHelper";
-import { useCreateLink } from "@utils/useHooks";
 
 const Home = (Props: any) => {
   const [posts] = useState<any>(Props.contentList || []);
-
-  useCreateLink("/css/home.css");
 
   return (
     <Layout>
       <Helmet>
         <title>Trident</title>
-        <link rel="stylesheet" href="css/fonts.css" />
-        <link rel="stylesheet" href="css/index.css" />
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <link rel="stylesheet" type="text/css" href="css/fonts.css" />
+        <link rel="stylesheet" type="text/css" href="css/home.css" />
+        <link rel="stylesheet" type="text/css" href="css/masonry.css" />
+
+        <script
+          async
+          crossOrigin="anonymous"
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.ADSENSE_CLIENT}`}
+        />
       </Helmet>
       <SearchResult posts={posts} />
     </Layout>
