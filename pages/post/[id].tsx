@@ -165,10 +165,10 @@ const PostPage = (Props: any) => {
       <Helmet>
         <title>{`Trident | ${Props?.title}`}</title>
 
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <link rel="stylesheet" type="text/css" href="css/fonts.css" />
-        <link rel="stylesheet" type="text/css" href="css/prism.css" />
-        <link rel="stylesheet" type="text/css" href="css/editor.css" />
+        <link rel="stylesheet" type="text/css" href="/css/index.css" />
+        <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
+        <link rel="stylesheet" type="text/css" href="/css/prism.css" />
+        <link rel="stylesheet" type="text/css" href="/css/editor.css" />
 
         <script
           async

@@ -12,10 +12,10 @@ const Home = (Props: any) => {
     <Layout>
       <Helmet>
         <title>Trident</title>
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <link rel="stylesheet" type="text/css" href="css/fonts.css" />
-        <link rel="stylesheet" type="text/css" href="css/home.css" />
-        <link rel="stylesheet" type="text/css" href="css/masonry.css" />
+        <link rel="stylesheet" type="text/css" href="/css/index.css" />
+        <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
+        <link rel="stylesheet" type="text/css" href="/css/home.css" />
+        <link rel="stylesheet" type="text/css" href="/css/masonry.css" />
 
         <script
           async
