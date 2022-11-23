@@ -28,6 +28,9 @@ module.exports = removeImports({
       displayName: true,
       pure: true
     },
+    removeConsole: {
+      exclude: ['error'],
+    },
   },
   typescript,
   eslint,
@@ -138,15 +141,14 @@ module.exports = removeImports({
           rule.use = convertToESBuild(rule.use);
         }
       });
-
-      // config.optimization.minimizer.shift();
-      // config.optimization.minimizer.unshift(
-      //   new ESBuildMinifyPlugin({
-      //     target: "es2020",
-      //     minify: true
-      //   })
-      // );
-    // }
+      config.infrastructureLogging = { debug: /PackFileCache/ }; 
+      config.optimization.minimizer.shift();
+      config.optimization.minimizer.unshift(
+        new ESBuildMinifyPlugin({
+          target: "es2020",
+          minify: true
+        })
+      );
     return config;
   }
 });

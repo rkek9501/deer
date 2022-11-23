@@ -31,10 +31,6 @@ const Container = styled.div`
   }
 `;
 
-if (process.env.LOG_MODE === "off") {
-  console.log = () => {};
-}
-
 const App = (appProps: any) => {
   const { Component, pageProps } = appProps;
 
