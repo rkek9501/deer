@@ -64,7 +64,7 @@ const run = () => {
   server.use("/sitemap.xml", express.static(path.join(process.cwd(), "/public/sitemap.xml")));
 
   server.use(async (req: Request, res: Response, next: NextFunction) => {
-    console.log(JSON.stringify({ url: req.url, session: req.session, cookie: req.cookies }, null, 2));
+    // console.log(JSON.stringify({ url: req.url, session: req.session, cookie: req.cookies }, null, 2));
     if (!req.cookies["accessToken"] && req.session.accessToken) {
       res.cookie("accessToken", req.session.accessToken, ACCESS_TOKEN_COOKIE_OPTIONS);
     }
@@ -77,7 +77,7 @@ const run = () => {
   server.use("/api/post", postRouter);
 
   server.use(async (req: Request, res: Response, next: NextFunction) => {
-    console.log("[Server] :", req.url)
+    // console.log("[Server] :", req.url)
     const reqUrls = req.url.split("/");
     const pathname = `/${reqUrls[1]}`;
     if (req.url === "/" || ["/login", "/user", "/post", "/editor", "/tags"].includes(pathname)) {

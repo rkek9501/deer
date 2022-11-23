@@ -25,7 +25,7 @@ const findPaths = async () => {
   const list = await posts
     .findAll({
       where: { deletedAt: null },
-      order: [["createdAt", "DESC"]],
+      order: [["createdAt", "ASC"]],
       attributes: { exclude: ["content", "subtitle", "viewCount", "createdAt", "deletedAt"] },
     })
     .then((data: any) => JSON.parse(JSON.stringify(data)));
@@ -365,7 +365,7 @@ appRouter.put("/update", accessCheck, async (req, res) => {
   const { id, title, content, openState, tagList } = req.body;
   const userId = req.auth?.id;
   const verified = req.auth?.verified;
-  console.log({ userId, verified }, req.body);
+  // console.log({ userId, verified }, req.body);
   try {
     const user = await users.findOne({ where: { id: userId }, raw: true });
     console.log({ user });
@@ -397,7 +397,7 @@ appRouter.put("/update", accessCheck, async (req, res) => {
           ]
         })
         .then((data: any) => JSON.parse(JSON.stringify(data)));
-        console.log({ post });
+        // console.log({ post });
       // 태그 업데이트
       const postedTags = post?.tags?.map((tag: any) => tag.id).sort();
       const selectedTags = tagList
@@ -519,10 +519,12 @@ appRouter.put("/update", accessCheck, async (req, res) => {
           { where: { id: post.id }, transaction }
         );
 
-        new Promise(async () => {
-          const paths = await findPaths();
-          generateSiteMap(paths);
-        })
+        if (updated && openState === "Y") {
+          new Promise(async () => {
+            const paths = await findPaths();
+            generateSiteMap(paths);
+          });
+        }
 
         if (updated) return res.status(200).send({ result: true, message: "게시글이 수정되었습니다." });
       }

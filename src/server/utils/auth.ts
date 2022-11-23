@@ -12,6 +12,7 @@ const accessCheck = (req: Request, res: Response, next: NextFunction) => {
 
   const accessable =  verifyAccessToken(accessToken);
   const refreshable = verifyRefreshToken(refreshToken);
+  // console.log(JSON.stringify({ accessToken, refreshToken, accessable, refreshable }, null, 2));
 
   if (!accessable && refreshable) {
     refreshingTokens(refreshable, req, res)
