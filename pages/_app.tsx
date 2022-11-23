@@ -42,6 +42,12 @@ const App = (appProps: any) => {
   return (
     <Suspense fallback={<Loading />}>
       <AppProvider>
+        <script
+          id="adsense"
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.ADSENSE_CLIENT}`}
+          crossOrigin="anonymous"
+        />
         <Header />
         <Container>
           <Component {...pageProps} />

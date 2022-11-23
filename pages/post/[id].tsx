@@ -19,9 +19,9 @@ const Carousel = dynamic(() => import("@components/Carousel"), { ssr: false });
 const Comment = dynamic(() => import("@components/Comment"), { ssr: false });
 
 import RequestHelper from "@utils/requestHelper";
-import { useCreateLink } from "@utils/useHooks";
 import { checkToken } from "@utils/tokenManager";
 import { base64, utf8 } from "@utils/crypto";
+import AdsComponents from "@components/Adsense";
 
 const PageContainer = styled.div`
   height: inherit;
@@ -169,12 +169,6 @@ const PostPage = (Props: any) => {
         <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
         <link rel="stylesheet" type="text/css" href="/css/prism.css" />
         <link rel="stylesheet" type="text/css" href="/css/editor.css" />
-
-        <script
-          async
-          crossOrigin="anonymous"
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.ADSENSE_CLIENT}`}
-        />
       </Helmet>
         {/* <link rel="stylesheet" href="css/prism.css" />
         <link rel="stylesheet" href="css/editor.css" /> */}
@@ -205,6 +199,7 @@ const PostPage = (Props: any) => {
             )}
           </div>
           <Carousel contents={recomend || []} />
+          <AdsComponents />
           <Comment />
         </ContentContainer>
       ) : (
