@@ -123,14 +123,18 @@ const PostPage = (Props: any) => {
         const lines = contentRes.data?.content?.split("\n");
         const heading: any[] = [];
         const content = [];
+        let isCodeBlock = false;
         for (const [idx, line] of lines.entries()) {
-          if (line.indexOf("# ") === 0) {
+          if (line.indexOf("```") !== -1) {
+            isCodeBlock = !isCodeBlock;
+          }
+          if (line.indexOf("# ") === 0 && !isCodeBlock) {
             content.push(`${line} <a id="bookmark_${idx}" class="bookmarked" style="visibility:hidden;"></a>`);
             heading.push({ type: "h1", line: line.slice(2), idx: `bookmark_${idx}` });
-          } else if (line.indexOf("## ") === 0) {
+          } else if (line.indexOf("## ") === 0 && !isCodeBlock) {
             content.push(`${line} <a id="bookmark_${idx}" class="bookmarked" style="visibility:hidden;"></a>`);
             heading.push({ type: "h2", line: line.slice(3), idx: `bookmark_${idx}` });
-          } else if (line.indexOf("### ") === 0) {
+          } else if (line.indexOf("### ") === 0 && !isCodeBlock) {
             content.push(`${line} <a id="bookmark_${idx}" class="bookmarked" style="visibility:hidden;"></a>`);
             heading.push({ type: "h3", line: line.slice(4), idx: `bookmark_${idx}` });
           } else {
