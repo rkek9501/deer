@@ -1,26 +1,11 @@
 import React, { Suspense, useEffect } from "react";
-import { getAnalytics } from "firebase/analytics";
-import { initializeApp } from "firebase/app";
 import styled from "styled-components";
+import ReactGA from "react-ga";
 
-import Loading from "../src/client/components/Loading";
+import Loading from "@components/Loading";
 import Header from "@components/Header";
 import AppProvider from "@context/index";
 import "./globals.css";
-
-const setFirebase = () => {
-  const firebaseConfig = {
-    apiKey: process.env.FB_API_KEY,
-    authDomain: process.env.FB_AUTH_DOMAIN,
-    projectId: process.env.FB_PROJECT_ID,
-    storageBucket: process.env.FB_STORAGE_BUCKET,
-    messagingSenderId: process.env.FB_MSG_SENDER_ID,
-    appId: process.env.FB_APP_ID,
-    measurementId: process.env.FB_MEUSURE_ID
-  };
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-}
 
 const Container = styled.div`
   width: 100vw;
@@ -34,11 +19,13 @@ const Container = styled.div`
 const App = (appProps: any) => {
   const { Component, pageProps } = appProps;
 
-  useEffect(() => {
+  useEffect(()=>{
     if (process.env.NODE_ENV === "production") {
-      setFirebase();
+      ReactGA.initialize(process.env.FB_STREAM_GID || "");
+      ReactGA.pageview(location.pathname + location.pathname);
     }
-  }, []);
+  },[]);
+  
   return (
     <Suspense fallback={<Loading />}>
       <AppProvider>
