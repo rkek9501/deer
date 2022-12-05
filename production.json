@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "trident",
+      "name": "deer",
       "script": "build/server/server.js",
       "watch": false,
       "env": {

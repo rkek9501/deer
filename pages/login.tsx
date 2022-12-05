@@ -30,7 +30,7 @@ const PageContainer = styled.div`
     font-size: 2.4rem;
     font-family: score9;
   }
-  .title.title-trident {
+  .title.title-deer {
     font-family: Futura-Bold;
   }
   .loginbtn {
@@ -130,10 +130,10 @@ const Login = () => {
   return (
     <PageContainer>
       <Helmet>
-        <title>Trident Login</title>
+        <title>Deer Login</title>
       </Helmet>
       <div className="login-content">
-        <div className="title title-trident">TRIDENT</div>
+        <div className="title title-deer">Deer</div>
         <form className="login-input-box">
           <input name="id" type="text" placeholder="전화번호, 사용자 이름 또는 이메일" value={id} onChange={(e) => setid(e.target.value)} />
           <input

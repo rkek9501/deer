@@ -106,8 +106,6 @@ const PostPage = (Props: any) => {
   const router = useRouter();
   const contentId = router.query?.id;
 
-  // console.log("this is post page!!");
-
   useEffect(() => {
     setSession(checkToken());
   }, []);
@@ -167,7 +165,7 @@ const PostPage = (Props: any) => {
   return (<Layout>
     <PageContainer>
       <Helmet>
-        <title>{`Trident | ${Props?.title}`}</title>
+        <title>{`Deer | ${Props?.title}`}</title>
 
         <link rel="stylesheet" type="text/css" href="/css/index.css" />
         <link rel="stylesheet" type="text/css" href="/css/fonts.css" />

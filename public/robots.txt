@@ -1,4 +1,4 @@
-Sitemap: https://trident-blog.com/sitemap.xml
+Sitemap: https://de-er.link/sitemap.xml
 User-agent: googlebot
 Disallow: /uploads/
 Disallow: /img/

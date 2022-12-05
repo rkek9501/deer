@@ -29,7 +29,7 @@ const Header = () => {
   return (
     <HeaderContainer>
       <div className="header-left">
-        <h1 className="title title-trident" onClick={() => router.push("/", undefined, { shallow: false })}>
+        <h1 className="title title-deer" onClick={() => router.push("/", undefined, { shallow: false })}>
           <LogoSvg />
         </h1>
       </div>

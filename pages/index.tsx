@@ -11,7 +11,7 @@ const Home = (Props: any) => {
   return (
     <Layout>
       <Helmet>
-        <title>Trident</title>
+        <title>Deer</title>
         <link rel="stylesheet" type="text/css" href="/css/index.css" />
         <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
         <link rel="stylesheet" type="text/css" href="/css/home.css" />

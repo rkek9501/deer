@@ -10,8 +10,8 @@ class MyDocument extends Document {
         <Head>
           <meta charSet="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-          <meta name="description" content="Trident" />
-          <title>Trident</title>
+          <meta name="description" content="Deer" />
+          <title>Deer</title>
 
           <link rel="shortcut icon" href="/img/favi/favicon.ico" />
           <link rel="apple-touch-icon" sizes="57x57" href="/img/favi/apple-icon-57x57.png" />
