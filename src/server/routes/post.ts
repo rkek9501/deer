@@ -252,10 +252,14 @@ const getSubtitleFromMarkdown = (markdown: string) => {
   let subtitle: null | string = null;
 
   for (let line of lines) {
-    if (!subtitle && isRegValid(line)) {
-      if (line.indexOf("# ")) {
+    if (!subtitle) {
+      if (isRegValid(line)) {
+        if (line.indexOf("# ") !== -1) {
         subtitle = line.split("# ")[1];
       } else {
+        subtitle = line;
+      }
+      } else if (line.length > 0) {
         subtitle = line;
       }
       break;
