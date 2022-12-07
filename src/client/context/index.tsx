@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useEffect, useState } from "react";
 import { checkToken, clearToken } from "@utils/tokenManager";
 import requestHelper from "@utils/requestHelper";
+import { GlobalLoader } from "@components/Loading";
 
 interface AppProviderProps {
   children: React.ReactNode;
@@ -11,10 +12,13 @@ export const AppContext = createContext({
   page: "/",
   setPage: (path: string) => {},
   tags: [],
-  isMobile: false
+  isMobile: false,
+  loading: false,
+  setLoading: (loading: boolean) => {},
 });
 
 const AppProvider = (props: AppProviderProps) => {
+  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState("/");
   const [isMobile, setMobild] = useState(false);
   const [tags, setTags] = useState<any>([]);
@@ -64,12 +68,14 @@ const AppProvider = (props: AppProviderProps) => {
     page,
     setPage,
     tags,
-    isMobile
+    isMobile,
+    loading,
+    setLoading
   };
   return (
     <AppContext.Provider value={values}>
-      {/* <HistoryProvider /> */}
       {props.children}
+      {loading && <GlobalLoader/>}
     </AppContext.Provider>
   );
 };

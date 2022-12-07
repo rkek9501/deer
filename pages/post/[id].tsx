@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import type { GetStaticPaths, GetStaticProps } from "next";
 import dynamic from "next/dynamic";
@@ -22,6 +22,7 @@ import RequestHelper from "@utils/requestHelper";
 import { checkToken } from "@utils/tokenManager";
 import { base64, utf8 } from "@utils/crypto";
 import AdsComponents from "@components/Adsense";
+import { AppContext } from "@context";
 
 const PageContainer = styled.div`
   height: inherit;
@@ -98,7 +99,7 @@ type PostType = {
 };
 
 const PostPage = (Props: any) => {
-  console.log("page Props", Props);
+  const { setLoading } = useContext(AppContext);
   const [data, setData] = useState<PostType | null>(null);
   const [hData, setHData] = useState<any>([]);
   const [session, setSession] = useState(false);
@@ -142,6 +143,7 @@ const PostPage = (Props: any) => {
         const contents = content.join("\n");
         setHData(heading);
         setData({ ...contentRes.data, content: contents });
+        setLoading(false);
       })()
     }
   }, [data]);

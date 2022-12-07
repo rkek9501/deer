@@ -133,7 +133,7 @@ const Login = () => {
         <title>Deer Login</title>
       </Helmet>
       <div className="login-content">
-        <div className="title title-deer">Deer</div>
+        <div className="title title-deer">DEER</div>
         <form className="login-input-box">
           <input name="id" type="text" placeholder="전화번호, 사용자 이름 또는 이메일" value={id} onChange={(e) => setid(e.target.value)} />
           <input

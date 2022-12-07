@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import moment from "moment";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import styled, { css } from "styled-components";
+
+import { AppContext } from "@context/index";
+import * as gtag from "@utils/gtag";
 import Tag from "./TagBlock";
 
 const CardContainer = styled.a`
@@ -162,11 +165,22 @@ const CardImgLoader = ({ src }: { src: string }) => {
   return `${src}`
 }
 const Textcard = (props: { post: PostType; size?: string }) => {
+  const { setLoading } = useContext(AppContext);
+  const router = useRouter();
   let firstImgSrc = props.post.files?.length > 0 ? props.post.files[0]?.src : null;
   if (!firstImgSrc) {
     firstImgSrc = `/img/card/default${getThumb(props.post.id)}.jpg`;
   }
-  return <Link href={`/post/${props.post.subpath}`}>
+  return <div onClick={() => {
+    setLoading(true);
+    gtag.event({
+      action: 'click',
+      category: 'move page',
+      label: 'card',
+    });
+    router.push(`/post/${props.post.subpath}`);
+  }}
+>
     <CardContainer small={props.size === "small"} >
       <div className="card-top">
         <Image
@@ -200,7 +214,7 @@ const Textcard = (props: { post: PostType; size?: string }) => {
         </div>
       </div>
     </CardContainer>
-  </Link>;
+  </div>;
 };
 
 export default Textcard;
