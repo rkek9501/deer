@@ -2,14 +2,18 @@
 
 import express from "express";
 import fs from "fs";
-import clone from "lodash/clone";
-import difference from "lodash/difference";
-import isEqual from "lodash/isEqual";
-import uniqWith from "lodash/uniqWith";
-import { parse } from "node-html-parser";
 import path from "path";
 import { Op, Sequelize } from "sequelize";
 import type { Transaction } from "sequelize/types";
+import { parse } from "node-html-parser";
+
+import clone from "lodash/clone";
+import flatten from "lodash/flatten";
+import difference from "lodash/difference";
+import isEqual from "lodash/isEqual";
+import uniq from "lodash/uniq";
+import uniqWith from "lodash/uniqWith";
+
 import models from "../models";
 import { accessCheck, authCheck } from "../utils/auth";
 import { base64, utf8 } from "../utils/crypt";
@@ -255,10 +259,10 @@ const getSubtitleFromMarkdown = (markdown: string) => {
     if (!subtitle) {
       if (isRegValid(line)) {
         if (line.indexOf("# ") !== -1) {
-        subtitle = line.split("# ")[1];
-      } else {
-        subtitle = line;
-      }
+          subtitle = line.split("# ")[1];
+        } else {
+          subtitle = line;
+        }
       } else if (line.length > 0) {
         subtitle = line;
       }
@@ -592,7 +596,25 @@ appRouter.post("/upload", accessCheck, async (req, res) => {
 
 appRouter.get("/tags", async (req, res) => {
   try {
-    const tagList = await tags.findAll({});
+    const list = await posts
+      .findAll({
+        where: { deletedAt: null, openState: "Y" },
+        order: [["createdAt", "DESC"]],
+        attributes: { exclude: ["content", "subtitle", "writterId", "viewCount", "createdAt", "updatedAt", "deletedAt"] },
+        include: [
+          { model: tags, through: { attributes: ["postId", "tagId"] } }
+        ]
+      })
+      .then((data: any) => JSON.parse(JSON.stringify(data)));
+
+    const tagsIds = list.map((_: any, i: number) => {
+      return _.tags?.map((__: any) => __.id) || [];
+    });
+
+    const tagIds = flatten(tagsIds);
+    const uniqTagIds = uniq(tagIds);
+    const tagList = await tags.findAll({ where: { id: uniqTagIds } });
+
     return res.status(200).send({ result: true, data: tagList });
   } catch (exception) {
     console.log("error", exception);
