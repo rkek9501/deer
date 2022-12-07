@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
+import dynamic from "next/dynamic";
 
 import Layout from "@components/Layout";
-import SearchResult from "@components/SearchResult";
 import RequestHelper from "@utils/requestHelper";
+
+const SearchResult = dynamic(() => import("@components/SearchResult"), { ssr: false });
 
 const Home = (Props: any) => {
   const [posts] = useState<any>(Props.contentList || []);
