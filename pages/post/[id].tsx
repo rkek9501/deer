@@ -149,6 +149,7 @@ const PostPage = (Props: any) => {
   }, [data]);
 
   const gotoEdit = () => {
+    setLoading(true);
     router.push({
       pathname: '/editor/[id]',
       query: { id: contentId },

@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 
+import { AppContext } from "@context/index";
 import Button from "@components/Button";
 import Checkbox from "@components/Checkbox";
 import requestHelper from "@utils/requestHelper";
@@ -80,7 +81,7 @@ const PageContainer = styled.div`
   }
 `;
 const Login = () => {
-  // const { session } = useContext(AppContext);
+  const { setLoading } = useContext(AppContext);
   const router = useRouter();
   const [id, setid] = useState("");
   const [pw, setpw] = useState("");
@@ -92,11 +93,8 @@ const Login = () => {
       setid(saveId);
       setSaveId(true);
     }
+    setLoading(false);
   }, []);
-
-  // useEffect(() => {
-  //   if (session) router.push("/");
-  // }, [session]);
 
   const btnclick = useCallback(() => {
     if (!id || id.trim().length === 0) return alert("아이디를 입력해주세요.");
@@ -114,7 +112,7 @@ const Login = () => {
       } else {
         localStorage?.setItem("name", response.name);
         if (isSaveId) localStorage?.setItem("id", id);
-        router.push("/");
+        router.replace("/");
       }
     })();
   }, [id, pw, isSaveId]);

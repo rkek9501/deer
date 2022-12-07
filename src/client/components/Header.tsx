@@ -139,7 +139,7 @@ const MenuContainer = styled.span`
 `;
 
 const HeaderMenu = () => {
-  const { logout, isMobile } = useContext(AppContext);
+  const { logout, isMobile, setLoading } = useContext(AppContext);
   const [open, setOpen] = useState(false);
   const [session, setSession] = useState(false);
   const router = useRouter();
@@ -190,11 +190,31 @@ const HeaderMenu = () => {
     return () => document.removeEventListener("click", handleClickOutside, true);
   }, [btnDropdownRef]);
 
+  const onClickDropdownPopover = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (open) closeDropdownPopover();
+    else openDropdownPopover();
+  };
   const onLogout = async () => {
     await RequestHelper.Get({ url: "/api/user/logout" });
     logout();
     closeDropdownPopover();
   };
+  const onClickLogin = () => {
+    router.push("/login");
+    setLoading(true);
+    closeDropdownPopover();
+  };
+  const onClickMyinfo = () => {
+    router.push("/user");
+    setLoading(true);
+    closeDropdownPopover();
+  };
+  const onClickEdit = () => {
+    router.push("/editor");
+    setLoading(true);
+    closeDropdownPopover();
+  }
 
   return (
     <MenuContainer
@@ -204,14 +224,7 @@ const HeaderMenu = () => {
       onTouchEnd={(e) => e.stopPropagation()}
       onDrag={(e) => e.stopPropagation()}
     >
-      <a
-        ref={btnDropdownRef}
-        onClick={(e) => {
-          e.preventDefault();
-          if (open) closeDropdownPopover();
-          else openDropdownPopover();
-        }}
-      >
+      <a ref={btnDropdownRef} onClick={onClickDropdownPopover} >
         {!open ? <Icons.Menu /> : <Icons.Close />}
       </a>
       <div ref={popoverDropdownRef} id="menu-container" style={{ display: `${open ? "flex" : "none"}`, zIndex: 10 }}>
@@ -226,40 +239,24 @@ const HeaderMenu = () => {
           {session ? (
             <>
               {pathname !== "/editor" && (
-                <div
-                  className="menu-item"
-                  onClick={() => {
-                    router.push("/editor");
-                  }}
-                >
+                <div className="menu-item" onClick={onClickEdit} >
                   <Icons.Edit />
                   글작성
                 </div>
               )}
-              <div className="menu-item" onClick={() => onLogout()}>
+              <div className="menu-item" onClick={onLogout}>
                 <Icons.Logout />
                 로그아웃
               </div>
               {pathname !== "/user" && (
-                <div
-                  className="menu-item"
-                  onClick={() => {
-                    router.push("/user");
-                  }}
-                >
+                <div className="menu-item" onClick={onClickMyinfo}>
                   <Icons.User />
                   내정보 수정
                 </div>
               )}
             </>
           ) : (
-            <div
-              className="menu-item"
-              onClick={() => {
-                router.push("/login");
-                closeDropdownPopover();
-              }}
-            >
+            <div className="menu-item" onClick={onClickLogin} >
               <Icons.Login />
               로그인
             </div>

@@ -204,6 +204,7 @@ const ChangePassView = React.memo(() => {
 });
 
 const User = () => {
+  const { setLoading } = useContext(AppContext);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [image, setImage] = useState(null);
@@ -222,6 +223,7 @@ const User = () => {
       } else {
         alert("프로필 변경 중 오류가 발생하였습니다. 잠시 후 다시시도해 주세요.")
       }
+      setLoading(false);
     })();
   }, []);
 

@@ -101,7 +101,7 @@ const TitleInput = (props: TitleType) => {
 };
 
 const EditorPage = () => {
-  const { tags: allTags } = useContext(AppContext);
+  const { tags: allTags, setLoading } = useContext(AppContext);
   const { files } = useContext(EditorContext);
 
   // const history = useHistory();
@@ -120,6 +120,10 @@ const EditorPage = () => {
   // const [userImg, setUserImg] = useState(null);
   // const [writter, setWritter] = useState(localStorage?.getItem("name") || "");
   // const [createdAt, setCreatedAt] = useState(moment().format("YYYYMMDD"));
+
+  useEffect(() => {
+    setLoading(false);
+  }, []);
 
   useEffect(() => {
     if (allTags && allTags.length > 0) {

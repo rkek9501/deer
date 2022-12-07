@@ -100,7 +100,7 @@ const TitleInput = (props: TitleType) => {
 };
 
 const EditorPage = (Props: any) => {
-  const { tags: allTags } = useContext(AppContext);
+  const { tags: allTags, setLoading } = useContext(AppContext);
   const { files } = useContext(EditorContext);
   const router = useRouter();
   const contentId = router.query?.id || null;
@@ -127,6 +127,7 @@ const EditorPage = (Props: any) => {
         setSelectedTags(response.data?.tags?.map((tag: any) => ({ value: tag.id, label: tag.name, color: tag.color })));
         // setWritter(response.data?.writterId);
       }
+      setLoading(false);
       if (error) {
         router.push("/404");
       }
