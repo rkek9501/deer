@@ -25,7 +25,7 @@ AWS를 기반으로한 배포와 Google(Search Console, Analytics 등) 기반의
 
 |   Front-End   |   Back-End   |   Etc   |
 |---------------|--------------|---------|
-|[![My Skills](https://skillicons.dev/icons?i=react,nextjs&theme=light)](https://skillicons.dev)|[![My Skills](https://skillicons.dev/icons?i=nodejs,express,sequelize&theme=light)](https://skillicons.dev)|[![My Skills](https://skillicons.dev/icons?i=js,ts,git,aws,gcp,figma&theme=light)](https://skillicons.dev)|
+|[![My Skills](https://skillicons.dev/icons?i=react,nextjs&theme=light)](https://skillicons.dev)|[![My Skills](https://skillicons.dev/icons?i=nodejs,express,sequelize&theme=light)](https://skillicons.dev)|[![My Skills](https://skillicons.dev/icons?i=js,ts,git,nginx,aws,gcp,figma&theme=light)](https://skillicons.dev)|
 
 ## Next Step
 
