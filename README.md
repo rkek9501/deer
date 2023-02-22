@@ -1,37 +1,66 @@
-### node version is v14.16.1
+# Deer
 
-### 패키지 설치
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/34267371/220578488-41518269-e279-4dd6-9d48-412661c130af.png" alt="Deer-logo" width="300" />
+</p>
 
-```bash
-$ npm i
-```
+<p align="center">
+  <img src="https://img.shields.io/badge/version-1.0.0-green" alt="deer-version"/>
+  <img src="https://img.shields.io/badge/typescript-4.2.4-blue.svg" alt="ts-version"/>
+  <img src="https://img.shields.io/badge/node-14.16.1-blue.svg" alt="node-version"/>
+  <img src="https://img.shields.io/badge/react-18.2.0-blue.svg" alt="react-version"/>
+  <img src="https://img.shields.io/badge/next.js-14.16.1-blue.svg" alt="nextjs-version"/>
+</p>
 
-### 클라이언트만 실행
+## Project Description
+개발 & 디자인 블로그 프로젝트
 
-```bash
-$ npm run client
-```
+Deer는 Developer와 Designer의 공통되는 알파벳인 'De'와 'er'을 합친 단어로 각각 1명의 개발자와 디자이너가 팀이 되어 진행한 주말 팀 프로젝트입니다.
 
-### 클라이언트만 빌드
+각자가 개발, 디자인했던 내용을 다시 상기하며 기록하며, 부족함을 채워나가는 공간입니다.
 
-```bash
-$ npm run build-client
-```
+AWS를 기반으로한 배포와 Google(Search Console, Analytics 등) 기반의 운영 및 관리를 통해 서비스 배포 및 관리의 전제적인 프로세스를 학습하는것이 목표입니다.
 
-### 서버만 빌드
+## Stacks
 
-```bash
-$ npm run build-server
-```
+|   Front-End   |   Back-End   |   Etc   |
+|---------------|--------------|---------|
+|[![My Skills](https://skillicons.dev/icons?i=react,nextjs&theme=light)](https://skillicons.dev)|[![My Skills](https://skillicons.dev/icons?i=nodejs,express,sequelize&theme=light)](https://skillicons.dev)|[![My Skills](https://skillicons.dev/icons?i=js,ts,git,aws,gcp,figma&theme=light)](https://skillicons.dev)|
 
-### 서버와 클라이언트 빌드
+## Next Step
 
-```bash
-$ npm run build
-```
+- [ ] Google Adsense 적용 및 확인
+- [ ] Front-End Request 캐싱
+- [ ] 무한 스크롤링 작업 (API / UI)
+- UI 
+  - [ ] 읽은 게시글 확인 가능하도록 수정
+  - [ ] 게시글 조회 UI 수정
+    - [ ] 스크롤링에 따라 Table Of Content 하이라이팅 되도록 수정
+    - [ ] 사이드바 제거 및 게시글 폭 수정 
 
-### 서버만 실행
 
-```bash
-$ npm run server
-```
+-----
+
+## How To Use
+
+### `yarn`
+
+패키지 설치 
+
+### `yarn next:dev`
+
+Development 클라이언트 실행 (4001 포트)
+
+### `yarn next:server`
+
+Development 서버 실행 nodemon 을 통해 서버코드 수정 시 서버 재실행\
+Nextjs custom 서버로 실행됨
+
+### `yarn next:build`
+
+Nextjs Production 빌드
+
+### `yarn server`
+
+Production 서버 실행
+
