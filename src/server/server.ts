@@ -17,17 +17,17 @@ const app = next({
 });
 
 const nextHandler = appRouter.getRequestHandler(app);
+let isAppGoingToBeClosed = false;
 
 const run = () => {
   const server = express();
   applyMiddlewares(server);
 
-  // let isAppGoingToBeClosed = false;
   const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
   server.use((req: Request, res: Response, next: NextFunction) => {
-    // if (isAppGoingToBeClosed) {
-    //   res.set("Connection", "close");
-    // }
+    if (isAppGoingToBeClosed) {
+      res.set("Connection", "close");
+    }
     if (!allowedMethods.includes(req.method)) {
       return res.status(405).json({
         error: "Method Not Allowed",
@@ -71,11 +71,27 @@ const run = () => {
 
   server.use(express.static(path.join(process.cwd(), "/public")));
 
-  const httpsServer = IS_LOCAL ? https.createServer(SERVER_OPTIONS, server) : http.createServer(SERVER_OPTIONS, server);
+  const httpsServer = IS_LOCAL ? https.createServer(SERVER_OPTIONS, server) : http.createServer(server);
   httpsServer.listen(SERVER_PORT, () => {
     console.log(`[Run Server] ${process.env.NODE_ENV}!`);
     console.log(`[Run Server] PORT:${SERVER_PORT}`);
     console.log(`[Run Server] URL:${HOST_URL}`);
+
+    if (process.send) {
+      process.send("ready");
+      console.log(`[Run Server] Send to pm2 with ready message at ${new Date()}`);
+    }
+
+  });
+  process.on('SIGINT', () => {
+    isAppGoingToBeClosed = true;
+    console.log('SIGINT signal received.');
+    httpsServer.close(function(err) {
+      if (err) {
+        console.error("SIGINT err", err);
+      }
+      process.exit(err ? 1 : 0);
+    });
   });
 };
 
@@ -88,16 +104,6 @@ if (isPreServer) {
     .prepare()
     .then(() => {
       run();
-      // process.on('SIGINT', () => {
-      //   isAppGoingToBeClosed = true;
-      //   console.log('SIGINT signal received.');
-      //   server.close(function(err) {
-      //     if (err) {
-      //       console.error("SIGINT err", err);
-      //     }
-      //     process.exit(err ? 1 : 0);
-      //   });
-      // });
     })
     .catch((err) => {
       console.log("[Run Server Error] Next App server Error!", err);

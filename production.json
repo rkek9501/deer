@@ -2,13 +2,18 @@
   "apps": [
     {
       "name": "deer",
-      "script": "build/server/server.js",
+      "script": "ts-node",
+      "args": "src/server/server.ts",
+      "exec_mode": "cluster",
+      "instances": 2,
+      "autorestart": true,
+      "wait_ready": true,
+      "listen_timeout": 50000,
+      "kill_timeout": 5000,
       "watch": false,
       "env": {
         "NODE_ENV": "production"
-      },
-      "exec_mode": "cluster",
-      "instances": 2
+      }
     }
   ]
 }
