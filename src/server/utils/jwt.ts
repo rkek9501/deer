@@ -1,8 +1,5 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { 
-  ACCESS_TOKEN_EXPIRES_IN, ACCESS_TOKEN_KEY,
-  REFRESH_TOKEN_EXPIRES_IN, REFRESH_TOKEN_KEY
-} from "../env";
+import { ACCESS_TOKEN_EXPIRES_IN, ACCESS_TOKEN_KEY, REFRESH_TOKEN_EXPIRES_IN, REFRESH_TOKEN_KEY } from "../env";
 
 export const setAccessToken = (id: string) => {
   const token = jwt.sign({ id }, ACCESS_TOKEN_KEY, { expiresIn: ACCESS_TOKEN_EXPIRES_IN });

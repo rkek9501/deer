@@ -104,7 +104,7 @@ const Login = () => {
         localStorage?.removeItem("id");
       }
       const { response, error } = await requestHelper.Post({ url: "/api/user/login", body: { id: id, pw: pw } });
-      console.log({response})
+      console.log({ response });
       if (error) {
         alert("로그인 실패");
         if (!isSaveId) setid("");
@@ -117,9 +117,12 @@ const Login = () => {
     })();
   }, [id, pw, isSaveId]);
 
-  const onChangeCheck = useCallback((checked: boolean) => {
-    setSaveId(checked);
-  }, [id]);
+  const onChangeCheck = useCallback(
+    (checked: boolean) => {
+      setSaveId(checked);
+    },
+    [id]
+  );
 
   const onKeyPressEnter = (key: string) => {
     if (key.toLowerCase() === "enter") btnclick();
@@ -158,16 +161,16 @@ const Login = () => {
 
 Login.getInitialProps = async (ctx: any) => {
   const initialCookies = ctx.req?.headers.cookie;
-  if (initialCookies) ctx.res?.setHeader('Set-Cookie', initialCookies);
+  if (initialCookies) ctx.res?.setHeader("Set-Cookie", initialCookies);
   const { response } = await requestHelper.Get({ url: "/api/user/checkSession" }, initialCookies);
 
   if (response?.result) {
-    ctx.res?.writeHead(302, { Location: '/' });
+    ctx.res?.writeHead(302, { Location: "/" });
     ctx.res?.end();
   }
   return {
-    props: { },
+    props: {}
   };
-}
+};
 
 export default Login;

@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import path from "path";
+import fs from "fs";
 
 dotenv.config({ path: path.join(process.cwd(), ".env") });
 
@@ -7,7 +8,7 @@ export const IS_DEV = Boolean(process.env.NODE_ENV !== "production");
 
 export const IS_LOCAL = Boolean(process.env.IS_LOCAL === "yes");
 export const SERVER_PORT = Number(process.env.SERVER_PORT) || 5000;
-export const SERVER_URL = String(process.env.SERVER_URL) || "localhost"
+export const SERVER_URL = String(process.env.SERVER_URL) || "localhost";
 export const HOST_URL = IS_LOCAL ? `https://${SERVER_URL}:${SERVER_PORT}` : `https://${SERVER_URL}`;
 
 interface CONFIG {
@@ -37,15 +38,26 @@ export const ACCESS_TOKEN_COOKIE_OPTIONS = {
   maxAge: ACCESS_TOKEN_MAX_AGE,
   httpOnly: false,
   secure: !IS_DEV,
-  path: "/",
+  path: "/"
 };
 
 export const REFRESH_TOKEN_COOKIE_OPTIONS = {
   maxAge: REFRESH_TOKEN_MAX_AGE,
   httpOnly: false,
   secure: !IS_DEV,
-  path: "/",
+  path: "/"
 };
 
 export const ACCESS_TOKEN_KEY = String(process.env.ACCESS_TOKEN_KEY);
 export const REFRESH_TOKEN_KEY = String(process.env.REFRESH_TOKEN_KEY);
+
+// const key = fs.readFileSync(`/etc/letsencrypt/live/${SERVER_URL}/privkey.pem`);
+// const cert = fs.readFileSync(`/etc/letsencrypt/live/${SERVER_URL}/cert.pem`);
+// const ca = fs.readFileSync(`/etc/letsencrypt/live/${SERVER_URL}/fullchain.pem`);
+export const SERVER_OPTIONS = IS_DEV
+  ? {
+      // key,
+      // cert,
+      // ca
+    }
+  : {};

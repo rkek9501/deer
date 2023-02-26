@@ -13,7 +13,6 @@ import { base64 } from "@utils/crypto";
 import RequestHelper from "@utils/requestHelper";
 import { base64toFile } from "@utils/image";
 
-
 const UserPageContainer = styled.div`
   padding: 4rem;
   display: flex;
@@ -195,9 +194,7 @@ const ChangePassView = React.memo(() => {
         <Input label="비밀번호" type="password" value={nextPw} setValue={setNextPw} />
         <Input label="비밀번호 확인" type="password" value={nextPwChk} setValue={setNextPwChk} />
         <div className="change-err">{err}</div>
-        <Button onClick={() => changePw()}>
-          비밀번호 변경하기
-        </Button>
+        <Button onClick={() => changePw()}>비밀번호 변경하기</Button>
       </div>
     </ExpendabelViewContainer>
   );
@@ -214,14 +211,14 @@ const User = () => {
   useEffect(() => {
     (async () => {
       const { response, error } = await RequestHelper.Get({ url: "/api/user/profile" });
-      console.log({ response })
+      console.log({ response });
       if (response?.user) {
         const { name, email, image } = response.user;
         setName(name || "");
         setEmail(email || "");
         setImage(image);
       } else {
-        alert("프로필 변경 중 오류가 발생하였습니다. 잠시 후 다시시도해 주세요.")
+        alert("프로필 변경 중 오류가 발생하였습니다. 잠시 후 다시시도해 주세요.");
       }
       setLoading(false);
     })();
@@ -244,7 +241,7 @@ const User = () => {
       alert("수정되었습니다.");
       router.reload();
     } else {
-      alert("프로필 변경 중 오류가 발생하였습니다. 잠시 후 다시시도해 주세요.")
+      alert("프로필 변경 중 오류가 발생하였습니다. 잠시 후 다시시도해 주세요.");
     }
   }, [name, email]);
 
@@ -254,65 +251,72 @@ const User = () => {
       type: blob.type
     });
     const options = {
-      maxSizeMB: 1, 
-      maxWidthOrHeight: 512,
-    }
-    
+      maxSizeMB: 1,
+      maxWidthOrHeight: 512
+    };
+
     try {
       const compressedBlob = await imageCompression(temp, options);
-      imageCompression.getDataUrlFromFile(compressedBlob)
-        .then(async (result) => {
-          const transfromedFile = base64toFile(result, name || "jpg");
-          const response = await RequestHelper.Upload(transfromedFile, "user");
-          if (response?.result) {
-            setImage(data);
-          } else {
-            alert("프로필 변경 중 오류가 발생하였습니다. 잠시 후 다시시도해 주세요.")
-          }
-        })
+      imageCompression.getDataUrlFromFile(compressedBlob).then(async (result) => {
+        const transfromedFile = base64toFile(result, name || "jpg");
+        const response = await RequestHelper.Upload(transfromedFile, "user");
+        if (response?.result) {
+          setImage(data);
+        } else {
+          alert("프로필 변경 중 오류가 발생하였습니다. 잠시 후 다시시도해 주세요.");
+        }
+      });
     } catch (error) {
       console.log(error);
     }
   }, []);
 
   const requestRemoveProfileImg = useCallback(async () => {
-      const { response } = await RequestHelper.Put({ url: "/api/user/removeProfileImg" });
-      if (response.result) {
-        setImage(null);
-      } else {
-        alert("프로필 이미지 삭제 중 오류가 발생하였습니다. 잠시 후 다시시도해 주세요.")
-      }
+    const { response } = await RequestHelper.Put({ url: "/api/user/removeProfileImg" });
+    if (response.result) {
+      setImage(null);
+    } else {
+      alert("프로필 이미지 삭제 중 오류가 발생하였습니다. 잠시 후 다시시도해 주세요.");
+    }
   }, []);
 
-  const imgChangeCallback = (cb: { type: "close" | "remove" | "change"; data: any; name: string | null; }) => {
-    switch(cb.type) {
+  const imgChangeCallback = (cb: { type: "close" | "remove" | "change"; data: any; name: string | null }) => {
+    switch (cb.type) {
       case "remove":
         requestRemoveProfileImg();
         break;
       case "change":
         requestChangeProfileImg(cb.data, cb.name);
         break;
-      default: break;
+      default:
+        break;
     }
     closeModal();
   };
-  
+
   const CardImgLoader = ({ src }: { src: string }) => {
-    return `${src}`
-  }
+    return `${src}`;
+  };
   return (
     <Layout>
       <UserPageContainer>
         <div className="user-img-view" onClick={openModal}>
-          {image
-            ? <Image
-              className="user-img" src={image}
-              width={100} height={100}
-              unoptimized={true} 
+          {image ? (
+            <Image
+              className="user-img"
+              src={image}
+              width={100}
+              height={100}
+              unoptimized={true}
               layout={"fixed"}
               loader={CardImgLoader}
-              alt="profile-image" />
-            : <div className="no-image-container"><Icons.User /></div>}
+              alt="profile-image"
+            />
+          ) : (
+            <div className="no-image-container">
+              <Icons.User />
+            </div>
+          )}
           {modal && <ImgCropModal open={modal} existImg={!!image} callback={imgChangeCallback} />}
         </div>
         <div className="user-profiles">
@@ -321,9 +325,7 @@ const User = () => {
             <div className="expendable-area">
               <Input label="이름" value={name} setValue={setName} />
               <Input label="이메일" value={email} setValue={setEmail} />
-              <Button onClick={() => save()}>
-                저장하기
-              </Button>
+              <Button onClick={() => save()}>저장하기</Button>
             </div>
           </ExpendabelViewContainer>
 
@@ -337,10 +339,9 @@ const User = () => {
   );
 };
 
-
 User.getInitialProps = async (ctx: any) => {
   const initialCookies = ctx.req?.headers.cookie;
-  if (initialCookies) ctx.res?.setHeader('Set-Cookie', initialCookies);
+  if (initialCookies) ctx.res?.setHeader("Set-Cookie", initialCookies);
 
   const { response, error } = await RequestHelper.Get({ url: "/api/user/checkSession" }, initialCookies);
   console.log("User", { response });
@@ -350,8 +351,8 @@ User.getInitialProps = async (ctx: any) => {
   //   ctx.res?.end();
   // }
   return {
-    props: { },
+    props: {}
+  };
 };
-}
 
 export default User;

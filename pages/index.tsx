@@ -26,25 +26,25 @@ const Home = (Props: any) => {
 
 Home.getInitialProps = async (context: any) => {
   const { ctx, Component } = context;
-  console.log({ctx, Component});
+  console.log({ ctx, Component });
   // const initialCookies = ctx.req?.headers.cookie;
   // if (initialCookies) ctx.res?.setHeader('Set-Cookie', initialCookies);
 
   // let pageProps = {};
   // const cookie = ctx?.req?.headers?.cookie || '';
   // console.log({cookie});
-  // if (cookie) { 
+  // if (cookie) {
   //   // Axios.defaults.headers.Cookie = cookie;
   // }
   // if (Component.getInitialProps) {
   //   pageProps = await Component.getInitialProps(ctx);
   // }
 
-  const { response, error } = await RequestHelper.Get({ url: "/api/post/list" }, );
+  const { response, error } = await RequestHelper.Get({ url: "/api/post/list" });
   return {
-    contentList: response.data,
+    contentList: response.data
     // pageProps
-  } 
-}
+  };
+};
 
 export default Home;

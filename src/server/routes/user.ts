@@ -175,7 +175,6 @@ appRouter.post("/login", async (req, res) => {
   }
 });
 
-
 // appRouter.get('/test', authCheck, (req, res) => {  // 3
 //   console.log(req.session);
 //   const accessToken = setAccessToken("test");
@@ -217,7 +216,7 @@ appRouter.get("/checkSession", authCheck, async (req, res) => {
 
 appRouter.get("/profile", accessCheck, async (req, res) => {
   const id = req.auth?.id;
-  console.log("/profile" ,{ id });
+  console.log("/profile", { id });
   try {
     const user = await models.users
       .findOne({
@@ -261,7 +260,7 @@ appRouter.put("/removeProfileImg", accessCheck, async (req, res) => {
     await models.sequelize.transaction(async (transaction: Transaction) => {
       const user = await models.users.findOne({ where: { id } });
       if (user.image) {
-        console.log(id,"사용자의 기존의 프로필을 삭제합니다.")
+        console.log(id, "사용자의 기존의 프로필을 삭제합니다.");
         await remove(user.image);
         await user.update({ image: null }, { where: { id }, transaction });
       }

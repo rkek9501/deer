@@ -20,7 +20,6 @@ const customFormat = combine(
 
 const options = {
   error: {
-
     level: "error",
     filename: `${appRoot}/logs/error.log`,
     handleExceptions: true,
@@ -56,7 +55,6 @@ const logger = winston.createLogger({
   transports: [new winston.transports.File(options.error), new winston.transports.File(options.info), new winston.transports.Console(options.debug)],
   exitOnError: false // do not exit on handled exceptions
 });
-
 
 const morganFormat = ':remote-addr - :remote-user ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"';
 const morganOptions = {

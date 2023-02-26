@@ -4,7 +4,7 @@ import { ServerStyleSheet } from "styled-components";
 
 class MyDocument extends Document {
   public render() {
-    console.log("run _documents")
+    console.log("run _documents");
     return (
       <Html lang="en">
         <Head>

@@ -1,7 +1,4 @@
-import {
-  verifyAccessToken, verifyRefreshToken,
-  setAccessToken, setRefreshToken
-} from "./jwt";
+import { verifyAccessToken, verifyRefreshToken, setAccessToken, setRefreshToken } from "./jwt";
 import type { Request, Response, NextFunction } from "express";
 import { ACCESS_TOKEN_COOKIE_OPTIONS, REFRESH_TOKEN_COOKIE_OPTIONS } from "../env";
 
@@ -10,12 +7,12 @@ const accessCheck = (req: Request, res: Response, next: NextFunction) => {
   const accessToken = req.session?.accessToken || req.cookies?.accessToken || "";
   const refreshToken = req.session?.refreshToken || "";
 
-  const accessable =  verifyAccessToken(accessToken);
+  const accessable = verifyAccessToken(accessToken);
   const refreshable = verifyRefreshToken(refreshToken);
   // console.log(JSON.stringify({ accessToken, refreshToken, accessable, refreshable }, null, 2));
 
   if (!accessable && refreshable) {
-    refreshingTokens(refreshable, req, res)
+    refreshingTokens(refreshable, req, res);
   }
   if (!accessable) {
     console.log("un authrized");
@@ -34,12 +31,12 @@ const accessCheck = (req: Request, res: Response, next: NextFunction) => {
 const authCheck = (req: Request, res: Response, next: NextFunction) => {
   const accessToken = req.session?.accessToken || req.cookies?.accessToken || "";
   const refreshToken = req.session?.refreshToken || "";
-  
-  const accessable =  verifyAccessToken(accessToken);
+
+  const accessable = verifyAccessToken(accessToken);
   const refreshable = verifyRefreshToken(refreshToken);
 
   if (!accessable && refreshable) {
-    refreshingTokens(refreshable, req, res)
+    refreshingTokens(refreshable, req, res);
   }
   if (accessToken && !req.auth) {
     req.auth = {
@@ -63,6 +60,6 @@ const refreshingTokens = (id: string, req: Request, res: Response) => {
 
   res.cookie("accessToken", newAccessToken, ACCESS_TOKEN_COOKIE_OPTIONS);
   // res.cookie("refreshToken", newRefreshToken, REFRESH_TOKEN_COOKIE_OPTIONS);
-}
+};
 
 export { authCheck, accessCheck };

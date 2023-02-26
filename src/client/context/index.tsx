@@ -14,7 +14,7 @@ export const AppContext = createContext({
   tags: [],
   isMobile: false,
   loading: false,
-  setLoading: (loading: boolean) => {},
+  setLoading: (loading: boolean) => {}
 });
 
 const AppProvider = (props: AppProviderProps) => {
@@ -42,16 +42,13 @@ const AppProvider = (props: AppProviderProps) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const logout = useCallback(
-    (path?: string) => {
-      clearToken();
-      localStorage?.removeItem("name");
-      if (path) setPage(path);
-      else setPage("/");
-      location.href = path || "/";
-    },
-    []
-  );
+  const logout = useCallback((path?: string) => {
+    clearToken();
+    localStorage?.removeItem("name");
+    if (path) setPage(path);
+    else setPage("/");
+    location.href = path || "/";
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -75,7 +72,7 @@ const AppProvider = (props: AppProviderProps) => {
   return (
     <AppContext.Provider value={values}>
       {props.children}
-      {loading && <GlobalLoader/>}
+      {loading && <GlobalLoader />}
     </AppContext.Provider>
   );
 };

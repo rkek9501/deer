@@ -162,8 +162,8 @@ const getThumb = (id: number) => {
   return (id % 4) + 1;
 };
 const CardImgLoader = ({ src }: { src: string }) => {
-  return `${src}`
-}
+  return `${src}`;
+};
 const Textcard = (props: { post: PostType; size?: string }) => {
   const { setLoading } = useContext(AppContext);
   const router = useRouter();
@@ -171,50 +171,53 @@ const Textcard = (props: { post: PostType; size?: string }) => {
   if (!firstImgSrc) {
     firstImgSrc = `/img/card/default${getThumb(props.post.id)}.jpg`;
   }
-  return <div onClick={() => {
-    setLoading(true);
-    gtag.event({
-      action: 'click',
-      category: 'move page',
-      label: 'card',
-    });
-    router.push(`/post/${props.post.subpath}`);
-  }}
->
-    <CardContainer small={props.size === "small"} >
-      <div className="card-top">
-        <Image
-          alt={props.post.title}
-          className={`card-top-img ${props.post.openState && "secret"}`}
-          width={225}
-          height={150}
-          unoptimized={true} 
-          layout={"fixed"}
-          src={firstImgSrc}
-          loader={CardImgLoader}
-        />
-        <h2 className="title">
-          <span className="highlight">{props.post.title}</span>
-        </h2>
-        {props.post.openState !== "Y" && <div className="secret-card">비공개</div>}
-      </div>
-
-      <div className="card-bottom">
-        <div className="subtitle">{props.post.subtitle}</div>
-
-        <div className="data-area">
-          <p className="date">{moment(props.post.createdAt).format("MMM DD, YYYY")}</p>
-          <p className="author">{props.post?.user?.name}</p>
+  return (
+    <div
+      onClick={() => {
+        setLoading(true);
+        gtag.event({
+          action: "click",
+          category: "move page",
+          label: "card"
+        });
+        router.push(`/post/${props.post.subpath}`);
+      }}
+    >
+      <CardContainer small={props.size === "small"}>
+        <div className="card-top">
+          <Image
+            alt={props.post.title}
+            className={`card-top-img ${props.post.openState && "secret"}`}
+            width={225}
+            height={150}
+            unoptimized={true}
+            layout={"fixed"}
+            src={firstImgSrc}
+            loader={CardImgLoader}
+          />
+          <h2 className="title">
+            <span className="highlight">{props.post.title}</span>
+          </h2>
+          {props.post.openState !== "Y" && <div className="secret-card">비공개</div>}
         </div>
 
-        <div className="tag-area">
-          {props.post.tags?.map((tag: { name: string; color: string }, idx: number) => {
-            return <Tag key={idx} name={tag.name} color={tag.color} alwaysOn={true} />;
-          })}
+        <div className="card-bottom">
+          <div className="subtitle">{props.post.subtitle}</div>
+
+          <div className="data-area">
+            <p className="date">{moment(props.post.createdAt).format("MMM DD, YYYY")}</p>
+            <p className="author">{props.post?.user?.name}</p>
+          </div>
+
+          <div className="tag-area">
+            {props.post.tags?.map((tag: { name: string; color: string }, idx: number) => {
+              return <Tag key={idx} name={tag.name} color={tag.color} alwaysOn={true} />;
+            })}
+          </div>
         </div>
-      </div>
-    </CardContainer>
-  </div>;
+      </CardContainer>
+    </div>
+  );
 };
 
 export default Textcard;

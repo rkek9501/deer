@@ -12,7 +12,7 @@ import TagSelector from "@components/TagSelector";
 import RequestHelper from "@utils/requestHelper";
 import { AppContext } from "@context";
 
-export type TagType = { label: string, value: string, color: string };
+export type TagType = { label: string; value: string; color: string };
 
 const EditMode = styled.div`
   font-size: 2.6rem;
@@ -127,8 +127,9 @@ const EditorPage = () => {
 
   useEffect(() => {
     if (allTags && allTags.length > 0) {
-      console.log({allTags})
-      const tagList: TagType[] = allTags?.map((tag: any) => {
+      console.log({ allTags });
+      const tagList: TagType[] =
+        allTags?.map((tag: any) => {
           return { label: tag.name, value: tag.id, color: tag.color };
         }) ?? [];
 
@@ -163,50 +164,54 @@ const EditorPage = () => {
     }
   }, [id, title, content, openState, selectedTags, files]);
 
-  return (<Suspense fallback={<Loading />}><EditorProvider>
-    <PageContainer>
-      <Helmet>
-        {/* <link rel="stylesheet" href="css/prism.css" /> */}
-        {/* <link rel="stylesheet" href="css/editor.css" /> */}
-      </Helmet>
-      <Container id="left-container">
-        <div className="center">
-          <EditMode>
-            <div className="page-title">
-              게시글&nbsp;{editMode ? "수정" : "작성"}
-              {/* <div className="preview-switch-container">
+  return (
+    <Suspense fallback={<Loading />}>
+      <EditorProvider>
+        <PageContainer>
+          <Helmet>
+            {/* <link rel="stylesheet" href="css/prism.css" /> */}
+            {/* <link rel="stylesheet" href="css/editor.css" /> */}
+          </Helmet>
+          <Container id="left-container">
+            <div className="center">
+              <EditMode>
+                <div className="page-title">
+                  게시글&nbsp;{editMode ? "수정" : "작성"}
+                  {/* <div className="preview-switch-container">
                 <Label>미리보기</Label>
                 <Switch checked={preview} setChecked={setPreview} />
               </div> */}
+                </div>
+                <hr />
+              </EditMode>
+
+              <br />
+              <Label>제목</Label>
+              <TitleInput title={title} setTitle={setTitle} />
+
+              <br />
+              <Label>본문</Label>
+              <MarkdownEditor content={content} setContent={setContent} />
+
+              <br />
+              <Label>태그 선택</Label>
+              <TagSelector options={tags} selected={selectedTags} setSelected={setSelectedTags} />
+
+              <br />
+              <Between>
+                <div>
+                  <Label>공개 여부</Label>
+                  <Switch trueText="공개" falseText="비공개" checked={openState} setChecked={setOpenState} />
+                </div>
+
+                <Button onClick={() => uploadPost()}>{editMode ? "수정" : "작성"}</Button>
+              </Between>
             </div>
-            <hr />
-          </EditMode>
-
-          <br />
-          <Label>제목</Label>
-          <TitleInput title={title} setTitle={setTitle} />
-
-          <br />
-          <Label>본문</Label>
-          <MarkdownEditor content={content} setContent={setContent} />
-
-          <br />
-          <Label>태그 선택</Label>
-          <TagSelector options={tags} selected={selectedTags} setSelected={setSelectedTags} />
-
-          <br />
-          <Between>
-            <div>
-              <Label>공개 여부</Label>
-              <Switch trueText="공개" falseText="비공개" checked={openState} setChecked={setOpenState} />
-            </div>
-
-            <Button onClick={() => uploadPost()}>{editMode ? "수정" : "작성"}</Button>
-          </Between>
-        </div>
-      </Container>
-    </PageContainer>
-  </EditorProvider></Suspense>);
+          </Container>
+        </PageContainer>
+      </EditorProvider>
+    </Suspense>
+  );
 };
 
 export default EditorPage;

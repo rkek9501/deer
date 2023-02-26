@@ -27,11 +27,11 @@ const App = (appProps: any) => {
     const onRouteChange = (url: any) => {
       gtag.pageview(url);
     };
-    router.events.on('routeChangeComplete', onRouteChange);
-    router.events.on('hashChangeComplete', onRouteChange);
+    router.events.on("routeChangeComplete", onRouteChange);
+    router.events.on("hashChangeComplete", onRouteChange);
     return () => {
-      router.events.off('routeChangeComplete', onRouteChange);
-      router.events.off('hashChangeComplete', onRouteChange);
+      router.events.off("routeChangeComplete", onRouteChange);
+      router.events.off("hashChangeComplete", onRouteChange);
     };
   }, [router.events]);
 
@@ -41,7 +41,7 @@ const App = (appProps: any) => {
   //     ReactGA.pageview(location.pathname + location.pathname);
   //   }
   // },[]);
-  
+
   return (
     <Suspense fallback={<Loading />}>
       <AppProvider>
@@ -73,6 +73,6 @@ const App = (appProps: any) => {
       </AppProvider>
     </Suspense>
   );
-}
+};
 
 export default App;

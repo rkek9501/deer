@@ -37,9 +37,9 @@ const axiosInstance = axios.create({
   withCredentials: true,
   baseURL: process.env.HOST_URL,
   httpsAgent: new https.Agent({
-    rejectUnauthorized: false, //허가되지 않은 인증을 reject하지 않겠다!
-  }),
-})
+    rejectUnauthorized: false //허가되지 않은 인증을 reject하지 않겠다!
+  })
+});
 
 const requestFetch = (url: string, options: object, setLoadMask: any) => {
   if (setLoadMask) setLoadMask(true);
@@ -71,8 +71,8 @@ const Get = async (request: GetRequestType, cookies?: string) => {
       Authorization: "",
       Accept: "application/json",
       "Access-Control-Allow-Origin": "*",
-      "Content-Type": "application/json",
-    },
+      "Content-Type": "application/json"
+    }
   };
 
   if (cookies) {
@@ -85,15 +85,15 @@ const Get = async (request: GetRequestType, cookies?: string) => {
 
 const CheckAuth = async (cookies?: string) => {
   // const { url, query, setLoadMask } = request;
-  const path = "/api/user/chechSession"
+  const path = "/api/user/chechSession";
   const config: any = {
     method: "GET",
     headers: {
       Authorization: "",
       Accept: "application/json",
       "Access-Control-Allow-Origin": "*",
-      "Content-Type": "application/json",
-    },
+      "Content-Type": "application/json"
+    }
   };
 
   if (cookies) {
@@ -112,9 +112,9 @@ const Post = async (request: RequestType) => {
       Authorization: "",
       Accept: "application/json",
       "Access-Control-Allow-Origin": "*",
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     },
-    data: JSON.stringify(body),
+    data: JSON.stringify(body)
   };
   const token = getToken() || null;
   if (token) {

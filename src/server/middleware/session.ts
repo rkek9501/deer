@@ -1,13 +1,13 @@
 import session from "express-session";
 import FileStore from "session-file-store";
-import { SESSION_KEY,HOST_URL } from "../env"
+import { SESSION_KEY, HOST_URL } from "../env";
 import fs from "fs";
 import path from "path";
 
 (() => {
   const sessionDir = path.join(process.cwd(), "./sessions");
   if (!fs.existsSync(sessionDir)) {
-    console.log("make sessions dir")
+    console.log("make sessions dir");
     fs.mkdirSync(sessionDir);
   }
 })();
@@ -29,5 +29,5 @@ const initSession = session({
 });
 
 export default {
-  initSession,
-}
+  initSession
+};

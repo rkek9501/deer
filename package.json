@@ -15,8 +15,8 @@
     "sitemap": "babel-node ./src/sitemap/builder.js",
     "server": "NODE_ENV=production 'ts-node' --esm ./src/server/server.ts",
     "pre-server": "NODE_ENV=production IS_PRE=true 'ts-node' --esm ./src/server/server.ts",
-    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
-    "lint": "prettier --check \"src/**/*.{js,jsx,ts,tsx}\"",
+    "format": "prettier --write \"{src,pages}/**/*.{js,jsx,ts,tsx}\"",
+    "lint": "prettier --check \"{src,pages}/**/*.{js,jsx,ts,tsx}\" ",
     "test": "web-test-runner \"src/**/*.test.tsx\"",
     "check-types": "tsc"
   },

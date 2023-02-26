@@ -5,15 +5,16 @@ import { HOST_URL } from "../env";
 
 const generatePostSiteMap = (sites: any[]) => {
   return sites
-    .filter((post: any) => post?.openState==="Y")
-    .map((post) => `  <url>
+    .filter((post: any) => post?.openState === "Y")
+    .map(
+      (post) => `  <url>
     <loc>${HOST_URL}/post/${post.subpath}</loc>
     <priority>1.0</priority>
     <lastmod>${moment(post.updatedAt).format("YYYY-MM-DD")}</lastmod>
-  </url>`)
-    .join(`
+  </url>`
+    ).join(`
 `);
-}
+};
 
 const generateSiteMap = (sites: any[]) => {
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -24,11 +25,10 @@ const generateSiteMap = (sites: any[]) => {
   </url>
 ${generatePostSiteMap(sites)}
 </urlset>`;
-  const sitemapPath = path.join(process.cwd(),"public/sitemap.xml");
-
+  const sitemapPath = path.join(process.cwd(), "public/sitemap.xml");
 
   console.log("[Server] Re-Generate Sitemap");
-  fs.writeFileSync(sitemapPath, sitemap, 'utf8');
-}
+  fs.writeFileSync(sitemapPath, sitemap, "utf8");
+};
 
 export default generateSiteMap;

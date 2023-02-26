@@ -11,5 +11,5 @@ declare namespace Express {
       destroy: () => void;
       testNum?: number;
     };
-  };
-};
+  }
+}

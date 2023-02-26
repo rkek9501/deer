@@ -18,23 +18,24 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).single("file");
 
-export const remove = async (filePath: string) => new Promise((resolve, reject) => {
-  console.log(filePath, "파일을 삭제합니다.");
-  const fileAbsolutePath = path.join(process.cwd(), filePath);
-  if (fs.existsSync(fileAbsolutePath)) {
-    fs.unlink(fileAbsolutePath, (err) => {
-      if (err) {
-        console.log("fs unlink err", err);
-        reject();
-      } else {
-        console.log("파일을 성공적으로 삭제하였습니다.");
-        resolve("unlinked");
-      }
-    });
-  } else {
-    console.log("파일이 존재하지 않습니다.");
-    resolve("notExist");
-  }
-});
+export const remove = async (filePath: string) =>
+  new Promise((resolve, reject) => {
+    console.log(filePath, "파일을 삭제합니다.");
+    const fileAbsolutePath = path.join(process.cwd(), filePath);
+    if (fs.existsSync(fileAbsolutePath)) {
+      fs.unlink(fileAbsolutePath, (err) => {
+        if (err) {
+          console.log("fs unlink err", err);
+          reject();
+        } else {
+          console.log("파일을 성공적으로 삭제하였습니다.");
+          resolve("unlinked");
+        }
+      });
+    } else {
+      console.log("파일이 존재하지 않습니다.");
+      resolve("notExist");
+    }
+  });
 
 export default upload;

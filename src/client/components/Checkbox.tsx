@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { useEffect, useState } from "react";
+import styled from "styled-components";
 
 const CheckboxContainer = styled.div`
   display: flex;
@@ -16,7 +16,7 @@ type CheckboxProps = {
   checked: boolean;
   label?: string;
   onChange?: (checked: boolean) => void;
-}
+};
 const Checkbox = (props: CheckboxProps) => {
   const [checked, setChecked] = useState(props.checked);
 
@@ -24,13 +24,17 @@ const Checkbox = (props: CheckboxProps) => {
     props.onChange?.(checked);
   }, [checked]);
 
-  return <CheckboxContainer onClick={(e) => {
-    e.stopPropagation();
-    setChecked(!checked);
-    }}>
-    <input readOnly type="checkbox" checked={checked}/>
-    {props.label && <label>{props.label}</label>}
-  </CheckboxContainer>;
-}
+  return (
+    <CheckboxContainer
+      onClick={(e) => {
+        e.stopPropagation();
+        setChecked(!checked);
+      }}
+    >
+      <input readOnly type="checkbox" checked={checked} />
+      {props.label && <label>{props.label}</label>}
+    </CheckboxContainer>
+  );
+};
 
 export default Checkbox;

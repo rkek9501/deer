@@ -118,7 +118,7 @@ const PostPage = (Props: any) => {
         const { response: recomendRes } = await RequestHelper.Get({ url: "/api/post/recommend/" + contentId });
         console.log({ contentRes, recomendRes });
         setRecomend(recomendRes.data);
-        
+
         const lines = contentRes.data?.content?.split("\n");
         const heading: any[] = [];
         const content = [];
@@ -144,15 +144,15 @@ const PostPage = (Props: any) => {
         setHData(heading);
         setData({ ...contentRes.data, content: contents });
         setLoading(false);
-      })()
+      })();
     }
   }, [data]);
 
   const gotoEdit = () => {
     setLoading(true);
     router.push({
-      pathname: '/editor/[id]',
-      query: { id: contentId },
+      pathname: "/editor/[id]",
+      query: { id: contentId }
     });
   };
 
@@ -162,81 +162,82 @@ const PostPage = (Props: any) => {
     e.preventDefault();
   };
 
-  // return <div>404 Page Not Found</div> 
-  
-  // if(!data)
-  return (<Layout>
-    <PageContainer>
-      <Helmet>
-        <title>{`Deer | ${Props?.title}`}</title>
+  // return <div>404 Page Not Found</div>
 
-        <link rel="stylesheet" type="text/css" href="/css/index.css" />
-        <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
-        <link rel="stylesheet" type="text/css" href="/css/prism.css" />
-        <link rel="stylesheet" type="text/css" href="/css/editor.css" />
-      </Helmet>
+  // if(!data)
+  return (
+    <Layout>
+      <PageContainer>
+        <Helmet>
+          <title>{`Deer | ${Props?.title}`}</title>
+
+          <link rel="stylesheet" type="text/css" href="/css/index.css" />
+          <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
+          <link rel="stylesheet" type="text/css" href="/css/prism.css" />
+          <link rel="stylesheet" type="text/css" href="/css/editor.css" />
+        </Helmet>
         {/* <link rel="stylesheet" href="css/prism.css" />
         <link rel="stylesheet" href="css/editor.css" /> */}
-      {data ? (
-        <ContentContainer>
-          <div className="content-main">
-            <div className="center">
-              <Title>{data?.title}</Title>
-              <UserView name={data.user?.name} image={data.user?.image} date={data.createdAt} />
-              <TagList>
-                {data.tags?.map((tag: { name: string; color: string }, idx: number) => {
-                  return <Tag key={idx} name={tag.name} color={tag.color} alwaysOn={true} />;
-                })}
-              </TagList>
-              <Viewer content={data?.content} />
+        {data ? (
+          <ContentContainer>
+            <div className="content-main">
+              <div className="center">
+                <Title>{data?.title}</Title>
+                <UserView name={data.user?.name} image={data.user?.image} date={data.createdAt} />
+                <TagList>
+                  {data.tags?.map((tag: { name: string; color: string }, idx: number) => {
+                    return <Tag key={idx} name={tag.name} color={tag.color} alwaysOn={true} />;
+                  })}
+                </TagList>
+                <Viewer content={data?.content} />
+              </div>
+              <BookMark data={hData} />
             </div>
-            <BookMark data={hData} />
-          </div>
-          <span id="content-end" />
-          <div style={{ position: "relative" }}>
-            <FloatingBtn bottom={80} bgColor="#F9F9F9" onClick={goToTop}>
-              <Icons.ToTop />
-            </FloatingBtn>
-            {session && (
-              <FloatingBtn bottom={20} bgColor="greenyellow" onClick={() => gotoEdit()}>
-                수정
+            <span id="content-end" />
+            <div style={{ position: "relative" }}>
+              <FloatingBtn bottom={80} bgColor="#F9F9F9" onClick={goToTop}>
+                <Icons.ToTop />
               </FloatingBtn>
-            )}
+              {session && (
+                <FloatingBtn bottom={20} bgColor="greenyellow" onClick={() => gotoEdit()}>
+                  수정
+                </FloatingBtn>
+              )}
+            </div>
+            <Carousel contents={recomend || []} />
+            <AdsComponents />
+            <Comment />
+          </ContentContainer>
+        ) : (
+          <div className="center" id="center">
+            게시글이 존재하지 않습니다.
           </div>
-          <Carousel contents={recomend || []} />
-          <AdsComponents />
-          <Comment />
-        </ContentContainer>
-      ) : (
-        <div className="center" id="center">
-          게시글이 존재하지 않습니다.
-        </div>
-      )}
-    </PageContainer>
-  </Layout>);
+        )}
+      </PageContainer>
+    </Layout>
+  );
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const { response } = await RequestHelper.Get({ url: "/api/post/paths" });
   const paths = response.data?.map((post: any) => ({
-    params: { id: `${post.subpath}` },
+    params: { id: `${post.subpath}` }
   }));
-  return { paths, fallback: "blocking" }
-}
-
+  return { paths, fallback: "blocking" };
+};
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const pageData = JSON.parse(utf8.decode(base64.decode(params?.id ? String(params?.id) : "")));
   const title = pageData.title;
-  
+
   return {
     props: {
-      title,
+      title
       // content: contentRes.data,
       // recomend: recomendRes.data,
       // error
     }
-  }
-}
+  };
+};
 
 export default PostPage;

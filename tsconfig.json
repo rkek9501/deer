@@ -2,16 +2,8 @@
   "ts-node": {
     "files": true
   },
-  "include": [
-    "src/client/**/*",
-    "types",
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules",
-  ],
+  "include": ["src/client/**/*", "types", "next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"],
   "compilerOptions": {
     "module": "commonjs",
     "target": "ES2020",
@@ -43,18 +35,11 @@
     // "emitDeclarationOnly": true,
     // Babel이 TypeScript 프로젝트의 파일을 안전하게 트랜스파일할 수 있는지 확인합니다.
     "isolatedModules": true,
-    "typeRoots": [
-      "./node_modules/@types",
-      "types"
-    ],
+    "typeRoots": ["./node_modules/@types", "types"],
     // Import non-ES modules as default imports.
     "esModuleInterop": true,
     "outDir": "./build",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "incremental": true
   }

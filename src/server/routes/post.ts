@@ -30,7 +30,7 @@ const findPaths = async () => {
     .findAll({
       where: { deletedAt: null },
       order: [["createdAt", "ASC"]],
-      attributes: { exclude: ["content", "subtitle", "viewCount", "createdAt", "deletedAt"] },
+      attributes: { exclude: ["content", "subtitle", "viewCount", "createdAt", "deletedAt"] }
     })
     .then((data: any) => JSON.parse(JSON.stringify(data)));
   const pathMapping = list.map((item: any) => {
@@ -40,7 +40,7 @@ const findPaths = async () => {
     };
   });
   return pathMapping;
-}
+};
 
 appRouter.get("/item/:content", authCheck, async (req, res) => {
   const { content } = req.params;
@@ -89,7 +89,7 @@ appRouter.get("/paths", authCheck, async (req, res) => {
       .findAll({
         where: { deletedAt: null },
         order: [["createdAt", "DESC"]],
-        attributes: { exclude: ["content", "subtitle", "viewCount", "createdAt", "updatedAt", "deletedAt"] },
+        attributes: { exclude: ["content", "subtitle", "viewCount", "createdAt", "updatedAt", "deletedAt"] }
       })
       .then((data: any) => JSON.parse(JSON.stringify(data)));
     const pathMapping = list.map((item: any) => {
@@ -180,7 +180,7 @@ appRouter.get("/recommend/:content", authCheck, async (req, res) => {
       })
       .then((data: any) => JSON.parse(JSON.stringify(data)))
       .then((item: any) => item?.tags?.map((tag: any) => ({ id: tag.id, color: tag.color, name: tag.name })));
-    
+
     const list = await posts
       .findAll({
         where: { id: { [Op.not]: decode.id }, deletedAt: null },
@@ -225,7 +225,7 @@ appRouter.get("/recommend/:content", authCheck, async (req, res) => {
           .sort((a: any, b: any) => sortDesc(a, b, "overlapCount"))
       );
 
-      console.log(JSON.stringify({ list, posts, decode }, null, 2));
+    console.log(JSON.stringify({ list, posts, decode }, null, 2));
     return res.status(200).send({ result: true, data: list, message: "게시글 목록이 조회되었습니다." });
   } catch (exception) {
     console.log("error", exception);
@@ -359,8 +359,8 @@ appRouter.post("/create", accessCheck, async (req, res) => {
       new Promise(async () => {
         const paths = await findPaths();
         generateSiteMap(paths);
-      })
-      
+      });
+
       return res.status(200).send({ result: true, message: "게시글이 작성되었습니다." });
     });
   } catch (exception) {
@@ -405,7 +405,7 @@ appRouter.put("/update", accessCheck, async (req, res) => {
           ]
         })
         .then((data: any) => JSON.parse(JSON.stringify(data)));
-        // console.log({ post });
+      // console.log({ post });
       // 태그 업데이트
       const postedTags = post?.tags?.map((tag: any) => tag.id).sort();
       const selectedTags = tagList
@@ -445,8 +445,8 @@ appRouter.put("/update", accessCheck, async (req, res) => {
             const createTags = await tags.bulkCreate(newTags, { transaction });
             const createdTags = createTags.map((tag: any) => ({ postId: post.id, tagId: tag.dataValues.id }));
 
-            await post_tag.bulkCreate(createdTags, { transaction });;
-          } 
+            await post_tag.bulkCreate(createdTags, { transaction });
+          }
         }
 
         // 선택 해제된 태그 제거
@@ -601,9 +601,7 @@ appRouter.get("/tags", async (req, res) => {
         where: { deletedAt: null, openState: "Y" },
         order: [["createdAt", "DESC"]],
         attributes: { exclude: ["content", "subtitle", "writterId", "viewCount", "createdAt", "updatedAt", "deletedAt"] },
-        include: [
-          { model: tags, through: { attributes: ["postId", "tagId"] } }
-        ]
+        include: [{ model: tags, through: { attributes: ["postId", "tagId"] } }]
       })
       .then((data: any) => JSON.parse(JSON.stringify(data)));
 
@@ -672,7 +670,9 @@ appRouter.delete("/tag", async (req, res) => {
 
 appRouter.delete("/checkFiles", async (req, res) => {
   try {
-    const dbFileList = await files.findAll({ attributes: ["post_id", "origin_name", "s3Path"] }).then((data: any) => JSON.parse(JSON.stringify(data)));
+    const dbFileList = await files
+      .findAll({ attributes: ["post_id", "origin_name", "s3Path"] })
+      .then((data: any) => JSON.parse(JSON.stringify(data)));
     const uploadPath = path.join(process.cwd(), "./uploads");
     if (!fs.existsSync(uploadPath)) {
       fs.mkdirSync(uploadPath);

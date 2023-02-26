@@ -68,7 +68,7 @@ const Carousel = ({ contents }: any) => {
   }, [posts]);
 
   useLayoutEffect(() => {
-    if (typeof window !== 'undefined')
+    if (typeof window !== "undefined")
       new SwiperCore(".swiper", {
         slidesPerView: "auto",
         direction: "horizontal",

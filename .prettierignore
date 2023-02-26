@@ -1,10 +1,15 @@
 build/
-.env
 logs/
-build/
 node_modules/
 public/
+sessions/
+uploads/
+.vscode/
 
+README.md
+.env
+.env-ex
+*.db
 package-lock.json
 yarn.lock
 yarn-error.log

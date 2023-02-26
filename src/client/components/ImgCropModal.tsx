@@ -7,7 +7,7 @@ import styled from "styled-components";
 import Button from "./Button";
 import Icons from "./Icons";
 
-Modal.setAppElement('#__next');
+Modal.setAppElement("#__next");
 
 const customStyles = {
   overlay: {
@@ -16,20 +16,20 @@ const customStyles = {
     left: "50%",
     backgroundColor: "rgba(100, 100, 100, 0.75)",
     transform: "translate(-50%, -50%)",
-    width: 'calc(100vw)',
-    height: 'calc(100vh)',
-    minWidth: 600,
+    width: "calc(100vw)",
+    height: "calc(100vh)",
+    minWidth: 600
   },
   content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    maxWidth: 'calc(100vw - 200px)',
-    maxHeight: 'calc(100vh - 100px)',
-    transform: 'translate(-50%, -50%)',
-  },
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    maxWidth: "calc(100vw - 200px)",
+    maxHeight: "calc(100vh - 100px)",
+    transform: "translate(-50%, -50%)"
+  }
 };
 
 const ModalBody = styled.div`
@@ -211,56 +211,55 @@ const ImgCropModal = (Props: { open: boolean; existImg: boolean; callback: any }
 
   return (
     <div onClick={(e) => e.stopPropagation()}>
-      <Modal
-        isOpen={Props.open}
-        onRequestClose={() => Props.callback({ type: "close" })}
-        style={customStyles}
-        contentLabel="Example Modal"
-      >
+      <Modal isOpen={Props.open} onRequestClose={() => Props.callback({ type: "close" })} style={customStyles} contentLabel="Example Modal">
         <ModalBody>
           <div className="modal-header">
             <div>프로필 이미지 편집</div>
-            <div onClick={() => Props.callback({ type: "close" })}><Icons.Close/></div>
+            <div onClick={() => Props.callback({ type: "close" })}>
+              <Icons.Close />
+            </div>
           </div>
-          {step === 0 && <>
-            <div className="modal-body">
-              <div className="modal-buttons">
-                {Props.existImg && <Button onClick={gotoRemoveStep} >이미지 삭제</Button>}
-                <Button onClick={(e) => e.stopPropagation()} >이미지 변경
-                  <input type="file" onChange={onClickChangeImgBtn} accept="image/jpg,impge/png,image/jpeg,image/gif" />
-                </Button>
+          {step === 0 && (
+            <>
+              <div className="modal-body">
+                <div className="modal-buttons">
+                  {Props.existImg && <Button onClick={gotoRemoveStep}>이미지 삭제</Button>}
+                  <Button onClick={(e) => e.stopPropagation()}>
+                    이미지 변경
+                    <input type="file" onChange={onClickChangeImgBtn} accept="image/jpg,impge/png,image/jpeg,image/gif" />
+                  </Button>
+                </div>
               </div>
-            </div>
-          </>}
-          {step === 1 && <>
-            <div className="modal-body">
-              {src && <ReactCrop
-                src={src}
-                crop={crop}
-                ruleOfThirds
-                onImageLoaded={onImageLoaded}
-                onComplete={onCropComplete}
-                onChange={onCropChange}
-              />}
-              <PrevArea>
-                미리보기
-                <ModalImg id="crop" className="crop-img" src={cropSrc} />
-              </PrevArea>
-            </div>
-            <div className="modal-footer">
-              <Button onClick={gotoPrevStep}>이전</Button>
-              <Button onClick={onClickSave}>저장</Button>
-            </div>
-          </>}
-          {step === 2 && <>
-            <div className="modal-body">
-              <div className="remove-question">정말로 프로필 이미지를 삭제하시겠습니까?</div>
-            </div>
-            <div className="modal-footer">
-              <Button onClick={gotoPrevStep} >이전</Button>
-              <Button onClick={onClickRemoveImgBtn} >삭제</Button>
-            </div>
-          </>}
+            </>
+          )}
+          {step === 1 && (
+            <>
+              <div className="modal-body">
+                {src && (
+                  <ReactCrop src={src} crop={crop} ruleOfThirds onImageLoaded={onImageLoaded} onComplete={onCropComplete} onChange={onCropChange} />
+                )}
+                <PrevArea>
+                  미리보기
+                  <ModalImg id="crop" className="crop-img" src={cropSrc} />
+                </PrevArea>
+              </div>
+              <div className="modal-footer">
+                <Button onClick={gotoPrevStep}>이전</Button>
+                <Button onClick={onClickSave}>저장</Button>
+              </div>
+            </>
+          )}
+          {step === 2 && (
+            <>
+              <div className="modal-body">
+                <div className="remove-question">정말로 프로필 이미지를 삭제하시겠습니까?</div>
+              </div>
+              <div className="modal-footer">
+                <Button onClick={gotoPrevStep}>이전</Button>
+                <Button onClick={onClickRemoveImgBtn}>삭제</Button>
+              </div>
+            </>
+          )}
         </ModalBody>
       </Modal>
     </div>

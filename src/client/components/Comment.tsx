@@ -35,7 +35,7 @@ const Comment = React.memo(() => {
   if (!process.env.COMMENT_REPO && !process.env.COMMENT_LABEL) {
     return null;
   }
-  return <CommentArea ref={containerRef}/>;
+  return <CommentArea ref={containerRef} />;
 });
 
 export default Comment;
