@@ -1,7 +1,13 @@
-# Deer
+# [Deer](https://de-er.link)
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/34267371/220578488-41518269-e279-4dd6-9d48-412661c130af.png" alt="Deer-logo" width="300" />
+  <a href="https://de-er.link">
+    <img src="https://user-images.githubusercontent.com/34267371/223376843-0dbd2496-82c5-4f3a-be28-bdd5b45433fa.png" alt="Deer-icon" width="40" />
+  </a>
+  &nbsp;&nbsp;&nbsp;
+  <a href="https://de-er.link">
+    <img src="https://user-images.githubusercontent.com/34267371/223376820-46d928d3-d2ad-412c-b2df-a658a6fcdba9.png" alt="Deer-logo" width="200" />
+  </a>
 </p>
 
 <p align="center">
