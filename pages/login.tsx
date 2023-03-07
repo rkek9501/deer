@@ -7,6 +7,7 @@ import { AppContext } from "@context/index";
 import Button from "@components/Button";
 import Checkbox from "@components/Checkbox";
 import requestHelper from "@utils/requestHelper";
+import Icons from "@components/Icons";
 
 const PageContainer = styled.div`
   padding: 8rem 4rem 2rem;
@@ -75,8 +76,7 @@ const PageContainer = styled.div`
       border: none;
       background: white;
       box-shadow: none;
-      margin: 0 auto;
-      /* margin-top: 4rem; */
+      margin: 0;
     }
   }
 `;
@@ -134,7 +134,9 @@ const Login = () => {
         <title>Deer Login</title>
       </Helmet>
       <div className="login-content">
-        <div className="title title-deer">DEER</div>
+        <div className="title title-deer">
+          <Icons.Logo />
+        </div>
         <form className="login-input-box">
           <input name="id" type="text" placeholder="전화번호, 사용자 이름 또는 이메일" value={id} onChange={(e) => setid(e.target.value)} />
           <input

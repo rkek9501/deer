@@ -180,10 +180,9 @@ const Textcard = (props: { post: PostType; size?: string }) => {
           category: "move page",
           label: "card"
         });
-        router.push(`/post/${props.post.subpath}`);
       }}
     >
-      <CardContainer small={props.size === "small"}>
+      <CardContainer small={props.size === "small"} href={`/post/${props.post.subpath}`}>
         <div className="card-top">
           <Image
             alt={props.post.title}

@@ -6,6 +6,7 @@ import Script from "next/script";
 
 import Loading from "@components/Loading";
 import Header from "@components/Header";
+import { SvgDefs } from "@components/Icons";
 import AppProvider from "@context/index";
 import * as gtag from "@utils/gtag";
 import "./globals.css";
@@ -71,6 +72,7 @@ const App = (appProps: any) => {
           <Component {...pageProps} />
         </Container>
       </AppProvider>
+      <SvgDefs />
     </Suspense>
   );
 };
