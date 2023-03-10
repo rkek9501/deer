@@ -38,6 +38,9 @@ AWS를 기반으로한 배포와 Google(Search Console, Analytics 등) 기반의
 - [ ] Google Adsense 적용 및 확인
 - [ ] Front-End Request 캐싱
 - [ ] 무한 스크롤링 작업 (API / UI)
+- [ ] 에디터 수정
+  - [ ] 이미지 파일 업로드 이슈 수정 (doing...)
+  - [X] 에디터 높이 설정 수정
 - UI 
   - [ ] 읽은 게시글 확인 가능하도록 수정
   - [ ] 게시글 조회 UI 수정

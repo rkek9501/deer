@@ -95,7 +95,8 @@ const MarkdownEditor = (Props: { content: string; setContent: (content: string) 
       <div className="container">
         <MDEditor
           value={Props.content || ""}
-          height={300}
+          minHeight={300}
+          height={500}
           onChange={(value: any, ...args) => {
             Props.setContent(value);
             console.log({ args, value });
