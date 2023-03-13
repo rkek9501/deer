@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const BtnContainer = styled.div`
+const BtnContainer = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,6 +11,7 @@ const BtnContainer = styled.div`
   outline: none;
   border: none;
   cursor: pointer;
+  border-radius: 4px;
   background-color: #c1c1c1;
   &:hover {
     background-color: #a1a1a1;

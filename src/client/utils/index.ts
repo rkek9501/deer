@@ -22,10 +22,10 @@ export const createLink = (href: string) => {
   return link;
 };
 
-const colors = ["#A2D39B", "#62D0DD", "#CEB4FF", "#FF708B", "#FF8E21", "#AFD223", "#708FFF", "#FF66B9", "#FF5151", "#F4E8A4"];
+export const DefaultColors = ["#A2D39B", "#62D0DD", "#CEB4FF", "#FF708B", "#FF8E21", "#AFD223", "#708FFF", "#FF66B9", "#FF5151", "#F4E8A4"];
 const min = 0,
   max = 9;
 export const getRandomColor = () => {
   const random = Math.floor(Math.random() * (max - min)) + min;
-  return colors[random];
+  return DefaultColors[random];
 };
