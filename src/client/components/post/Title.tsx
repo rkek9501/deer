@@ -8,10 +8,10 @@ const TitleStyle = styled.h1`
   flex: 1;
   width: 100%;
   padding: 2rem 0;
-  font-size: 9rem;
+  font-size: 8rem;
   font-weight: bold;
   font-family: score6;
-  line-height: 9rem;
+  line-height: 8.2rem;
   margin: 0;
   word-break: keep-all;
   color: #333333;

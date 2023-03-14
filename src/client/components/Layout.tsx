@@ -38,11 +38,10 @@ const Main = styled.div`
 
 interface EditorProviderProps {
   children: React.ReactNode;
+  noneMenu?: boolean;
 }
 
 const Layout = (props: EditorProviderProps) => {
-  // const isBrowser = false;
-  // if(!isBrowser) return <>aaa</>;
   const { isMobile } = useContext(AppContext);
   const containerRef = useRef<HTMLDivElement>(null);
   const [ratio, setRatio] = useState(100);
@@ -69,7 +68,7 @@ const Layout = (props: EditorProviderProps) => {
   return (
     <Main>
       <SHeader ratio={ratio} />
-      {!isMobile && <Menu />}
+      {(!props.noneMenu && !isMobile) && <Menu />}
       <div id="scroller" ref={containerRef}>
         {props.children}
       </div>

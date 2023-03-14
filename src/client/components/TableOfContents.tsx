@@ -2,28 +2,29 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 const BookMarkConatiner = styled.div`
+  position: absolute;
   right: 0;
   font-family: "score4";
-  width: 200px;
-  max-width: 200px;
+  width: calc((100vw - 756px)/2);
+  max-height: calc(100vh - 60px);
+  max-width: calc((100vw - 756px)/2);
   line-height: 24px;
   padding-left: 8px;
-  @media (min-width: 1px) and (max-width: 480px) {
-    display: none;
-  }
   .fixed-box {
+    overflow: scroll;
+    max-height: calc(100vh - 250px);
     border-left: solid 2px #d9d9d9;
     padding-left: 8px;
     position: fixed;
-    width: 200px;
-    max-width: 200px;
+    width: calc((100vw - 756px)/2);
+    max-width: calc((100vw - 756px)/2);
     font-size: 2rem;
     line-height: 2.4rem;
     word-break: break-all;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin: 40px 0;
+    margin-top: 40px;
     z-index: 1;
   }
 
@@ -42,11 +43,11 @@ const BookMarkConatiner = styled.div`
 
   display: none;
   /* smartphones, iPhone, portrait 480x320 phones */
-  @media (min-width: 1px) and (max-width: 480px) {
+  @media (min-width: 1px) and (max-width: 1140px) {
     display: none;
   }
   /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
-  @media (min-width: 481px) {
+  @media (min-width: 1141px) {
     &.on {
       display: block;
     }

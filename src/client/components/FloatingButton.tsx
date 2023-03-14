@@ -7,11 +7,10 @@ type FAB = {
   bgColor?: string | null | undefined;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   children: React.ReactNode;
-  isFixed?: boolean;
 };
 
 const FloatingWrapper = styled.div<FAB>`
-  position: ${(props) => (props.isFixed ? "fixed" : "absolute")};
+  position: fixed;
   bottom: 0;
   top: auto;
   bottom: ${(props) => props.bottom}px;
@@ -24,7 +23,7 @@ const FloatingWrapper = styled.div<FAB>`
   justify-content: center;
   font-size: 1.3rem;
   font-weight: bold;
-  z-index: 1;
+  z-index: 2;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   transition: height 0.3s;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -35,33 +34,20 @@ const FloatingWrapper = styled.div<FAB>`
   right: 10px;
   /* smartphones, iPhone, portrait 480x320 phones */
   @media (min-width: 1px) and (max-width: 480px) {
-    right: ${(props) => (props.isFixed ? "2rem" : "0")};
+    right: 2rem;
+  }
+  @media (min-width: 481px) and (max-width: 1140px) {
+    right: 4rem;
   }
   /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
-  @media (min-width: 481px) {
-    right: ${(props) => (props.isFixed ? "22rem" : "20rem")};
+  @media (min-width: 1141px) {
+    right: 20rem;
   }
 `;
 
 const FloatingButton = (props: FAB) => {
-  const [isFixed, setFixed] = useState(true);
-  useEffect(() => {
-    const end = document.getElementById("content-end");
-    const scroller = document.getElementById("scroller");
-    const onScroll = () => {
-      const clientHeight = scroller?.clientHeight || 0;
-      const scrollTop = scroller?.scrollTop || 0;
-      if (end?.offsetTop) {
-        if (end?.offsetTop > scrollTop + clientHeight) setFixed(true);
-        else setFixed(false);
-      }
-    };
-    scroller?.addEventListener("scroll", onScroll, false);
-    return () => scroller?.removeEventListener("scroll", onScroll, false);
-  }, []);
-
   return (
-    <FloatingWrapper isFixed={isFixed} bottom={props.bottom} size={props.size} bgColor={props.bgColor} onClick={props.onClick}>
+    <FloatingWrapper bottom={props.bottom} size={props.size} bgColor={props.bgColor} onClick={props.onClick}>
       {props.children}
     </FloatingWrapper>
   );

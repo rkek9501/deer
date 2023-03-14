@@ -15,9 +15,6 @@ const CarouselContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  @media (min-width: 481px) {
-    width: calc(100% - 200px);
-  }
 `;
 const SlideContainer = styled.div`
   .swiper {
