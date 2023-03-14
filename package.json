@@ -83,6 +83,7 @@
     "sqlite3": "^5.1.1",
     "styled-components": "^5.3.5",
     "swiper": "^8.0.7",
+    "swr": "^2.1.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {

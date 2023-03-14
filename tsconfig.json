@@ -16,10 +16,11 @@
     /* paths - import rewriting/resolving */
     "paths": {
       "@components/*": ["src/client/components/*"],
+      "@context": ["src/client/context"],
+      "@context/*": ["src/client/context/*"],
+      "@hooks/*": ["src/client/hooks/*"],
       "@utils": ["src/client/utils"],
       "@utils/*": ["src/client/utils/*"],
-      "@context": ["src/client/context"],
-      "@context/*": ["src/client/context/*"]
     },
     "noEmit": true,
     /* Additional Options */

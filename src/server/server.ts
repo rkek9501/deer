@@ -7,7 +7,7 @@ import path from "path";
 
 import { ACCESS_TOKEN_COOKIE_OPTIONS, HOST_URL, IS_LOCAL, SERVER_OPTIONS, IS_DEV, SERVER_PORT, STATIC_FILE_MAX_AGE } from "./env";
 import applyMiddlewares from "./middleware";
-import appRouter, { postRouter, userRouter } from "./routes";
+import appRouter, { postRouter, tagRouter, userRouter } from "./routes";
 
 const app = next({
   dev: IS_DEV,
@@ -56,11 +56,12 @@ const run = () => {
   });
   server.use("/api/user", userRouter);
   server.use("/api/post", postRouter);
+  server.use("/api/tag", tagRouter);
 
   server.use(async (req: Request, res: Response, next: NextFunction) => {
     const reqUrls = req.url.split("/");
     const pathname = `/${reqUrls[1]}`;
-    if (req.url === "/" || ["/login", "/user", "/post", "/editor", "/tags"].includes(pathname)) {
+    if (req.url === "/" || ["/login", "/user", "/post", "/editor", "/tag"].includes(pathname)) {
       nextHandler(req, res);
     } else if (["/api", "/uploads", "/css", "/fonts", "/img"].includes(pathname)) {
       next();

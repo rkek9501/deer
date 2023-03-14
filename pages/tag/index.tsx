@@ -1,31 +1,23 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import { BlockPicker, ColorResult } from "react-color";
 
-import { AppContext } from "@context";
 import Button from "@components/Button";
 import Tag from "@components/TagBlock";
-import TagList from "@components/post/TagList";
-import { DefaultColors } from "@utils";
 import Icons from "@components/Icons";
-
-type TagType = {
-  id?: number;
-  name: string;
-  color: string;
-}
+import { DefaultColors } from "@utils";
+import useTag, { TagPageMode, TagType, useTagEditor } from "@hooks/useTag";
 
 const TagListContainer = styled.div`
   padding: 20px 30px;
+  height: calc(100vh - 60px);
+  overflow: scroll;
 `;
 
 const Wrapper = styled.div`
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
   margin-top: 20px;
 `;
+
 const Title = styled.div`
   display: flex;
   flex-direction: row;
@@ -35,6 +27,7 @@ const Title = styled.div`
     width: 60px;
   }
 `;
+
 const FormContainer = styled.div`
   width: 60%;
   max-width: 240px;
@@ -102,16 +95,14 @@ const TagManage = ({
 }) => {
   return (
     <Wrapper>
-      <TagList>
-        {tagList.map((tag: any, idx: number) => <Tag
-          key={idx}
-          {...tag}
-          alwaysOn={true}
-          onClick={() => {
-            onClickTag(tag);
-          }}
-        />)}
-      </TagList>
+      {tagList.map((tag: any, idx: number) => <Tag
+        key={idx}
+        {...tag}
+        alwaysOn={true}
+        onClick={() => {
+          onClickTag(tag);
+        }}
+      />)}
     </Wrapper>
   );
 };
@@ -127,12 +118,7 @@ const TagModify = ({
   onClickComplete: (tag: TagType) => void;
   onClickCancel: () => void;
 }) => {
-  const [name, setName] = useState(tag?.name || "");
-  const [color, setColor] = useState(tag?.color || DefaultColors[0]);
-
-  const handleColor = useCallback((color: ColorResult) => {
-    setColor(color.hex);
-  }, []);
+  const { name, color, setName, handleColor } = useTagEditor({ name: tag?.name, color: tag?.color });
 
   return (
     <Wrapper>
@@ -173,66 +159,9 @@ const TagModify = ({
   );
 };
 
-const useTag = () => {
-  const { setLoading } = useContext(AppContext);
-  const [mode, setMode] = useState<"list"|"add"|"modify">("list");
-  const [selectedTag, setSelectedTag] = useState<TagType|null>(null);
-
-  const onClickCancel = () => {
-    setMode("list");
-    setSelectedTag(null);
-  };
-  const onClickAdd = () => {
-    setMode("add");
-    setSelectedTag(null);
-  };
-  const onClickModify = (tag: TagType) => {
-    setMode("modify");
-    setSelectedTag(tag);
-  };
-  const onClickComplete = useCallback((tag: TagType) => {
-    if (!tag.name || tag.name.trim().length === 0) {
-      return alert("태그 이름을 입력해주세요.");
-    }
-    if (!tag.color || tag.color.trim().length === 0) {
-      return alert("태그 색을 선택해주세요.");
-    }
-    if (selectedTag?.name === tag.name && selectedTag?.color === tag.color) {
-      return alert("수정된 값이 없습니다.");
-    }
-    setLoading(true);
-
-    // TODO: api 추가 후 연동
-    if (mode === "add") {
-      console.log({tag});
-    } else if (mode === "modify") {
-      console.log(selectedTag?.id, {tag});
-    }
-
-    setTimeout(() => {
-      setLoading(false);
-      onClickCancel();
-    }, 1000)
-  }, [mode, selectedTag]);
-  return {
-    mode,
-    selectedTag,
-    onClickCancel,
-    onClickAdd,
-    onClickModify,
-    onClickComplete
-  };
-};
-
-const Mode = {
-  list: "관리",
-  add: "추가",
-  modify: "수정"
-};
-
 const TagPage = () => {
-  const { tags: allTags } = useContext(AppContext);
   const {
+    allTags,
     mode,
     selectedTag,
     onClickCancel,
@@ -244,13 +173,14 @@ const TagPage = () => {
   return (
     <TagListContainer>
       <Title>
-        <h1>태그 {Mode[mode]}</h1>
+        <h1>태그 {TagPageMode[mode]}</h1>
         {mode==="list"
           ? <div onClick={onClickAdd}><Icons.Plus/></div>
           : <div onClick={onClickCancel}><Icons.Close/></div>
         }
       </Title>
       <hr/>
+      
       {mode==="list"
         ? <TagManage
           tagList={allTags}

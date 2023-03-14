@@ -56,8 +56,9 @@ module.exports = removeImports({
       alias: {
         ...config.resolve.alias,
         "@components": path.join(process.cwd(), "./src/client/components"),
+        "@context": path.join(process.cwd(), "./src/client/context"),
+        "@hooks": path.join(process.cwd(), "./src/client/hooks"),
         "@utils": path.join(process.cwd(), "./src/client/utils"),
-        "@context": path.join(process.cwd(), "./src/client/context")
       }
     };
     config.plugins.push(

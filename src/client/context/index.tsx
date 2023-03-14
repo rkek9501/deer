@@ -25,7 +25,7 @@ const AppProvider = (props: AppProviderProps) => {
 
   useEffect(() => {
     (async () => {
-      const { response, error } = await requestHelper.Get({ url: "/api/post/tags" });
+      const { response, error } = await requestHelper.Get({ url: "/api/tag" });
       if (response?.data) setTags(response.data);
     })();
     const handleResize = () => {
