@@ -7,14 +7,14 @@ import type { Transaction } from "sequelize/types";
 import flatten from "lodash/flatten";
 import uniq from "lodash/uniq";
 
-import models from "../models";
 import { accessCheck, authCheck } from "../utils/auth";
+import models from "../models";
 import { isValidHex } from "../utils/vaild";
 
-const { posts, tags, post_tag, files, users } = models;
+const { posts, tags } = models;
 const appRouter = express.Router();
 
-appRouter.get("/", async (req, res) => {
+appRouter.get("/", accessCheck, async (req, res) => {
   try {
     const { option } = req.query;
 
@@ -46,7 +46,7 @@ appRouter.get("/", async (req, res) => {
   }
 });
 
-appRouter.post("/", async (req, res) => {
+appRouter.post("/", accessCheck, async (req, res) => {
   const { color, name } = req.body;
   console.log({color, name});
   try {
@@ -62,7 +62,8 @@ appRouter.post("/", async (req, res) => {
     return res.status(500).send({ result: false, message: "태그 생성중 오류가 발생하였습니다." });
   }
 });
-appRouter.put("/", async (req, res) => {
+
+appRouter.put("/", accessCheck, async (req, res) => {
   const { id, color, name } = req.body;
   try {
     if (!isValidHex(color)) return res.status(200).send({ result: false, message: "color 값이 올바르지 않습니다." });
@@ -83,7 +84,8 @@ appRouter.put("/", async (req, res) => {
     return res.status(500).send({ result: false, message: "태그 수정중 오류가 발생하였습니다." });
   }
 });
-appRouter.delete("/", async (req, res) => {
+
+appRouter.delete("/", accessCheck, async (req, res) => {
   const { id } = req.query;
   try {
     const result = await models.sequelize.transaction(async (t: Transaction) => {

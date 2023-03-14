@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 
@@ -28,6 +28,10 @@ const useTag = () => {
 
   const { trigger: createTag } = useSWRMutation("/api/tag", postFetcher);
   const { trigger: updateTag  } = useSWRMutation("/api/tag", putFetcher);
+
+  useEffect(() => {
+    if (!isLoading) setLoading(false);
+  }, [isLoading]);
 
   const onClickCancel = () => {
     setMode("list");

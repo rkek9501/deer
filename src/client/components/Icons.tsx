@@ -172,12 +172,23 @@ const UploadSvg = () => (
 
 export const ExpandLessIcon = (props: { rotate?: number }) => (
   <svg width="20" height="10" viewBox="0 0 47 23" fill="none" transform={`rotate(${props.rotate || 0})`}>
-    <path d="M2 2L25.5 20L45.5 2" stroke="black" strokeWidth="4" />
+    <use xlinkHref="#svg-expandless-icon" />
   </svg>
 );
 const ExpandLessSvg = (props: { rotate?: number }) => (
-  <svg width="20" height="10" viewBox="0 0 47 23" fill="none" transform={`rotate(${props.rotate || 0})`}>
+  <svg id="svg-expandless-icon" width="20" height="10" viewBox="0 0 47 23" fill="none" transform={`rotate(${props.rotate || 0})`}>
     <path d="M2 2L25.5 20L45.5 2" stroke="black" strokeWidth="4" />
+  </svg>
+);
+
+export const HashTagIcon = () => (
+  <svg width="21" height="23" viewBox="0 0 21 23">
+    <use xlinkHref="#svg-hash-tag-icon" />
+  </svg>
+);
+const HashTagSvg = () => (
+  <svg id="svg-hash-tag-icon" width="21" height="23" viewBox="0 0 21 23" fill="none">
+    <path d="M8.664 18.976H11.088L12.192 13.864H15.864V11.728H12.624L13.608 7.408H16.776V5.272H14.04L15.168 0.159999H12.744L11.616 5.272H7.8L8.928 0.159999H6.504L5.352 5.272H1.728V7.408H4.92L3.96 11.728H0.816V13.864H3.528L2.424 18.976H4.824L5.952 13.864H9.768L8.664 18.976ZM7.344 7.408H11.16L10.2 11.728H6.384L7.344 7.408Z" fill="black"/>
   </svg>
 );
 
@@ -230,6 +241,7 @@ export const SvgDefs = () => {
         <CloseSvg />
         <EditSvg />
         <ExpandLessSvg />
+        <HashTagSvg />
         <LogoSvg />
         <LoginSvg />
         <LogoutSvg />
@@ -248,6 +260,7 @@ export default {
   Menu: MenuIcon,
   Close: CloseIcon,
   Search: SearchIcon,
+  HashTag: HashTagIcon,
   Edit: EditIcon,
   Logout: LogoutIcon,
   Login: LoginIcon,

@@ -179,13 +179,17 @@ const HeaderMenu = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: any) => {
-      if (btnDropdownRef.current && !btnDropdownRef.current?.contains(event.target)) {
+      if (
+        btnDropdownRef.current
+        && !btnDropdownRef.current?.contains(event.target)
+        && !popoverDropdownRef.current?.contains(event.target)
+      ) {
         closeDropdownPopover();
       }
     };
     document.addEventListener("click", handleClickOutside, true);
     return () => document.removeEventListener("click", handleClickOutside, true);
-  }, [btnDropdownRef]);
+  }, [btnDropdownRef, popoverDropdownRef]);
 
   const onClickDropdownPopover = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -214,7 +218,12 @@ const HeaderMenu = () => {
       <a ref={btnDropdownRef} onClick={onClickDropdownPopover}>
         {!open ? <Icons.Menu /> : <Icons.Close />}
       </a>
-      <div ref={popoverDropdownRef} id="menu-container" style={{ display: `${open ? "flex" : "none"}`, zIndex: 10 }}>
+      <div
+        id="menu-container"
+        ref={popoverDropdownRef}
+        style={{ display: `${open ? "flex" : "none"}`, zIndex: 10 }}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div id="menu-tag-list">
           {isMobile && (
             <div>
@@ -222,14 +231,30 @@ const HeaderMenu = () => {
             </div>
           )}
         </div>
-        <div id="menu-list-container" onClick={() => closeDropdownPopover()}>
+        <div id="menu-list-container" onClick={(e) => e.preventDefault()}>
           {session ? (
             <>
               {pathname !== "/editor" && (
-                <Link href="/editor" passHref onClick={onClickMemu}>
-                  <a className="menu-item">
+                <Link href="/editor" passHref>
+                  <a className="menu-item" onClick={onClickMemu}>
                     <Icons.Edit />
                     글작성
+                  </a>
+                </Link>
+              )}
+              {pathname !== "/tag" && (
+                <Link href="/tag" passHref>
+                  <a className="menu-item" onClick={onClickMemu}>
+                    <Icons.HashTag />
+                    태그 관리
+                  </a>
+                </Link>
+              )}
+              {pathname !== "/user" && (
+                <Link href="/user" passHref>
+                  <a className="menu-item" onClick={onClickMemu}>
+                    <Icons.User />
+                    내정보 수정
                   </a>
                 </Link>
               )}
@@ -237,14 +262,6 @@ const HeaderMenu = () => {
                 <Icons.Logout />
                 로그아웃
               </a>
-              {pathname !== "/user" && (
-                <Link href="/user" passHref onClick={onClickMemu}>
-                  <a className="menu-item">
-                    <Icons.User />
-                    내정보 수정
-                  </a>
-                </Link>
-              )}
             </>
           ) : (
             <Link href="/login" passHref onClick={onClickMemu}>
