@@ -48,7 +48,7 @@ const PageContainer = styled.div`
     width: 268px;
   }
 
-  form input {
+  .login-input-box input {
     height: 28px;
     margin-bottom: 1rem;
     &.id {
@@ -137,7 +137,7 @@ const Login = () => {
         <div className="title title-deer">
           <Icons.Logo />
         </div>
-        <form className="login-input-box">
+        <div className="login-input-box">
           <input name="id" type="text" placeholder="전화번호, 사용자 이름 또는 이메일" value={id} onChange={(e) => setid(e.target.value)} />
           <input
             name="pw"
@@ -154,7 +154,7 @@ const Login = () => {
               로그인
             </Button>
           </div>
-        </form>
+        </div>
         {/* <div className="login-pw-check">비밀번호를 잊으셨나요?</div> */}
       </div>
     </PageContainer>
