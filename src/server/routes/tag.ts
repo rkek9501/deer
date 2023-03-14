@@ -67,7 +67,7 @@ appRouter.put("/", async (req, res) => {
   try {
     if (!isValidHex(color)) return res.status(200).send({ result: false, message: "color 값이 올바르지 않습니다." });
 
-    const find = await tags.findOne({ where: { name } });
+    const find = await tags.findOne({ where: { name, id: { [Op.not]: id } } });
     if (find) return res.status(200).send({ result: false, message: "이미 존재하는 태그이름 입니다." });
 
     const result = await models.sequelize.transaction(async (t: Transaction) => {
