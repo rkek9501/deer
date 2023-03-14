@@ -8,7 +8,7 @@ const TagBtn = styled.button<{ bgColor: string; alwaysOn?: boolean; fontColor: s
   border: none;
   font-size: 1.8rem;
   line-height: 2rem;
-  font-family: Arita-dotum-Medium;
+  font-family: Arita-dotum-SemiBold;
   margin: 0 1rem 1rem 0;
   color: black;
   padding: 1rem;
