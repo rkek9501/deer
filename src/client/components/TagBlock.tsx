@@ -1,7 +1,9 @@
 import React from "react";
 import styled, { css } from "styled-components";
 
-const TagBtn = styled.button<{ bgColor: string; alwaysOn?: boolean }>`
+import { getTextColorByBackgroundColor } from "@utils";
+
+const TagBtn = styled.button<{ bgColor: string; alwaysOn?: boolean; fontColor: string; }>`
   display: inline-block;
   border: none;
   font-size: 1.8rem;
@@ -9,17 +11,17 @@ const TagBtn = styled.button<{ bgColor: string; alwaysOn?: boolean }>`
   font-family: Arita-dotum-Medium;
   margin: 0 1rem 1rem 0;
   color: black;
-  /* margin: 0 0.8rem 0.6rem 0; */
   padding: 1rem;
   cursor: pointer;
-  ${({ alwaysOn, bgColor }) =>
+  ${({ alwaysOn, bgColor, fontColor }) =>
     alwaysOn &&
     css`
       background-color: ${bgColor};
+      color: ${fontColor};
     `}
   &:hover {
     background-color: ${({ bgColor }) => bgColor};
-    /* opacity: 0.85; */
+    color: ${({ fontColor }) => fontColor};
   }
 `;
 
@@ -31,8 +33,9 @@ type tagType = {
 };
 const tag = (props: tagType) => {
   const { color, name, alwaysOn } = props;
+  const fontColor = getTextColorByBackgroundColor(color);
   return (
-    <TagBtn type="button" alwaysOn={alwaysOn} bgColor={color} onClick={() => props.onClick?.()}>
+    <TagBtn type="button" alwaysOn={alwaysOn} bgColor={color} fontColor={fontColor} onClick={() => props.onClick?.()}>
       {name}
     </TagBtn>
   );

@@ -1,6 +1,6 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { BlockPicker, ColorResult } from "react-color";
+import { BlockPicker } from "react-color";
 
 import Button from "@components/Button";
 import Tag from "@components/TagBlock";
