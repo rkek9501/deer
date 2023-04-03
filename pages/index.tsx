@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-css-tags */
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import dynamic from "next/dynamic";
@@ -5,7 +6,7 @@ import dynamic from "next/dynamic";
 import Layout from "@components/Layout";
 import RequestHelper from "@utils/requestHelper";
 
-const SearchResult = dynamic(() => import("@components/SearchResult"), { ssr: false });
+const SearchResult = dynamic(() => import("@components/SearchResult"), { ssr: true });
 
 const Home = (Props: any) => {
   const [posts] = useState<any>(Props.contentList || []);
@@ -24,26 +25,12 @@ const Home = (Props: any) => {
   );
 };
 
-Home.getInitialProps = async (context: any) => {
-  const { ctx, Component } = context;
-  console.log({ ctx, Component });
-  // const initialCookies = ctx.req?.headers.cookie;
-  // if (initialCookies) ctx.res?.setHeader('Set-Cookie', initialCookies);
-
-  // let pageProps = {};
-  // const cookie = ctx?.req?.headers?.cookie || '';
-  // console.log({cookie});
-  // if (cookie) {
-  //   // Axios.defaults.headers.Cookie = cookie;
-  // }
-  // if (Component.getInitialProps) {
-  //   pageProps = await Component.getInitialProps(ctx);
-  // }
-
+export const getServerSideProps = async (context: any) => {
   const { response, error } = await RequestHelper.Get({ url: "/api/post/list" });
   return {
-    contentList: response.data
-    // pageProps
+    props: {
+      contentList: response?.data
+    }
   };
 };
 
