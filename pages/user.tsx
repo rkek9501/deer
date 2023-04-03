@@ -1,27 +1,28 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import React from "react";
 import Image from "next/image";
 import styled from "styled-components";
-import imageCompression from "browser-image-compression";
+import { DotLoader } from "react-spinners";
 
 import Button from "@components/Button";
 import Icons from "@components/Icons";
 import ImgCropModal from "@components/ImgCropModal";
 import Layout from "@components/Layout";
-import { AppContext } from "@context/index";
-import { base64 } from "@utils/crypto";
+
 import RequestHelper from "@utils/requestHelper";
-import { base64toFile } from "@utils/image";
+import useUser, { useChangeUserPw } from "@hooks/useUser";
 
 const UserPageContainer = styled.div`
   padding: 4rem;
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  width: 100%;
   .user-img-view {
     width: 100px;
     height: 100px;
     border-radius: 50px;
     position: relative;
+    cursor: pointer;
     z-index: 1;
     > *:first-child {
       position: relative;
@@ -97,6 +98,7 @@ const ExpendabelViewContainer = styled.div`
     font-weight: 700;
     margin-bottom: 1rem;
     font-size: 1.8rem;
+    cursor: pointer;
 
     .chevron-icon {
       transition: all ease 0.5s;
@@ -133,54 +135,12 @@ const ExpendabelViewContainer = styled.div`
     font-size: 1.4rem;
   }
 `;
-type ErrType = boolean | string;
-const ChangePassView = React.memo(() => {
-  const { logout } = useContext(AppContext);
-  const router = useRouter();
-  const [open, setOpen] = useState(false);
-  const [prevPw, setPrevPw] = useState("");
-  const [nextPw, setNextPw] = useState("");
-  const [nextPwChk, setNextPwChk] = useState("");
-  const [err, setErr] = useState<ErrType>(false);
 
-  useEffect(() => {
-    setErr(false);
-  }, [prevPw, nextPw, nextPwChk]);
-
-  const changePw = useCallback(() => {
-    setErr(false);
-    let msg: ErrType = false;
-    if (prevPw.length === 0) {
-      msg = "현재 비밀번호를 입력해주세요.";
-    } else if (nextPw.length === 0) {
-      msg = "비밀번호를 입력해주세요.";
-    } else if (prevPw === nextPw) {
-      msg = "현재 비밀번호와 동일하게 변경할 수 없습니다.";
-    } else if (nextPw !== nextPwChk) {
-      msg = "비밀번호가 일치하지 않습니다.";
-    }
-    if (msg) {
-      return setErr(msg);
-    } else {
-      (async () => {
-        const { response, error } = await RequestHelper.Put({
-          url: "/api/user/changePassword",
-          body: { prevPw: base64.encode(prevPw), nextPw: base64.encode(nextPw) }
-        });
-        if (error) {
-          return setErr("비밀번호 변경중 오류가 발생하였습니다.");
-        }
-        if (response.result) {
-          await RequestHelper.Get({ url: "/api/user/logout" });
-          logout();
-          alert("로그인 후 다시 이용해주세요.");
-          router.push("/");
-        } else {
-          return setErr(response.message);
-        }
-      })();
-    }
-  }, [prevPw, nextPw, nextPwChk]);
+const ChangePassView = () => {
+  const {
+    open, values, err,
+    setOpen, changeValues, onClickChangePw,
+  } = useChangeUserPw();
 
   return (
     <ExpendabelViewContainer>
@@ -189,153 +149,65 @@ const ChangePassView = React.memo(() => {
         <Icons.ExpandLess rotate={open ? 180 : 0} />
       </div>
       <div className={`expendable-area ${open ? "open" : "close"}`}>
-        <Input label="현재 비밀번호" type="password" value={prevPw} setValue={setPrevPw} />
+        <Input label="현재 비밀번호" type="password" value={values.prevPw} setValue={changeValues("prewPw")} />
         <br />
-        <Input label="비밀번호" type="password" value={nextPw} setValue={setNextPw} />
-        <Input label="비밀번호 확인" type="password" value={nextPwChk} setValue={setNextPwChk} />
+        <Input label="비밀번호" type="password" value={values.nextPw} setValue={changeValues("nextPw")} />
+        <Input label="비밀번호 확인" type="password" value={values.nextPwChk} setValue={changeValues("nextPwChk")} />
         <div className="change-err">{err}</div>
-        <Button onClick={() => changePw()}>비밀번호 변경하기</Button>
+        <Button onClick={() => onClickChangePw()}>비밀번호 변경하기</Button>
       </div>
     </ExpendabelViewContainer>
   );
-});
+};
 
 const User = () => {
-  const { setLoading } = useContext(AppContext);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [image, setImage] = useState(null);
-  const [modal, setModal] = useState(false);
-  const router = useRouter();
+  const {
+    image, name, email, modal,
+    isLoading, error,
+    setName, setEmail,openModal,
+    imgChangeCallback, CardImgLoader, save
+  } = useUser();
 
-  useEffect(() => {
-    (async () => {
-      const { response, error } = await RequestHelper.Get({ url: "/api/user/profile" });
-      console.log({ response });
-      if (response?.user) {
-        const { name, email, image } = response.user;
-        setName(name || "");
-        setEmail(email || "");
-        setImage(image);
-      } else {
-        alert("프로필 변경 중 오류가 발생하였습니다. 잠시 후 다시시도해 주세요.");
-      }
-      setLoading(false);
-    })();
-  }, []);
+  if (isLoading) return <UserPageContainer><DotLoader color="#005fee" /></UserPageContainer>;
+  if (error) return <UserPageContainer>데이터를 불러오는데 실패하였습니다.</UserPageContainer>;
 
-  const openModal = () => setModal(true);
-  const closeModal = () => setModal(false);
-
-  const save = useCallback(async () => {
-    const params: { name?: string; email?: string } = {};
-    if (name && name.trim().length !== 0) {
-      params.name = name;
-    }
-    if (email && email.trim().length !== 0) {
-      params.email = email;
-    }
-    const { response } = await RequestHelper.Put({ url: "/api/user/changeProfile", body: params });
-
-    if (response.result) {
-      alert("수정되었습니다.");
-      router.reload();
-    } else {
-      alert("프로필 변경 중 오류가 발생하였습니다. 잠시 후 다시시도해 주세요.");
-    }
-  }, [name, email]);
-
-  const requestChangeProfileImg = useCallback(async (data: any, name: string | null) => {
-    let blob = await fetch(data).then((r) => r.blob());
-    const temp = new File([blob], name || "jpg", {
-      type: blob.type
-    });
-    const options = {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 512
-    };
-
-    try {
-      const compressedBlob = await imageCompression(temp, options);
-      imageCompression.getDataUrlFromFile(compressedBlob).then(async (result) => {
-        const transfromedFile = base64toFile(result, name || "jpg");
-        const response = await RequestHelper.Upload(transfromedFile, "user");
-        if (response?.result) {
-          setImage(data);
-        } else {
-          alert("프로필 변경 중 오류가 발생하였습니다. 잠시 후 다시시도해 주세요.");
-        }
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
-  const requestRemoveProfileImg = useCallback(async () => {
-    const { response } = await RequestHelper.Put({ url: "/api/user/removeProfileImg" });
-    if (response.result) {
-      setImage(null);
-    } else {
-      alert("프로필 이미지 삭제 중 오류가 발생하였습니다. 잠시 후 다시시도해 주세요.");
-    }
-  }, []);
-
-  const imgChangeCallback = (cb: { type: "close" | "remove" | "change"; data: any; name: string | null }) => {
-    switch (cb.type) {
-      case "remove":
-        requestRemoveProfileImg();
-        break;
-      case "change":
-        requestChangeProfileImg(cb.data, cb.name);
-        break;
-      default:
-        break;
-    }
-    closeModal();
-  };
-
-  const CardImgLoader = ({ src }: { src: string }) => {
-    return `${src}`;
-  };
   return (
-    <Layout>
-      <UserPageContainer>
-        <div className="user-img-view" onClick={openModal}>
-          {image ? (
-            <Image
-              className="user-img"
-              src={image}
-              width={100}
-              height={100}
-              unoptimized={true}
-              layout={"fixed"}
-              loader={CardImgLoader}
-              alt="profile-image"
-            />
-          ) : (
-            <div className="no-image-container">
-              <Icons.User />
-            </div>
-          )}
-          {modal && <ImgCropModal open={modal} existImg={!!image} callback={imgChangeCallback} />}
-        </div>
-        <div className="user-profiles">
-          <ExpendabelViewContainer>
-            <div className="user-info expendable-label">개인정보 수정</div>
-            <div className="expendable-area">
-              <Input label="이름" value={name} setValue={setName} />
-              <Input label="이메일" value={email} setValue={setEmail} />
-              <Button onClick={() => save()}>저장하기</Button>
-            </div>
-          </ExpendabelViewContainer>
+    <UserPageContainer>
+      <div className="user-img-view" onClick={openModal}>
+        {image ? (
+          <Image
+            className="user-img"
+            src={image}
+            width={100}
+            height={100}
+            unoptimized={true}
+            layout={"fixed"}
+            loader={CardImgLoader}
+            alt="profile-image"
+          />
+        ) : (
+          <div className="no-image-container">
+            <Icons.User />
+          </div>
+        )}
+        {modal && <ImgCropModal open={modal} existImg={!!image} callback={imgChangeCallback} />}
+      </div>
+      <div className="user-profiles">
+        <ExpendabelViewContainer>
+          <div className="user-info expendable-label">개인정보 수정</div>
+          <div className="expendable-area">
+            <Input label="이름" value={name} setValue={setName} />
+            <Input label="이메일" value={email} setValue={setEmail} />
+            <Button onClick={() => save()}>저장하기</Button>
+          </div>
+        </ExpendabelViewContainer>
 
-          <br />
-          <hr />
-          <br />
-          <ChangePassView />
-        </div>
-      </UserPageContainer>
-    </Layout>
+        <br />
+        <hr />
+        <br />
+        <ChangePassView />
+      </div>
+    </UserPageContainer>
   );
 };
 
@@ -355,4 +227,4 @@ User.getInitialProps = async (ctx: any) => {
   };
 };
 
-export default User;
+export default React.memo(User);

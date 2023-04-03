@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import Modal from "react-modal";
@@ -49,7 +49,7 @@ const ModalBody = styled.div`
   .modal-body {
     min-width: 300px;
     .modal-buttons {
-      div {
+      button {
         position: relative;
       }
       input[type="file"] {
@@ -98,6 +98,10 @@ type ImageTypes = {
   data: any;
   url: string | null;
 };
+
+interface ChangeEvent<T = EventTarget> {
+  target: T;
+}
 
 const ImgCropModal = (Props: { open: boolean; existImg: boolean; callback: any }) => {
   const [crop, setCrop] = useState<any>({ unit: "%", width: 50, aspect: 1 });
@@ -199,6 +203,7 @@ const ImgCropModal = (Props: { open: boolean; existImg: boolean; callback: any }
   };
 
   const onClickChangeImgBtn = (e: any) => {
+    e.stopPropagation();
     const data = e.target.files[0];
     const blobUrl = URL.createObjectURL(data).toString();
     setFile({ data, url: blobUrl });

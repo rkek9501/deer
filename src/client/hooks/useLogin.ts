@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import useSWRMutation from "swr/mutation";
 
 import { AppContext } from "@context/index";
-import requestHelper from "@utils/requestHelper";
 import { postFetcher } from "@utils/swrFetcher";
 
 const useLogin = () => {
