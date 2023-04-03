@@ -14,7 +14,7 @@ import { isValidHex } from "../utils/vaild";
 const { posts, tags } = models;
 const appRouter = express.Router();
 
-appRouter.get("/", accessCheck, async (req, res) => {
+appRouter.get("/", async (req, res) => {
   try {
     const { option } = req.query;
 
