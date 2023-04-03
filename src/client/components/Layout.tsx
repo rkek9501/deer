@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import SHeader from "@components/scrollBar";
 import Menu from "@components/Menu";
-import { AppContext } from "@context/index";
+import useLayout from "@hooks/useLayout";
 
 const Main = styled.div`
   width: 100%;
@@ -16,8 +16,10 @@ const Main = styled.div`
     min-width: 200px;
     overflow-x: scroll;
     overflow-y: scroll;
-    border-left: solid 2px black;
     height: calc(100vh - 70px);
+  }
+  #scroller.main {
+    border-left: solid 2px black;
   }
   @media screen and (min-width: 1px) and (max-width: 480px) {
     width: 100vw;
@@ -42,34 +44,18 @@ interface EditorProviderProps {
 }
 
 const Layout = (props: EditorProviderProps) => {
-  const { isMobile } = useContext(AppContext);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [ratio, setRatio] = useState(100);
-
-  const onScroll = () => {
-    const target = containerRef.current;
-
-    const scrollTop = target?.scrollTop || 0;
-    const offsetHeight = target?.offsetHeight || 0;
-    const scrollHeight = target?.scrollHeight || 0;
-    const scrollY = scrollTop;
-    const pageHeight = scrollHeight - offsetHeight;
-    const ratio = 100 - (isNaN(scrollY / pageHeight) ? 0 : scrollY / pageHeight) * 100;
-    setRatio(ratio);
-  };
-
-  useEffect(() => {
-    if (containerRef?.current) {
-      containerRef.current.addEventListener("scroll", onScroll, false);
-    }
-    return () => containerRef?.current?.removeEventListener("scroll", onScroll, false);
-  }, [containerRef]);
+  const {
+    isMain,
+    isMobile,
+    ratio,
+    containerRef,
+  } = useLayout();
 
   return (
     <Main>
       <SHeader ratio={ratio} />
       {(!props.noneMenu && !isMobile) && <Menu />}
-      <div id="scroller" ref={containerRef}>
+      <div id="scroller" className={`${isMain&&"main"}`} ref={containerRef}>
         {props.children}
       </div>
     </Main>
