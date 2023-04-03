@@ -14,12 +14,9 @@ const attributes = {
 const CommentArea = styled.div`
   max-height: 250px;
   width: 100%;
-  @media (min-width: 481px) {
-    width: calc(100% - 200px);
-  }
 `;
 
-const Comment = React.memo(() => {
+const Comment = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
@@ -36,6 +33,6 @@ const Comment = React.memo(() => {
     return null;
   }
   return <CommentArea ref={containerRef} />;
-});
+};
 
-export default Comment;
+export default React.memo(Comment);
