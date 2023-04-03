@@ -108,7 +108,6 @@ appRouter.get("/paths", authCheck, async (req, res) => {
 appRouter.get("/list", authCheck, async (req, res) => {
   try {
     const userId = req.auth?.id;
-    console.log({ userId });
     const user = userId ? await users.findOne({ where: { id: userId }, raw: true }) : null;
 
     const list = await posts
@@ -225,7 +224,7 @@ appRouter.get("/recommend/:content", authCheck, async (req, res) => {
           .sort((a: any, b: any) => sortDesc(a, b, "overlapCount"))
       );
 
-    console.log(JSON.stringify({ list, posts, decode }, null, 2));
+    // console.log(JSON.stringify({ list, posts, decode }, null, 2));
     return res.status(200).send({ result: true, data: list, message: "게시글 목록이 조회되었습니다." });
   } catch (exception) {
     console.log("error", exception);
@@ -376,7 +375,6 @@ appRouter.put("/update", accessCheck, async (req, res) => {
   // console.log({ userId, verified }, req.body);
   try {
     const user = await users.findOne({ where: { id: userId }, raw: true });
-    console.log({ user });
     if (!userId || !verified || !user) return res.status(200).send({ result: false, message: "you cannot upload posts." });
 
     if (!title || title.trim().length === 0) return res.status(200).send({ result: false, message: "제목을 입력해주세요." });
