@@ -1,13 +1,12 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React from "react";
 import { Helmet } from "react-helmet";
-import { useRouter } from "next/router";
 import styled from "styled-components";
 
-import { AppContext } from "@context/index";
 import Button from "@components/Button";
 import Checkbox from "@components/Checkbox";
 import requestHelper from "@utils/requestHelper";
 import Icons from "@components/Icons";
+import useLogin from "@hooks/useLogin";
 
 const PageContainer = styled.div`
   padding: 8rem 4rem 2rem;
@@ -81,52 +80,16 @@ const PageContainer = styled.div`
   }
 `;
 const Login = () => {
-  const { setLoading } = useContext(AppContext);
-  const router = useRouter();
-  const [id, setid] = useState("");
-  const [pw, setpw] = useState("");
-  const [isSaveId, setSaveId] = useState(false);
-
-  useEffect(() => {
-    const saveId = localStorage?.getItem("id");
-    if (saveId) {
-      setid(saveId);
-      setSaveId(true);
-    }
-    setLoading(false);
-  }, []);
-
-  const btnclick = useCallback(() => {
-    if (!id || id.trim().length === 0) return alert("아이디를 입력해주세요.");
-    else if (!pw || pw.trim().length === 0) return alert("패스워드를 입력해주세요.");
-    (async () => {
-      if (!isSaveId) {
-        localStorage?.removeItem("id");
-      }
-      const { response, error } = await requestHelper.Post({ url: "/api/user/login", body: { id: id, pw: pw } });
-      console.log({ response });
-      if (error) {
-        alert("로그인 실패");
-        if (!isSaveId) setid("");
-        setpw("");
-      } else {
-        localStorage?.setItem("name", response.name);
-        if (isSaveId) localStorage?.setItem("id", id);
-        router.replace("/");
-      }
-    })();
-  }, [id, pw, isSaveId]);
-
-  const onChangeCheck = useCallback(
-    (checked: boolean) => {
-      setSaveId(checked);
-    },
-    [id]
-  );
-
-  const onKeyPressEnter = (key: string) => {
-    if (key.toLowerCase() === "enter") btnclick();
-  };
+  const {
+    id,
+    pw,
+    setid,
+    setpw,
+    onKeyPressEnter,
+    isSaveId,
+    onChangeCheck,
+    btnclick
+  } = useLogin();
 
   return (
     <PageContainer>
@@ -138,7 +101,13 @@ const Login = () => {
           <Icons.Logo />
         </div>
         <div className="login-input-box">
-          <input name="id" type="text" placeholder="전화번호, 사용자 이름 또는 이메일" value={id} onChange={(e) => setid(e.target.value)} />
+          <input
+            name="id"
+            type="text"
+            placeholder="전화번호, 사용자 이름 또는 이메일"
+            value={id}
+            onChange={(e) => setid(e.target.value)}
+          />
           <input
             name="pw"
             type="password"

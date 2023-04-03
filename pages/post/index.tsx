@@ -1,7 +1,8 @@
 import React from "react";
+import NotFoundPage from "../404";
 
 const Post = () => {
-  return <>NULL</>;
+  return <NotFoundPage />;
 };
 
 export default Post;

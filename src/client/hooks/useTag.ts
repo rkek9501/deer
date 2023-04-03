@@ -19,7 +19,6 @@ export const TagPageMode = {
   modify: "수정"
 };
 
-
 const useTag = () => {
   const { setLoading } = useContext(AppContext);
   const [mode, setMode] = useState<"list"|"add"|"modify">("list");
@@ -27,7 +26,7 @@ const useTag = () => {
   const { data, isLoading, error, mutate } = useSWR("/api/tag?option=all", getFetcher);
 
   const { trigger: createTag } = useSWRMutation("/api/tag", postFetcher);
-  const { trigger: updateTag  } = useSWRMutation("/api/tag", putFetcher);
+  const { trigger: updateTag } = useSWRMutation("/api/tag", putFetcher);
 
   useEffect(() => {
     if (!isLoading) setLoading(false);
