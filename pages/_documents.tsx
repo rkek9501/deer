@@ -28,13 +28,6 @@ class MyDocument extends Document {
           <link rel="icon" type="image/png" sizes="16x16" href="/img/favi/favicon-16x16.png" />
           <link rel="manifest" href="/img/favi/manifest.json" />
 
-          <meta property="og:title" content="Deer" />
-          <meta property="og:type" content="blog" />
-          <meta property="og:description" content="Blog of Doyoung & Osu" />
-          <meta property="og:site_name" content="Deer's blog" />
-          <meta property="og:url" content="https://de-er.link/" />
-          <meta property="og:image" content="https://de-er.link/img/Deer-og-img.png" />
-            
           <link rel="stylesheet" type="text/css" charSet="UTF-8" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
           <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
         </Head>

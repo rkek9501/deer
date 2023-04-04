@@ -19,6 +19,13 @@ const Home = (Props: any) => {
         <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
         <link rel="stylesheet" type="text/css" href="/css/home.css" />
         <link rel="stylesheet" type="text/css" href="/css/masonry.css" />
+
+        <meta property="og:title" content="Deer" />
+        <meta property="og:type" content="blog" />
+        <meta property="og:description" content="Blog of Doyoung & Osu" />
+        <meta property="og:site_name" content="Deer's blog" />
+        <meta property="og:url" content="https://de-er.link/" />
+        <meta property="og:image" content="https://de-er.link/img/Deer-og-img.png" />
       </Helmet>
       <SearchResult posts={posts} />
     </Layout>
