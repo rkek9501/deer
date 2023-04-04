@@ -8,8 +8,15 @@ class MyDocument extends Document {
       <Html lang="en">
         <Head>
           <meta charSet="utf-8" />
+          <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
           <meta name="description" content="Deer" />
+          <meta property="og:title" content="Deer" />
+          <meta property="og:type" content="blog" />
+          <meta property="og:description" content="Blog of Doyoung & Osu" />
+          <meta property="og:site_name" content="Deer's blog" />
+          <meta property="og:url" content="https://de-er.link/" />
+          <meta property="og:image" content="https://de-er.link/img/Deer-og-img.png" />
           <title>Deer</title>
 
           <link rel="shortcut icon" href="/img/favi/favicon.ico" />
