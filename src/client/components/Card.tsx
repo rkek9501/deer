@@ -1,7 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import moment from "moment";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import styled, { css } from "styled-components";
 
 import { AppContext } from "@context/index";
@@ -166,11 +165,19 @@ const CardImgLoader = ({ src }: { src: string }) => {
 };
 const Textcard = (props: { post: PostType; size?: string }) => {
   const { setLoading } = useContext(AppContext);
-  const router = useRouter();
-  let firstImgSrc = props.post.files?.length > 0 ? props.post.files[0]?.src : null;
-  if (!firstImgSrc) {
-    firstImgSrc = `/img/card/default${getThumb(props.post.id)}.jpg`;
-  }
+  const [date, setDate] = useState<string|null>(null);
+
+  useEffect(() => {
+    const _date = moment(props.post.createdAt).format("MMM DD, YYYY");
+    setDate(_date);
+  }, []);
+
+  const firstImgSrc = useMemo(() => {
+    return props.post.files?.length > 0
+      ? props.post.files[0]?.src
+      : `/img/card/default${getThumb(props.post.id)}.jpg`;
+  }, [props.post]);
+
   return (
     <div
       onClick={() => {
@@ -204,7 +211,7 @@ const Textcard = (props: { post: PostType; size?: string }) => {
           <div className="subtitle">{props.post.subtitle}</div>
 
           <div className="data-area">
-            <p className="date">{moment(props.post.createdAt).format("MMM DD, YYYY")}</p>
+            <p className="date">{date}</p>
             <p className="author">{props.post?.user?.name}</p>
           </div>
 
