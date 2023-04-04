@@ -15,17 +15,18 @@ const Home = (Props: any) => {
     <Layout>
       <Helmet>
         <title>Deer</title>
-        <link rel="stylesheet" type="text/css" href="/css/index.css" />
-        <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
-        <link rel="stylesheet" type="text/css" href="/css/home.css" />
-        <link rel="stylesheet" type="text/css" href="/css/masonry.css" />
-
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta property="og:title" content="Deer" />
         <meta property="og:type" content="blog" />
         <meta property="og:description" content="Blog of Doyoung & Osu" />
         <meta property="og:site_name" content="Deer's blog" />
         <meta property="og:url" content="https://de-er.link/" />
         <meta property="og:image" content="https://de-er.link/img/Deer-og-img.png" />
+
+        <link rel="stylesheet" type="text/css" href="/css/index.css" />
+        <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
+        <link rel="stylesheet" type="text/css" href="/css/home.css" />
+        <link rel="stylesheet" type="text/css" href="/css/masonry.css" />
       </Helmet>
       <SearchResult posts={posts} />
     </Layout>
