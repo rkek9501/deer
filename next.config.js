@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
-const { ESBuildMinifyPlugin } = require("esbuild-loader");
-const Dotenv = require("dotenv-webpack");
+// const { ESBuildMinifyPlugin } = require("esbuild-loader");
+// const Dotenv = require("dotenv-webpack");
 const removeImports = require("next-remove-imports")({
   test: /node_modules([\s\S]*?)\.(tsx|ts|js|mjs|jsx)$/,
   matchImports: "\\.(less|css|scss|sass|styl)$"
@@ -17,17 +17,13 @@ const eslint = IS_LOCAL ? { dirs: ["./pages", "./src/client"] } : { ignoreDuring
 const typescript = IS_LOCAL ? {} : { ignoreBuildErrors: true };
 
 module.exports = removeImports({
+  // trailingSlash: true,
+  // assetPrefix: HOST_URL,
   swcMinify: true,
-  reactStrictMode: false,
+  reactStrictMode: true,
   // useFileSystemPublicRoutes: false,
   compiler: {
-    // ssr: true,
-    styledComponents: {
-      ssr: true,
-      fileName: true,
-      displayName: true,
-      pure: true
-    },
+    styledComponents: true,
     removeConsole: {
       exclude: ["error"]
     }
@@ -50,6 +46,7 @@ module.exports = removeImports({
       }
     ];
   },
+  /*
   webpack: (config, { webpack, dev }) => {
     config.resolve = {
       ...config.resolve,
@@ -122,4 +119,5 @@ module.exports = removeImports({
     );
     return config;
   }
+  */
 });
