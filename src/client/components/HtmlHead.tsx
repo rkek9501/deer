@@ -31,7 +31,7 @@ const Head = (Props: HeadProps) => {
       <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
       {Props.isHome && <link rel="stylesheet" type="text/css" href="/css/home.css" />}
       {Props.isHome && <link rel="stylesheet" type="text/css" href="/css/masonry.css" />}
-      {Props.isMarkdown &&<link rel="stylesheet" type="text/css" href="/css/prism.css" />}
+      {/* {Props.isMarkdown && <link rel="stylesheet" type="text/css" href="/css/prism.css" />} */}
       {Props.isMarkdown && <link rel="stylesheet" type="text/css" href="/css/editor.css" />}
 
       <link rel="shortcut icon" href="/img/favi/favicon.ico" />
