@@ -1,11 +1,11 @@
 import React, { Suspense, useCallback, useContext, useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
-import clone from "lodash/clone";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import clone from "lodash/clone";
 
 import EditorProvider, { EditorContext } from "@components/Editor/EditorContext";
 import MarkdownEditor from "@components/Editor";
+import Head from "@components/HtmlHead";
 import Loading from "@components/Loading";
 import Switch from "@components/Switch";
 import TagSelector from "@components/TagSelector";
@@ -117,9 +117,9 @@ const EditorPage = (Props: any) => {
   useEffect(() => {
     if (contentId)
       (async () => {
-        console.log("!!!!", router.query?.id);
+        // console.log("!!!!", router.query?.id);
         const { response, error } = await RequestHelper.Get({ url: "/api/post/item/" + contentId });
-        console.log({ error, response });
+        // console.log({ error, response });
         if (response?.data) {
           setId(response.data?.id);
           setTitle(response.data?.title);
@@ -137,13 +137,13 @@ const EditorPage = (Props: any) => {
 
   useEffect(() => {
     if (allTags && allTags.length > 0) {
-      console.log({ allTags });
+      // console.log({ allTags });
       const tagList: TagType[] =
         allTags?.map((tag: any) => {
           return { label: tag.name, value: tag.id, color: tag.color };
         }) ?? [];
 
-      console.log({ tagList });
+      // console.log({ tagList });
       setTags(tagList as TagType[]);
     }
   }, [allTags]);
@@ -175,52 +175,51 @@ const EditorPage = (Props: any) => {
   }, [id, title, content, openState, selectedTags, files]);
 
   return (
-    <Suspense fallback={<Loading />}>
-      <EditorProvider>
-        <PageContainer>
-          <Helmet>
-            {/* <link rel="stylesheet" href="css/prism.css" />
-        <link rel="stylesheet" href="css/editor.css" /> */}
-          </Helmet>
-          <Container id="left-container">
-            <div className="center">
-              <EditMode>
-                <div className="page-title">
-                  게시글&nbsp;{editMode ? "수정" : "작성"}
-                  {/* <div className="preview-switch-container">
+    <>
+      <Head isMarkdown title="Deer - 게시글 수정" />
+      <Suspense fallback={<Loading />}>
+        <EditorProvider>
+          <PageContainer>
+            <Container id="left-container">
+              <div className="center">
+                <EditMode>
+                  <div className="page-title">
+                    게시글&nbsp;{editMode ? "수정" : "작성"}
+                    {/* <div className="preview-switch-container">
                 <Label>미리보기</Label>
                 <Switch checked={preview} setChecked={setPreview} />
               </div> */}
-                </div>
-                <hr />
-              </EditMode>
+                  </div>
+                  <hr />
+                </EditMode>
 
-              <br />
-              <Label>제목</Label>
-              <TitleInput title={title} setTitle={setTitle} />
+                <br />
+                <Label>제목</Label>
+                <TitleInput title={title} setTitle={setTitle} />
 
-              <br />
-              <Label>본문</Label>
-              <MarkdownEditor content={content} setContent={setContent} />
+                <br />
+                <Label>본문</Label>
+                <MarkdownEditor content={content} setContent={setContent} />
 
-              <br />
-              <Label>태그 선택</Label>
-              <TagSelector options={tags} selected={selectedTags} setSelected={setSelectedTags} />
+                <br />
+                <Label>태그 선택</Label>
+                <TagSelector options={tags} selected={selectedTags} setSelected={setSelectedTags} />
 
-              <br />
-              <Between>
-                <div>
-                  <Label>공개 여부</Label>
-                  <Switch trueText="공개" falseText="비공개" checked={openState} setChecked={setOpenState} />
-                </div>
+                <br />
+                <Between>
+                  <div>
+                    <Label>공개 여부</Label>
+                    <Switch trueText="공개" falseText="비공개" checked={openState} setChecked={setOpenState} />
+                  </div>
 
-                <Button onClick={() => uploadPost()}>{editMode ? "수정" : "작성"}</Button>
-              </Between>
-            </div>
-          </Container>
-        </PageContainer>
-      </EditorProvider>
-    </Suspense>
+                  <Button onClick={() => uploadPost()}>{editMode ? "수정" : "작성"}</Button>
+                </Between>
+              </div>
+            </Container>
+          </PageContainer>
+        </EditorProvider>
+      </Suspense>
+    </>
   );
 };
 

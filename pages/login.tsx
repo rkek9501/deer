@@ -1,11 +1,11 @@
 import React from "react";
-import { Helmet } from "react-helmet";
 import styled from "styled-components";
 
 import Button from "@components/Button";
 import Checkbox from "@components/Checkbox";
-import requestHelper from "@utils/requestHelper";
+import Head from "@components/HtmlHead";
 import Icons from "@components/Icons";
+import requestHelper from "@utils/requestHelper";
 import useLogin from "@hooks/useLogin";
 
 const PageContainer = styled.div`
@@ -80,22 +80,11 @@ const PageContainer = styled.div`
   }
 `;
 const Login = () => {
-  const {
-    id,
-    pw,
-    setid,
-    setpw,
-    onKeyPressEnter,
-    isSaveId,
-    onChangeCheck,
-    btnclick
-  } = useLogin();
+  const { id, pw, setid, setpw, onKeyPressEnter, isSaveId, onChangeCheck, btnclick } = useLogin();
 
   return (
     <PageContainer>
-      <Helmet>
-        <title>Deer Login</title>
-      </Helmet>
+      <Head title="Deer - 로그인" />
       <div className="login-content">
         <div className="title title-deer">
           <Icons.Logo />

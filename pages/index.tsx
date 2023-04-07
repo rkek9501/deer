@@ -1,44 +1,36 @@
-/* eslint-disable @next/next/no-css-tags */
-import React, { useState } from "react";
-import { Helmet } from "react-helmet";
-import dynamic from "next/dynamic";
+import React from "react";
+import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 
+import Head from "@components/HtmlHead";
 import Layout from "@components/Layout";
+import SearchResult from "@components/SearchResult";
 import RequestHelper from "@utils/requestHelper";
 
-const SearchResult = dynamic(() => import("@components/SearchResult"), { ssr: true });
-
 const Home = (Props: any) => {
-  const [posts] = useState<any>(Props.contentList || []);
-
   return (
-    <Layout>
-      <Helmet>
-        <title>Deer</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta property="og:title" content="Deer" />
-        <meta property="og:type" content="blog" />
-        <meta property="og:description" content="Blog of Doyoung & Osu" />
-        <meta property="og:site_name" content="Deer's blog" />
-        <meta property="og:url" content="https://de-er.link/" />
-        <meta property="og:image" content="https://de-er.link/img/Deer-og-img.png" />
-
-        <link rel="stylesheet" type="text/css" href="/css/index.css" />
-        <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
-        <link rel="stylesheet" type="text/css" href="/css/home.css" />
-        <link rel="stylesheet" type="text/css" href="/css/masonry.css" />
-      </Helmet>
-      <SearchResult posts={posts} />
-    </Layout>
+    <>
+      <Head withMeta isHome={true} title="Deer" />
+      <Layout>
+        <SearchResult posts={Props.contents || []} />
+      </Layout>
+    </>
   );
 };
 
-export const getServerSideProps = async (context: any) => {
-  const { response, error } = await RequestHelper.Get({ url: "/api/post/list" });
-  return {
-    props: {
-      contentList: response?.data
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+  const contents = [];
+  try {
+    const cookie = context.req ? context.req.headers.cookie : "";
+    const { response } = await RequestHelper.Get({ url: "/api/post/list" }, cookie);
+    if (response?.result) {
+      contents.push(...response?.data);
     }
+  } catch (error) {
+    console.log("Cannot Find Contents", error);
+  }
+
+  return {
+    props: { contents }
   };
 };
 

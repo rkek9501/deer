@@ -1,6 +1,6 @@
-import moment from "moment";
 import React from "react";
 import styled from "styled-components";
+import useDate from "@hooks/useDate";
 
 const UserIcon = styled.div`
   width: 40px !important;
@@ -51,13 +51,14 @@ type UserData = {
   date: string;
 };
 const UserView = (user: UserData) => {
-  const icon = user.image ? <img src={user.image} /> : user.name.charAt(0).toUpperCase();
+  const icon = user.image ? <img src={user.image} /> : user.name?.charAt(0).toUpperCase();
+  const date = useDate(user.date);
   return (
     <UserBoxContainer>
       <UserIcon>{icon}</UserIcon>
       <UserTextContainer>
         <div>{user.name}</div>
-        <div>{moment(user.date).format("MMMM DD, YYYY")}</div>
+        <div>{date}</div>
       </UserTextContainer>
     </UserBoxContainer>
   );

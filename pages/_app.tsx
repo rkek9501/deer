@@ -13,10 +13,10 @@ import "./globals.css";
 
 const Container = styled.div`
   width: 100vw;
-  height: calc(100vh - 70px);
+  height: calc(100vh - 70px) !important;
   overflow: hidden;
   @media (min-width: 1px) and (max-width: 480px) {
-    height: calc(100vh - 60px);
+    height: calc(100vh - 60px) !important;
   }
 `;
 

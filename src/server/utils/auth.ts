@@ -4,7 +4,7 @@ import { ACCESS_TOKEN_COOKIE_OPTIONS, REFRESH_TOKEN_COOKIE_OPTIONS } from "../en
 
 // 접근권한 확인 (POST, PUT, DELETE)
 const accessCheck = (req: Request, res: Response, next: NextFunction) => {
-  const accessToken = req.session?.accessToken || req.cookies?.accessToken || "";
+  const accessToken = req.cookies?.accessToken || req.session?.accessToken || "";
   const refreshToken = req.session?.refreshToken || "";
 
   const accessable = verifyAccessToken(accessToken);
@@ -29,7 +29,7 @@ const accessCheck = (req: Request, res: Response, next: NextFunction) => {
 
 // 사용자 인증 로그인 여부 체크 (GET)
 const authCheck = (req: Request, res: Response, next: NextFunction) => {
-  const accessToken = req.session?.accessToken || req.cookies?.accessToken || "";
+  const accessToken = req.cookies?.accessToken || req.session?.accessToken || "";
   const refreshToken = req.session?.refreshToken || "";
 
   const accessable = verifyAccessToken(accessToken);

@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import moment from "moment";
 import Image from "next/image";
 import styled, { css } from "styled-components";
 
 import { AppContext } from "@context/index";
 import * as gtag from "@utils/gtag";
+import useDate from "@hooks/useDate";
 import Tag from "./TagBlock";
 
 const CardContainer = styled.a`
@@ -165,12 +165,7 @@ const CardImgLoader = ({ src }: { src: string }) => {
 };
 const Textcard = (props: { post: PostType; size?: string }) => {
   const { setLoading } = useContext(AppContext);
-  const [date, setDate] = useState<string|null>(null);
-
-  useEffect(() => {
-    const _date = moment(props.post.createdAt).format("MMM DD, YYYY");
-    setDate(_date);
-  }, []);
+  const date = useDate(props.post.createdAt);
 
   const firstImgSrc = useMemo(() => {
     return props.post.files?.length > 0

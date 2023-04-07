@@ -1,5 +1,4 @@
 import React from "react";
-import { Helmet } from "react-helmet";
 import type { GetStaticPaths, GetStaticProps } from "next";
 import dynamic from "next/dynamic";
 import styled from "styled-components";
@@ -7,6 +6,7 @@ import styled from "styled-components";
 import AdsComponents from "@components/Adsense";
 import { Viewer } from "@components/Editor";
 import FloatingBtn from "@components/FloatingButton";
+import Head from "@components/HtmlHead";
 import Icons from "@components/Icons";
 import Layout from "@components/Layout";
 import TagList from "@components/post/TagList";
@@ -20,7 +20,7 @@ const Comment = dynamic(() => import("@components/Comment"), { ssr: false });
 
 import useLoadPost from "@hooks/useLoadPost";
 import RequestHelper from "@utils/requestHelper";
-import { base64, utf8 } from "@utils/crypto";
+// import { base64, utf8 } from "@utils/crypto";
 
 const PageContainer = styled.div`
   height: inherit;
@@ -87,68 +87,61 @@ const ContentContainer = styled.div`
 `;
 
 const PostPage = (Props: any) => {
-  const {
-    gotoEdit,
-    data,
-    hData,
-    session,
-    recomend
-  } = useLoadPost();
-
-  const goToTop = (e: React.MouseEvent<HTMLElement>) => {
-    document.getElementById("scroller")?.scrollTo(0, 0);
-    e.stopPropagation();
-    e.preventDefault();
-  };
+  const { data, contentId } = Props;
+  const { gotoEdit, goToTop, hData, session, recomend } = useLoadPost(data, contentId);
 
   return (
-    <Layout noneMenu={true}>
-      <PageContainer>
-        <Helmet>
-          <title>{`Deer | ${Props?.title}`}</title>
-          <link rel="stylesheet" type="text/css" href="/css/index.css" />
-          <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
-          <link rel="stylesheet" type="text/css" href="/css/prism.css" />
-          <link rel="stylesheet" type="text/css" href="/css/editor.css" />
-        </Helmet>
-        {data ? (<>
-          <ContentContainer>
-            <div className="content-main">
-              <div className="center">
-                <Title>{data?.title}</Title>
-                <UserView name={data.user?.name} image={data.user?.image} date={data.createdAt} />
-                <TagList>
-                  {data.tags?.map((tag: { name: string; color: string }, idx: number) => {
-                    return <Tag key={idx} name={tag.name} color={tag.color} alwaysOn={true} />;
-                  })}
-                </TagList>
-                <Viewer content={data?.content} />
-              </div>
+    <>
+      <Head
+        withMeta
+        isMarkdown={true}
+        title={`Deer${data?.title ? ` | ${data?.title}` : ""}`}
+        description={data?.subtitle || null}
+        url={`https://de-er.link/post/${contentId}`}
+      />
+      <Layout noneMenu={true}>
+        <PageContainer>
+          {data ? (
+            <>
+              <ContentContainer>
+                <div className="content-main">
+                  <div className="center">
+                    <Title>{data?.title}</Title>
+                    <UserView name={data.user?.name} image={data.user?.image} date={data.createdAt} />
+                    <TagList>
+                      {data.tags?.map((tag: { name: string; color: string }, idx: number) => {
+                        return <Tag key={idx} name={tag.name} color={tag.color} alwaysOn={true} />;
+                      })}
+                    </TagList>
+                    <Viewer content={data?.content} />
+                  </div>
+                </div>
+
+                <span id="content-end" />
+                <div style={{ position: "relative" }}>
+                  <FloatingBtn bottom={80} bgColor="#F9F9F9" onClick={goToTop}>
+                    <Icons.ToTop />
+                  </FloatingBtn>
+                  {session && (
+                    <FloatingBtn bottom={20} bgColor="greenyellow" onClick={() => gotoEdit()}>
+                      수정
+                    </FloatingBtn>
+                  )}
+                </div>
+                <Carousel contents={recomend || []} />
+                <Comment />
+              </ContentContainer>
+              <BookMark data={hData} />
+            </>
+          ) : (
+            <div className="center" id="center">
+              게시글이 존재하지 않습니다.
             </div>
-            
-            <span id="content-end" />
-            <div style={{ position: "relative" }}>
-              <FloatingBtn bottom={80} bgColor="#F9F9F9" onClick={goToTop}>
-                <Icons.ToTop />
-              </FloatingBtn>
-              {session && (
-                <FloatingBtn bottom={20} bgColor="greenyellow" onClick={() => gotoEdit()}>
-                  수정
-                </FloatingBtn>
-              )}
-            </div>
-            <Carousel contents={recomend || []} />
-            <AdsComponents />
-            <Comment />
-          </ContentContainer>
-          <BookMark data={hData} />
-        </>) : (
-          <div className="center" id="center">
-            게시글이 존재하지 않습니다.
-          </div>
-        )}
-      </PageContainer>
-    </Layout>
+          )}
+        </PageContainer>
+      </Layout>
+      <AdsComponents />
+    </>
   );
 };
 
@@ -160,18 +153,37 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return { paths, fallback: "blocking" };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const pageData = JSON.parse(utf8.decode(base64.decode(params?.id ? String(params?.id) : "")));
-  const title = pageData.title;
+export const getStaticProps: GetStaticProps = async (Props: any) => {
+  const { params } = Props;
+
+  let data = null;
+  let id = "";
+  try {
+    id = params?.id ? String(params?.id) : "";
+    const { response, error } = await RequestHelper.Get({ url: "/api/post/item/" + id });
+    if (error) throw Error(error);
+    if (response?.result) {
+      data = { ...response?.data };
+    }
+  } catch (err) {
+    console.log(err);
+  }
 
   return {
     props: {
-      title
-      // content: contentRes.data,
-      // recomend: recomendRes.data,
-      // error
+      contentId: id,
+      data
     }
   };
 };
+
+// export const getServerSideProps = async ({ req, res }: any) => {
+//   console.log("getServerSideProps!!!!!!!!!!!")
+//   // res.setHeader('Cache-Control', 'public, s-maxage=10, stale-while-revalidate=59');
+
+//   return {
+//     props: {},
+//   }
+// }
 
 export default PostPage;

@@ -26,7 +26,7 @@
   ],
   "rules": {
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
+    "react-hooks/exhaustive-deps": "off",
     "react/display-name": "warn",
     "import/no-anonymous-default-export": "off"
   },

@@ -4,9 +4,9 @@ import styled from "styled-components";
 import { DotLoader } from "react-spinners";
 
 import Button from "@components/Button";
+import Head from "@components/HtmlHead";
 import Icons from "@components/Icons";
 import ImgCropModal from "@components/ImgCropModal";
-import Layout from "@components/Layout";
 
 import RequestHelper from "@utils/requestHelper";
 import useUser, { useChangeUserPw } from "@hooks/useUser";
@@ -137,10 +137,7 @@ const ExpendabelViewContainer = styled.div`
 `;
 
 const ChangePassView = () => {
-  const {
-    open, values, err,
-    setOpen, changeValues, onClickChangePw,
-  } = useChangeUserPw();
+  const { open, values, err, setOpen, changeValues, onClickChangePw } = useChangeUserPw();
 
   return (
     <ExpendabelViewContainer>
@@ -161,53 +158,56 @@ const ChangePassView = () => {
 };
 
 const User = () => {
-  const {
-    image, name, email, modal,
-    isLoading, error,
-    setName, setEmail,openModal,
-    imgChangeCallback, CardImgLoader, save
-  } = useUser();
+  const { image, name, email, modal, isLoading, error, setName, setEmail, openModal, imgChangeCallback, CardImgLoader, save } = useUser();
 
-  if (isLoading) return <UserPageContainer><DotLoader color="#005fee" /></UserPageContainer>;
+  if (isLoading)
+    return (
+      <UserPageContainer>
+        <DotLoader color="#005fee" />
+      </UserPageContainer>
+    );
   if (error) return <UserPageContainer>데이터를 불러오는데 실패하였습니다.</UserPageContainer>;
 
   return (
-    <UserPageContainer>
-      <div className="user-img-view" onClick={openModal}>
-        {image ? (
-          <Image
-            className="user-img"
-            src={image}
-            width={100}
-            height={100}
-            unoptimized={true}
-            layout={"fixed"}
-            loader={CardImgLoader}
-            alt="profile-image"
-          />
-        ) : (
-          <div className="no-image-container">
-            <Icons.User />
-          </div>
-        )}
-        {modal && <ImgCropModal open={modal} existImg={!!image} callback={imgChangeCallback} />}
-      </div>
-      <div className="user-profiles">
-        <ExpendabelViewContainer>
-          <div className="user-info expendable-label">개인정보 수정</div>
-          <div className="expendable-area">
-            <Input label="이름" value={name} setValue={setName} />
-            <Input label="이메일" value={email} setValue={setEmail} />
-            <Button onClick={() => save()}>저장하기</Button>
-          </div>
-        </ExpendabelViewContainer>
+    <>
+      <Head title="Deer - 내 정보" />
+      <UserPageContainer>
+        <div className="user-img-view" onClick={openModal}>
+          {image ? (
+            <Image
+              className="user-img"
+              src={image}
+              width={100}
+              height={100}
+              unoptimized={true}
+              layout={"fixed"}
+              loader={CardImgLoader}
+              alt="profile-image"
+            />
+          ) : (
+            <div className="no-image-container">
+              <Icons.User />
+            </div>
+          )}
+          {modal && <ImgCropModal open={modal} existImg={!!image} callback={imgChangeCallback} />}
+        </div>
+        <div className="user-profiles">
+          <ExpendabelViewContainer>
+            <div className="user-info expendable-label">개인정보 수정</div>
+            <div className="expendable-area">
+              <Input label="이름" value={name} setValue={setName} />
+              <Input label="이메일" value={email} setValue={setEmail} />
+              <Button onClick={() => save()}>저장하기</Button>
+            </div>
+          </ExpendabelViewContainer>
 
-        <br />
-        <hr />
-        <br />
-        <ChangePassView />
-      </div>
-    </UserPageContainer>
+          <br />
+          <hr />
+          <br />
+          <ChangePassView />
+        </div>
+      </UserPageContainer>
+    </>
   );
 };
 

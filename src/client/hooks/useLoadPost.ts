@@ -1,9 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import useSWR from "swr";
+
 import { AppContext } from "@context";
-import usePreventBodyScorll from "@hooks/usePreventBodyScroll";
-import RequestHelper from "@utils/requestHelper";
 import { checkToken } from "@utils/tokenManager";
+import { getFetcher } from "@utils/swrFetcher";
+import usePreventBodyScorll from "@hooks/usePreventBodyScroll";
 
 export type PostType = {
   title: string;
@@ -13,14 +15,14 @@ export type PostType = {
   tags?: any[];
 };
 
-const useLoadPost = () => {
+const useLoadPost = (data: any, contentId: string) => {
   const { setLoading } = useContext(AppContext);
-  const [data, setData] = useState<PostType | null>(null);
+  const [content, setContent] = useState<string>("");
   const [hData, setHData] = useState<any>([]);
   const [session, setSession] = useState(false);
-  const [recomend, setRecomend] = useState(null);
   const router = useRouter();
-  const contentId = (typeof window !== "undefined" ? window?.location?.pathname.replace("/post/", "") : null)
+
+  const { data: recomend, isLoading, error } = useSWR(`/api/post/recommend/${contentId}`, getFetcher);
 
   useEffect(() => {
     setSession(checkToken());
@@ -29,43 +31,33 @@ const useLoadPost = () => {
   usePreventBodyScorll();
 
   useEffect(() => {
-    const isBrowser = typeof window !== "undefined";
-    console.log({contentId, isBrowser})
-    if (!data  && contentId && isBrowser) {
-      (async () => {
-        const { response: contentRes, error } = await RequestHelper.Get({ url: "/api/post/item/" + contentId });
-        const { response: recomendRes } = await RequestHelper.Get({ url: "/api/post/recommend/" + contentId });
-        console.log({ contentRes, recomendRes });
-        setRecomend(recomendRes?.data);
-
-        const lines = contentRes?.data?.content?.split("\n");
-        const heading: any[] = [];
-        const content = [];
-        let isCodeBlock = false;
-        for (const [idx, line] of lines?.entries() || []) {
-          if (line.indexOf("```") !== -1) {
-            isCodeBlock = !isCodeBlock;
-          }
-          if (line.indexOf("# ") === 0 && !isCodeBlock) {
-            content.push(`${line} <a id="bookmark_${idx}" class="bookmarked" style="visibility:hidden;"></a>`);
-            heading.push({ type: "h1", line: line.slice(2), idx: `bookmark_${idx}` });
-          } else if (line.indexOf("## ") === 0 && !isCodeBlock) {
-            content.push(`${line} <a id="bookmark_${idx}" class="bookmarked" style="visibility:hidden;"></a>`);
-            heading.push({ type: "h2", line: line.slice(3), idx: `bookmark_${idx}` });
-          } else if (line.indexOf("### ") === 0 && !isCodeBlock) {
-            content.push(`${line} <a id="bookmark_${idx}" class="bookmarked" style="visibility:hidden;"></a>`);
-            heading.push({ type: "h3", line: line.slice(4), idx: `bookmark_${idx}` });
-          } else {
-            content.push(line);
-          }
-        }
-        const contents = content.join("\n");
-        setHData(heading);
-        setData({ ...contentRes?.data, content: contents });
-        setLoading(false);
-      })();
+    const lines = data?.content?.split("\n");
+    const heading: any[] = [];
+    const content = [];
+    let isCodeBlock = false;
+    for (const [idx, line] of lines?.entries() || []) {
+      if (line.indexOf("```") !== -1) {
+        isCodeBlock = !isCodeBlock;
+      }
+      if (line.indexOf("# ") === 0 && !isCodeBlock) {
+        content.push(`${line} <a id="bookmark_${idx}" class="bookmarked" style="visibility:hidden;"></a>`);
+        heading.push({ type: "h1", line: line.slice(2), idx: `bookmark_${idx}` });
+      } else if (line.indexOf("## ") === 0 && !isCodeBlock) {
+        content.push(`${line} <a id="bookmark_${idx}" class="bookmarked" style="visibility:hidden;"></a>`);
+        heading.push({ type: "h2", line: line.slice(3), idx: `bookmark_${idx}` });
+      } else if (line.indexOf("### ") === 0 && !isCodeBlock) {
+        content.push(`${line} <a id="bookmark_${idx}" class="bookmarked" style="visibility:hidden;"></a>`);
+        heading.push({ type: "h3", line: line.slice(4), idx: `bookmark_${idx}` });
+      } else {
+        content.push(line);
+      }
     }
-  }, [data]);
+    const contents = content.join("\n");
+    setContent(contents);
+    setHData(heading);
+    setLoading(false);
+  }, []);
+
   const gotoEdit = () => {
     setLoading(true);
     router.push({
@@ -73,13 +65,21 @@ const useLoadPost = () => {
       query: { id: contentId }
     });
   };
+
+  const goToTop = (e: React.MouseEvent<HTMLElement>) => {
+    document.getElementById("scroller")?.scrollTo(0, 0);
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
   return {
     gotoEdit,
-    data,
+    goToTop,
+    content,
     hData,
     session,
-    recomend
-  }
-}
+    recomend: recomend?.data
+  };
+};
 
 export default useLoadPost;

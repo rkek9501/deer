@@ -7,6 +7,7 @@ import Tag from "@components/TagBlock";
 import Icons from "@components/Icons";
 import { DefaultColors } from "@utils";
 import useTag, { TagPageMode, TagType, useTagEditor } from "@hooks/useTag";
+import Head from "@components/HtmlHead";
 
 const TagListContainer = styled.div`
   padding: 20px 30px;
@@ -86,23 +87,19 @@ const FormContainer = styled.div`
   }
 `;
 
-const TagManage = ({
-  tagList,
-  onClickTag,
-}: {
-  tagList: TagType[];
-  onClickTag: (tag: TagType) => void;
-}) => {
+const TagManage = ({ tagList, onClickTag }: { tagList: TagType[]; onClickTag: (tag: TagType) => void }) => {
   return (
     <Wrapper>
-      {tagList.map((tag: any, idx: number) => <Tag
+      {tagList.map((tag: any, idx: number) => (
+        <Tag
         key={idx}
         {...tag}
         alwaysOn={true}
         onClick={() => {
           onClickTag(tag);
         }}
-      />)}
+        />
+      ))}
     </Wrapper>
   );
 };
@@ -170,7 +167,8 @@ const TagPage = () => {
     onClickComplete
   } = useTag();
   
-  return (
+  return (<>
+    <Head title="Deer - 태그" />
     <TagListContainer>
       <Title>
         <h1>태그 {TagPageMode[mode]}</h1>
@@ -194,7 +192,7 @@ const TagPage = () => {
         />
       }
     </TagListContainer>
-  );
+  </>);
 };
 
 export default TagPage;
