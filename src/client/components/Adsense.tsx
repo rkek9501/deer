@@ -1,12 +1,23 @@
 import React from "react";
 import Script from "next/script";
+import styled from "styled-components";
+
+const Container = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  * {
+    max-height: 100px;
+  }
+`;
 
 const AdsComponents = () => {
   return (
-    <div style={{ maxHeight: "100px", position: "absolute", bottom: 0, left: 0, right: 0 }}>
+    <Container style={{ maxHeight: "100px" }}>
       <ins
         className="adsbygoogle"
-        style={{ display: "block", minHeight: "200px" }}
+        style={{ display: "block", maxHeight: "100px" }}
         data-ad-client={process.env.ADSENSE_CLIENT}
         data-ad-slot={process.env.ADSENSE_SLOT}
         data-ad-format="auto"
@@ -17,7 +28,7 @@ const AdsComponents = () => {
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: "(adsbygoogle = window.adsbygoogle || []).push({});" }}
       />
-    </div>
+    </Container>
   );
 };
 
