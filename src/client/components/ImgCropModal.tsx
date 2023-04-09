@@ -17,7 +17,7 @@ const customStyles = {
     backgroundColor: "rgba(100, 100, 100, 0.75)",
     transform: "translate(-50%, -50%)",
     width: "calc(100vw)",
-    height: "calc(100vh)",
+    height: "calc(var(--vh, 1vh) * 100)",
     minWidth: 600
   },
   content: {
@@ -27,7 +27,7 @@ const customStyles = {
     bottom: "auto",
     marginRight: "-50%",
     maxWidth: "calc(100vw - 200px)",
-    maxHeight: "calc(100vh - 100px)",
+    maxHeight: "calc(var(--vh, 1vh) * 100 - 100px)",
     transform: "translate(-50%, -50%)"
   }
 };

@@ -167,6 +167,9 @@ export const getStaticProps: GetStaticProps = async (Props: any) => {
     }
   } catch (err) {
     console.log(err);
+    return {
+      notFound: true
+    }
   }
 
   return {

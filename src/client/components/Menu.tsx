@@ -6,7 +6,7 @@ import Icons from "./Icons";
 import Tag from "./TagBlock";
 
 const SideContainer = styled.div`
-  height: calc(100vh - 70px);
+  height: calc(var(--vh, 1vh) * 100 - 70px);
   @media (min-width: 1px) and (max-width: 480px) {
     height: auto !important;
     width: 100%;

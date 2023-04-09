@@ -33,9 +33,9 @@ const PageContainer = styled.div`
   display: flex;
   flex-direction: row;
   overflow: hidden;
-  height: calc(100vh - 70px);
+  height: calc(var(--vh, 1vh) * 100 - 70px);
   @media (min-width: 1px) and (max-width: 480px) {
-    height: calc(100vh - 60px);
+    height: calc(var(--vh, 1vh) * 100 - 60px);
   }
 `;
 

@@ -5,19 +5,19 @@ const BookMarkConatiner = styled.div`
   position: absolute;
   right: 0;
   font-family: "score4";
-  width: calc((100vw - 756px)/2);
-  max-height: calc(100vh - 60px);
-  max-width: calc((100vw - 756px)/2);
+  width: calc((100vw - 756px) / 2);
+  max-height: calc(var(--vh, 1vh) * 100 - 60px);
+  max-width: calc((100vw - 756px) / 2);
   line-height: 24px;
   padding-left: 8px;
   .fixed-box {
     overflow: scroll;
-    max-height: calc(100vh - 250px);
+    max-height: calc(var(--vh, 1vh) * 100 - 250px);
     border-left: solid 2px #d9d9d9;
     padding-left: 8px;
     position: fixed;
-    width: calc((100vw - 756px)/2);
-    max-width: calc((100vw - 756px)/2);
+    width: calc((100vw - 756px) / 2);
+    max-width: calc((100vw - 756px) / 2);
     font-size: 2rem;
     line-height: 2.4rem;
     word-break: break-all;

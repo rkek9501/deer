@@ -13,16 +13,25 @@ import "./globals.css";
 
 const Container = styled.div`
   width: 100vw;
-  height: calc(100vh - 70px) !important;
+  height: calc(var(--vh, 1vh) * 100 - 70px) !important;
   overflow: hidden;
   @media (min-width: 1px) and (max-width: 480px) {
-    height: calc(100vh - 60px) !important;
+    height: calc(var(--vh, 1vh) * 100 - 60px) !important;
   }
 `;
 
 const App = (appProps: any) => {
   const { Component, pageProps } = appProps;
   const router = useRouter();
+
+  useEffect(() => {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', vh + 'px');
+    window.addEventListener('resize', function () {
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', vh + 'px');
+    });
+  }, []);
 
   useEffect(() => {
     const onRouteChange = (url: any) => {

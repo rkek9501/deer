@@ -16,7 +16,7 @@ const Main = styled.div`
     min-width: 200px;
     overflow-x: scroll;
     overflow-y: scroll;
-    height: calc(100vh - 70px);
+    height: calc(var(--vh, 1vh) * 100 - 70px);
   }
   #scroller.main {
     border-left: solid 2px black;
