@@ -11,7 +11,7 @@ import Head from "@components/HtmlHead";
 
 const TagListContainer = styled.div`
   padding: 20px 30px;
-  height: calc(100vh - 60px);
+  height: calc(var(--vh, 1vh) * 100 - 60px);
   overflow: scroll;
 `;
 

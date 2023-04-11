@@ -90,21 +90,8 @@ const Login = () => {
           <Icons.Logo />
         </div>
         <div className="login-input-box">
-          <input
-            name="id"
-            type="text"
-            placeholder="전화번호, 사용자 이름 또는 이메일"
-            value={id}
-            onChange={(e) => setid(e.target.value)}
-          />
-          <input
-            name="pw"
-            type="password"
-            placeholder="비밀번호"
-            value={pw}
-            onChange={(e) => setpw(e.target.value)}
-            onKeyPress={(e) => onKeyPressEnter(e.key)}
-          />
+          <input name="id" type="text" placeholder="전화번호, 사용자 이름 또는 이메일" value={id} onChange={(e) => setid(e.target.value)} />
+          <input name="pw" type="password" placeholder="비밀번호" value={pw} onChange={(e) => setpw(e.target.value)} onKeyPress={(e) => onKeyPressEnter(e.key)} />
           <Checkbox checked={isSaveId} onChange={onChangeCheck} label="아이디 저장하기" />
           <br />
           <div>
