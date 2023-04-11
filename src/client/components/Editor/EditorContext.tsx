@@ -10,15 +10,16 @@ export type FileData = {
 };
 
 export const EditorContext = createContext({
-  files: [] as FileData[],
-  setFiles: (file: FileData[]) => {}
+  content: "",
+  setContent: (file: string) => {}
 });
 
 const EditorProvider = (props: EditorProviderProps) => {
-  const [files, setFiles] = useState<FileData[]>([]);
+  const [content, setContent] = useState("");
+
   const values = {
-    files,
-    setFiles
+    content,
+    setContent
   };
   return <EditorContext.Provider value={values}>{props.children}</EditorContext.Provider>;
 };

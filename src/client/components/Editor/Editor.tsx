@@ -1,6 +1,5 @@
-import React, { useCallback, useContext, useRef } from "react";
+import React, { ChangeEvent, useCallback, useContext, useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
-import clone from "lodash/clone";
 
 import "@uiw/react-markdown-preview/markdown.css";
 import "@uiw/react-md-editor/markdown-editor.css";
@@ -27,78 +26,95 @@ import {
   checkedListCommand
 } from "@uiw/react-md-editor/lib/commands";
 
-import requestHelper from "@utils/requestHelper";
 import Icons from "@components/Icons";
-import { EditorContext, FileData } from "./EditorContext";
+import requestHelper from "@utils/requestHelper";
+import { EditorContext } from "./EditorContext";
 
-const MDEditor = dynamic<MDEditorProps>(
-  async () => {
-    const mod = await import("@uiw/react-md-editor");
-
-    return mod.default;
-  },
-  { ssr: false }
-);
-
-const EditorUploader = (Props: { appendImg: (img: string) => void; close: () => void }) => {
-  const { files, setFiles } = useContext(EditorContext);
+const EditorUploader = () => {
+  const { setContent } = useContext(EditorContext);
   const ref = useRef<HTMLInputElement>(null);
 
-  const appendNewFile = (file: FileData) => {
-    const temp: FileData[] = clone(files);
-    temp.push(file);
-    setFiles(temp);
-  };
   const imageUpload = useCallback(async (file: any) => {
     const response = await requestHelper.Upload(file, "content");
-    appendNewFile({ name: response.file, src: "/uploads/" + response.file });
-    Props.appendImg("/uploads/" + response.file);
+
+    const url = "/uploads/" + response.file;
+    const imgTag = `<img src="${url}" style="width: 100%;" />`;
+    const insertedMarkdown = insertToTextArea(imgTag);
+
+    if (!insertedMarkdown) return;
+    setContent(insertedMarkdown);
+    
     return "/uploads/" + response.file;
   }, []);
+
+  const handleFileChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target?.files?.[0]) imageUpload(e.target.files[0]);
+  }, []);
+
   return (
     <div style={{ width: "fitContent", padding: 10 }}>
       <div>이미지 파일 업로드</div>
-      <button
-        onClick={() => {
-          ref.current?.click();
-        }}
-      >
+      <button onClick={() => ref.current?.click()} >
         파일선택
       </button>
-      <input
-        type="file"
-        ref={ref}
-        style={{ display: "none" }}
-        onChange={(e) => {
-          if (e.target?.files?.[0]) {
-            imageUpload(e.target.files[0]);
-            Props.close();
-          }
-        }}
-      />
+      <input type="file" ref={ref} style={{ display: "none" }} onChange={handleFileChange} />
     </div>
   );
 };
 
-const MarkdownEditor = (Props: { content: string; setContent: (content: string) => void }) => {
-  const appendImg = useCallback(
-    async (img: string) => {
-      const prev = Props.content;
-      const imgTag = `<img src="${img}" style="width: 100%;" />`;
-      Props.setContent(`${prev ? prev + "\n" : ""}${imgTag}`);
-    },
-    [Props.content]
+
+const imageUploader = group([], {
+  name: "image",
+  groupName: "image",
+  icon: <Icons.Upload />,
+  buttonProps: { "aria-label": "Upload & Insert image" },
+  children: (props) => <EditorUploader />,
+});
+
+const insertToTextArea = (intsertString: string) => {
+  const textarea: HTMLTextAreaElement | null = document.querySelector("textarea.w-md-editor-text-input");
+  if (!textarea) return null;
+
+  let sentence = textarea.value;
+  const len = sentence.length;
+  const pos = textarea.selectionStart;
+  // const end = textarea.selectionEnd;
+
+  const front = sentence.slice(0, pos);
+  const back = sentence.slice(pos, len);
+
+  sentence = front + intsertString + back;
+
+  // textarea.value = sentence;
+  // textarea.selectionEnd = end + intsertString.length;
+
+  return sentence;
+};
+
+const MarkdownEditor = () => {
+  const { content, setContent } = useContext(EditorContext);
+  const MDEditor = useMemo(
+    () =>
+      dynamic<MDEditorProps>(
+        async () => {
+          const mod = await import("@uiw/react-md-editor");
+
+          return mod.default;
+        },
+        { ssr: false }
+      ),
+    []
   );
 
   return (
     <>
       <div className="container">
         <MDEditor
-          value={Props.content || ""}
+          value={content}
           minHeight={300}
           height={500}
           onChange={(value: any, ...args) => {
-            Props.setContent(value);
+            setContent(value);
             console.log({ args, value });
           }}
           commands={[
@@ -120,19 +136,7 @@ const MarkdownEditor = (Props: { content: string; setContent: (content: string) 
             unorderedListCommand,
             orderedListCommand,
             checkedListCommand,
-            group([], {
-              name: "update",
-              groupName: "update",
-              icon: <Icons.Upload />,
-              buttonProps: { "aria-label": "Upload Image" },
-              children: ({ close, execute, getState, textApi }) => {
-                return <EditorUploader appendImg={appendImg} close={close} />;
-              }
-              // execute: (state, api)  => {
-              //   console.log('execute', state, api);
-              //   api.replaceSelection(selectedFile || "");
-              // },
-            })
+            imageUploader
           ]}
         />
       </div>

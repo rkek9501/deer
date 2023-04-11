@@ -166,7 +166,7 @@ const AddBoxSvg = () => (
 );
 
 export const UploadIcon = () => (
-  <svg viewBox="0 0 1024 1024" width="12" height="12">
+  <svg viewBox="0 0 12 12" width="12" height="12">
     <use xlinkHref="#svg-upload-icon" />
   </svg>
 );

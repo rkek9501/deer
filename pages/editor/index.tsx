@@ -1,7 +1,6 @@
 import React, { Suspense, useCallback, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import clone from "lodash/clone";
 
 import EditorProvider, { EditorContext } from "@components/Editor/EditorContext";
 import MarkdownEditor from "@components/Editor";
@@ -92,6 +91,7 @@ type TitleType = {
   title: string;
   setTitle: (evnet: any) => void;
 };
+
 const TitleInput = (props: TitleType) => {
   return (
     <TitleStyle>
@@ -102,24 +102,17 @@ const TitleInput = (props: TitleType) => {
 
 const EditorPage = () => {
   const { tags: allTags, setLoading } = useContext(AppContext);
-  const { files } = useContext(EditorContext);
+  const { content } = useContext(EditorContext);
 
-  // const history = useHistory();
   const router = useRouter();
   const pathname = router.pathname;
   const query = router?.query;
   const editMode = pathname.indexOf("/editor") === 0 && query?.content;
 
-  const [id, setId] = useState(0);
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState<string>("");
   const [openState, setOpenState] = useState(false);
   const [tags, setTags] = useState<TagType[]>([]);
   const [selectedTags, setSelectedTags] = useState([]);
-  // const [preview, setPreview] = useState(false);
-  // const [userImg, setUserImg] = useState(null);
-  // const [writter, setWritter] = useState(localStorage?.getItem("name") || "");
-  // const [createdAt, setCreatedAt] = useState(moment().format("YYYYMMDD"));
 
   useEffect(() => {
     setLoading(false);
@@ -127,34 +120,33 @@ const EditorPage = () => {
 
   useEffect(() => {
     if (allTags && allTags.length > 0) {
-      console.log({ allTags });
+      // console.log({ allTags });
       const tagList: TagType[] =
         allTags?.map((tag: any) => {
           return { label: tag.name, value: tag.id, color: tag.color };
         }) ?? [];
 
-      console.log({ tagList });
+      // console.log({ tagList });
       setTags(tagList as TagType[]);
     }
   }, [allTags]);
 
   const uploadPost = useCallback(async () => {
-    const _files = clone(files);
-    for (let fileIdx = _files.length - 1; fileIdx >= 0; fileIdx -= 1) {
-      if (content?.indexOf(_files[fileIdx].src) === -1) {
-        _files.splice(fileIdx, 1);
-      }
-    }
-
     const params = {
-      id,
       title,
       content,
       openState: openState ? "Y" : "N",
-      files: _files,
-      tagList: selectedTags.map((tag: any) => ({ id: tag.__isNew__ ? null : tag.value, name: tag.label, color: tag.color }))
+      tagList: selectedTags.map((tag: any) => ({
+        id: tag.__isNew__ ? null : tag.value,
+        name: tag.label,
+        color: tag.color
+      }))
     };
-    const { response, error } = await RequestHelper.Post({ url: "/api/post/create", body: params });
+
+    const { response, error } = await RequestHelper.Post({
+      url: "/api/post/create",
+      body: params
+    });
     if (error) {
       return alert("오류가 발생하였습니다. 잠시후 다시 시도해주세요.");
     }
@@ -162,23 +154,18 @@ const EditorPage = () => {
     if (response.result) {
       return router.push("/");
     }
-  }, [id, title, content, openState, selectedTags, files]);
+  }, [title, content, openState, selectedTags]);
 
   return (
     <>
       <Head isMarkdown title="Deer - 게시글 작성" />
       <Suspense fallback={<Loading />}>
-        <EditorProvider>
           <PageContainer>
             <Container id="left-container">
               <div className="center">
                 <EditMode>
                   <div className="page-title">
                     게시글&nbsp;{editMode ? "수정" : "작성"}
-                    {/* <div className="preview-switch-container">
-                <Label>미리보기</Label>
-                <Switch checked={preview} setChecked={setPreview} />
-              </div> */}
                   </div>
                   <hr />
                 </EditMode>
@@ -189,7 +176,7 @@ const EditorPage = () => {
 
                 <br />
                 <Label>본문</Label>
-                <MarkdownEditor content={content} setContent={setContent} />
+                <MarkdownEditor />
 
                 <br />
                 <Label>태그 선택</Label>
@@ -207,10 +194,11 @@ const EditorPage = () => {
               </div>
             </Container>
           </PageContainer>
-        </EditorProvider>
       </Suspense>
     </>
   );
 };
 
-export default EditorPage;
+const ThisPage = () => <EditorProvider><EditorPage /></EditorProvider>;
+
+export default ThisPage;
