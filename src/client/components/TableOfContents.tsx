@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const BookMarkConatiner = styled.div`
@@ -57,12 +57,12 @@ const BookMarkConatiner = styled.div`
   }
 `;
 
-const TableOfContents = ({ data }: { data: any }) => {
+const useTableOfContents = () => {
   const [visible, setVisible] = useState(true);
   const [activeId, setActiveId] = useState<string>("");
-  const ref = useRef(null);
+  const [loading, setLoading] = useState(true);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const end = document.getElementById("content-end");
     const scroller = document.getElementById("scroller");
     const onScroll = () => {
@@ -87,31 +87,41 @@ const TableOfContents = ({ data }: { data: any }) => {
       },
       { rootMargin: `0% 0% -80% 0%` }
     );
-    if (ref) {
-      document.querySelectorAll(".toastui-editor-contents .bookmarked").forEach((section) => {
-        console.log({ section });
+    setTimeout(() => {
+      document.querySelectorAll(".wmde-markdown h1").forEach((section) => {
         observer.observe(section);
       });
-    }
+      setLoading(false);
+    }, 1200);
     return () => {
-      document.querySelectorAll(".toastui-editor-contents .bookmarked").forEach((section) => {
-        console.log({ section });
+      document.querySelectorAll(".wmde-markdown h1").forEach((section) => {
         observer.unobserve(section);
       });
     };
-  }, [ref]);
+  }, []);
+
+  return {
+    visible,
+    activeId,
+    loading
+  };
+};
+
+const TableOfContents = ({ data }: { data: any }) => {
+  const { visible, activeId, loading } = useTableOfContents();
 
   return (
     <BookMarkConatiner className={visible ? "on" : "off"}>
-      <div className="fixed-box" ref={ref}>
-        {data.map((line: any, key: number) => {
-          return (
+      <div className="fixed-box">
+        {loading
+          ? null
+          : data.map((line: any, key: number) => (
             <a key={key} className={line.idx === activeId ? "active" : ""} href={`#${line.idx}`}>
               {line.type !== "h1" && (line.type === "h2" ? <>&ensp;</> : <>&emsp;</>)}
               {line.line}
             </a>
-          );
-        })}
+          )
+        )}
       </div>
     </BookMarkConatiner>
   );
