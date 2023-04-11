@@ -26,7 +26,9 @@ appRouter.get("/", async (req, res) => {
       .findAll({
         where: { deletedAt: null, openState: "Y" },
         order: [["createdAt", "DESC"]],
-        attributes: { exclude: ["content", "subtitle", "writterId", "viewCount", "createdAt", "updatedAt", "deletedAt"] },
+        attributes: {
+          exclude: ["content", "subtitle", "writterId", "viewCount", "createdAt", "updatedAt", "deletedAt"]
+        },
         include: [{ model: tags, through: { attributes: ["postId", "tagId"] } }]
       })
       .then((data: any) => JSON.parse(JSON.stringify(data)));
@@ -48,7 +50,7 @@ appRouter.get("/", async (req, res) => {
 
 appRouter.post("/", accessCheck, async (req, res) => {
   const { color, name } = req.body;
-  console.log({color, name});
+  console.log({ color, name });
   try {
     if (!isValidHex(color)) return res.status(200).send({ result: false, message: "color 값이 올바르지 않습니다." });
     const result = await models.sequelize.transaction(async (t: Transaction) => {
@@ -56,7 +58,12 @@ appRouter.post("/", accessCheck, async (req, res) => {
       if (tag) return null;
       return await tags.create({ name, color }, { transaction: t });
     });
-    return res.status(200).send({ result: result ? true : false, message: result ? "태그가 생성되었습니다." : "이미 존재하는 태그입니다." });
+    return res
+      .status(200)
+      .send({
+        result: result ? true : false,
+        message: result ? "태그가 생성되었습니다." : "이미 존재하는 태그입니다."
+      });
   } catch (exception) {
     console.log("error", exception);
     return res.status(500).send({ result: false, message: "태그 생성중 오류가 발생하였습니다." });
@@ -78,7 +85,12 @@ appRouter.put("/", accessCheck, async (req, res) => {
       });
     });
 
-    return res.status(200).send({ result: result ? true : false, message: result ? "태그가 수정되었습니다." : "존재하지 않는 태그입니다." });
+    return res
+      .status(200)
+      .send({
+        result: result ? true : false,
+        message: result ? "태그가 수정되었습니다." : "존재하지 않는 태그입니다."
+      });
   } catch (exception) {
     console.log("error", exception);
     return res.status(500).send({ result: false, message: "태그 수정중 오류가 발생하였습니다." });
@@ -95,7 +107,12 @@ appRouter.delete("/", accessCheck, async (req, res) => {
       });
     });
 
-    return res.status(200).send({ result: result ? true : false, message: result ? "태그가 삭제되었습니다." : "존재하지 않는 태그입니다." });
+    return res
+      .status(200)
+      .send({
+        result: result ? true : false,
+        message: result ? "태그가 삭제되었습니다." : "존재하지 않는 태그입니다."
+      });
   } catch (exception) {
     console.log("error", exception);
     return res.status(500).send({ result: false, message: "태그 삭제중 오류가 발생하였습니다." });

@@ -95,7 +95,9 @@ appRouter.get("/paths", authCheck, async (req, res) => {
     const pathMapping = list.map((item: any) => {
       return {
         ...item,
-        subpath: base64.encode(utf8.encode(JSON.stringify({ id: item.id, writterId: item.writterId, title: item.title })))
+        subpath: base64.encode(
+          utf8.encode(JSON.stringify({ id: item.id, writterId: item.writterId, title: item.title }))
+        )
       };
     });
     return res.status(200).send({ result: true, data: pathMapping, message: "게시글 목록이 조회되었습니다." });
@@ -128,11 +130,15 @@ appRouter.get("/list", authCheck, async (req, res) => {
         ]
       })
       .then((data: any) => JSON.parse(JSON.stringify(data)));
-    const filtering = list.filter((item: any) => item.openState === "Y" || item.writterId === user?.id || req.auth?.verified);
+    const filtering = list.filter(
+      (item: any) => item.openState === "Y" || item.writterId === user?.id || req.auth?.verified
+    );
     const pathMapping = filtering.map((item: any) => {
       return {
         ...item,
-        subpath: base64.encode(utf8.encode(JSON.stringify({ id: item.id, writterId: item.writterId, title: item.title })))
+        subpath: base64.encode(
+          utf8.encode(JSON.stringify({ id: item.id, writterId: item.writterId, title: item.title }))
+        )
       };
     });
     return res.status(200).send({ result: true, data: pathMapping, message: "게시글 목록이 조회되었습니다." });
@@ -231,17 +237,16 @@ appRouter.get("/recommend/:content", authCheck, async (req, res) => {
     return res.status(500).send({ result: false, message: "게시글 조회중 오류가 발생하였습니다." });
   }
 });
-
 const isRegValid = (text: string) => {
   if (text.length === 0) return false;
   const headReg = /^\#.\s*/;
   const blockQuoteReg = /^\>.\s*/;
   const orLiReg = /^[0-9]{1,3}.\s.*/;
-
+  
   const isHead = headReg.test(text);
   const isList = orLiReg.test(text);
   const isQuote = blockQuoteReg.test(text);
-
+  
   const isBoldOrItalic = text.indexOf("*") === 0;
   const isLink = text.indexOf("!") === 0 || text.indexOf("[") === 0;
   const isCode = text.indexOf("`") === 0;
@@ -257,9 +262,9 @@ const getSubtitleFromMarkdown = (markdown: string) => {
   for (let line of lines) {
     if (!subtitle) {
       if (isRegValid(line)) {
-        if (line.indexOf("# ") !== -1) {
+      if (line.indexOf("# ") !== -1) {
           subtitle = line.split("# ")[1];
-        } else {
+      } else {
           subtitle = line;
         }
       } else if (line.length > 0) {
@@ -280,11 +285,15 @@ appRouter.post("/create", accessCheck, async (req, res) => {
   const verified = req.auth?.verified;
   try {
     const user = await users.findOne({ where: { id: userId }, raw: true });
-    if (!userId || !verified || !user) return res.status(200).send({ result: false, message: "you cannot upload posts." });
+    if (!userId || !verified || !user)
+      return res.status(200).send({ result: false, message: "you cannot upload posts." });
 
-    if (!title || title.trim().length === 0) return res.status(200).send({ result: false, message: "제목을 입력해주세요." });
-    else if (!content || content.trim().length === 0) return res.status(200).send({ result: false, message: "내용을 입력해주세요." });
-    else if (!["N", "Y"].includes(openState)) return res.status(200).send({ result: false, message: "입력값이 잘못되었습니다." });
+    if (!title || title.trim().length === 0)
+      return res.status(200).send({ result: false, message: "제목을 입력해주세요." });
+    else if (!content || content.trim().length === 0)
+      return res.status(200).send({ result: false, message: "내용을 입력해주세요." });
+    else if (!["N", "Y"].includes(openState))
+      return res.status(200).send({ result: false, message: "입력값이 잘못되었습니다." });
 
     const subtitle = getSubtitleFromMarkdown(content);
     const _files = parse(content).querySelectorAll("img");
@@ -375,11 +384,15 @@ appRouter.put("/update", accessCheck, async (req, res) => {
   // console.log({ userId, verified }, req.body);
   try {
     const user = await users.findOne({ where: { id: userId }, raw: true });
-    if (!userId || !verified || !user) return res.status(200).send({ result: false, message: "you cannot upload posts." });
+    if (!userId || !verified || !user)
+      return res.status(200).send({ result: false, message: "you cannot upload posts." });
 
-    if (!title || title.trim().length === 0) return res.status(200).send({ result: false, message: "제목을 입력해주세요." });
-    else if (!content || content.trim().length === 0) return res.status(200).send({ result: false, message: "내용을 입력해주세요." });
-    else if (!["N", "Y"].includes(openState)) return res.status(200).send({ result: false, message: "입력값이 잘못되었습니다." });
+    if (!title || title.trim().length === 0)
+      return res.status(200).send({ result: false, message: "제목을 입력해주세요." });
+    else if (!content || content.trim().length === 0)
+      return res.status(200).send({ result: false, message: "내용을 입력해주세요." });
+    else if (!["N", "Y"].includes(openState))
+      return res.status(200).send({ result: false, message: "입력값이 잘못되었습니다." });
 
     const subtitle = getSubtitleFromMarkdown(content);
 
@@ -394,7 +407,12 @@ appRouter.put("/update", accessCheck, async (req, res) => {
           },
           attributes: { exclude: ["deletedAt"] },
           include: [
-            { model: tags, through: { attributes: ["postId", "tagId"] }, attributes: ["id", "name", "color"], required: false },
+            {
+              model: tags,
+              through: { attributes: ["postId", "tagId"] },
+              attributes: ["id", "name", "color"],
+              required: false
+            },
             {
               model: files,
               attributes: ["post_id", "order", ["origin_name", "name"], ["s3Path", "src"]],
@@ -498,11 +516,19 @@ appRouter.put("/update", accessCheck, async (req, res) => {
 
         if (willUpdateFiles.length > 0) {
           for (const _wuf of willUpdateFiles) {
-            await files.update({ origin_name: _wuf.name, s3Path: _wuf.src }, { where: { post_id: post.id, order: _wuf.order }, transaction });
+            await files.update(
+              { origin_name: _wuf.name, s3Path: _wuf.src },
+              { where: { post_id: post.id, order: _wuf.order }, transaction }
+            );
           }
         }
         if (willCreateFiles.length > 0) {
-          const mappedList = willCreateFiles.map((file: any) => ({ post_id: post.id, order: file.order, origin_name: file.name, s3Path: file.src }));
+          const mappedList = willCreateFiles.map((file: any) => ({
+            post_id: post.id,
+            order: file.order,
+            origin_name: file.name,
+            s3Path: file.src
+          }));
           await files.bulkCreate(mappedList, { transaction });
         }
         if (willDeleteFiles.length > 0) {

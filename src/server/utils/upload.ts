@@ -11,7 +11,8 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
     let filename = moment().format("YYYYMMDDHHmmss") + "_" + file.originalname;
     const type = file.originalname.split(".");
-    if (req.originalUrl !== "/api/post/upload") filename = moment().format("YYYYMMDDHHmmss") + "_" + req.auth?.id + "." + type[type.length - 1];
+    if (req.originalUrl !== "/api/post/upload")
+      filename = moment().format("YYYYMMDDHHmmss") + "_" + req.auth?.id + "." + type[type.length - 1];
     cb(null, filename);
   }
 });
