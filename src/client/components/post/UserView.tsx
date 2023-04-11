@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import styled from "styled-components";
 import useDate from "@hooks/useDate";
 
@@ -45,14 +46,19 @@ const UserTextContainer = styled.div`
   }
 `;
 
+const ProfileImgLoader = ({ src }: { src: string }) => `${src}`;
+
 type UserData = {
   name: string;
   image?: string | null;
   date: string;
 };
 const UserView = (user: UserData) => {
-  const icon = user.image ? <img src={user.image} /> : user.name?.charAt(0).toUpperCase();
   const date = useDate(user.date);
+  const icon = user.image
+    ? <Image src={user.image} alt={user.name} width={40} height={40} loader={ProfileImgLoader}/>
+    : user.name?.charAt(0).toUpperCase();
+
   return (
     <UserBoxContainer>
       <UserIcon>{icon}</UserIcon>
