@@ -3,7 +3,12 @@ import styled, { css } from "styled-components";
 
 import { getTextColorByBackgroundColor } from "@utils";
 
-const TagBtn = styled.button<{ bgColor: string; alwaysOn?: boolean; fontColor: string }>`
+type TagBtnProps = {
+  bgColor: string;
+  alwaysOn?: boolean;
+  fontColor: string;
+};
+const TagBtn = styled.button<TagBtnProps>`
   display: inline-block;
   border: none;
   font-size: 1.8rem;

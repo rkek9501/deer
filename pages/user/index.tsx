@@ -158,7 +158,20 @@ const ChangePassView = () => {
 };
 
 const User = () => {
-  const { image, name, email, modal, isLoading, error, setName, setEmail, openModal, imgChangeCallback, CardImgLoader, save } = useUser();
+  const {
+    image,
+    name,
+    email,
+    modal,
+    isLoading,
+    error,
+    setName,
+    setEmail,
+    openModal,
+    imgChangeCallback,
+    CardImgLoader,
+    save
+  } = useUser();
 
   if (isLoading)
     return (
@@ -174,7 +187,16 @@ const User = () => {
       <UserPageContainer>
         <div className="user-img-view" onClick={openModal}>
           {image ? (
-            <Image className="user-img" src={image} width={100} height={100} unoptimized={true} layout={"fixed"} loader={CardImgLoader} alt="profile-image" />
+            <Image
+              className="user-img"
+              src={image}
+              width={100}
+              height={100}
+              unoptimized={true}
+              layout={"fixed"}
+              loader={CardImgLoader}
+              alt="profile-image"
+            />
           ) : (
             <div className="no-image-container">
               <Icons.User />

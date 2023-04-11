@@ -135,7 +135,11 @@ const Menu = (Props: { onClick?: () => void }) => {
       <div className="search-box">
         <div className="search">SEARCH</div>
         <div className="input-box">
-          <input value={value} onChange={(e) => onChangeInput(e.target.value)} onKeyPress={(e) => onKeyPressEnter(e.key)} />
+          <input
+            value={value}
+            onChange={(e) => onChangeInput(e.target.value)}
+            onKeyPress={(e) => onKeyPressEnter(e.key)}
+          />
           <button type="button" onClick={() => onClickSearch()}>
             <Icons.Search />
           </button>

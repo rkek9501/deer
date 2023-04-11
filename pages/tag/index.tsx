@@ -92,12 +92,12 @@ const TagManage = ({ tagList, onClickTag }: { tagList: TagType[]; onClickTag: (t
     <Wrapper>
       {tagList.map((tag: any, idx: number) => (
         <Tag
-        key={idx}
-        {...tag}
-        alwaysOn={true}
-        onClick={() => {
-          onClickTag(tag);
-        }}
+          key={idx}
+          {...tag}
+          alwaysOn={true}
+          onClick={() => {
+            onClickTag(tag);
+          }}
         />
       ))}
     </Wrapper>
@@ -115,7 +115,10 @@ const TagModify = ({
   onClickComplete: (tag: TagType) => void;
   onClickCancel: () => void;
 }) => {
-  const { name, color, setName, handleColor } = useTagEditor({ name: tag?.name, color: tag?.color });
+  const { name, color, setName, handleColor } = useTagEditor({
+    name: tag?.name,
+    color: tag?.color
+  });
 
   return (
     <Wrapper>
@@ -126,30 +129,18 @@ const TagModify = ({
 
         <span className="input-form-container">
           <label htmlFor="tag-name-input">이름</label>
-          <input
-            id="tag-name-input"
-            type="text"
-            defaultValue={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+          <input id="tag-name-input" type="text" defaultValue={name} onChange={(e) => setName(e.target.value)} />
         </span>
         <span className="input-form-container">
           <label htmlFor="tag-color-input">색</label>
           <div className="color-container">
-            <BlockPicker
-              triangle="hide"
-              color={color}
-              colors={DefaultColors}
-              onChangeComplete={handleColor}
-            />
+            <BlockPicker triangle="hide" color={color} colors={DefaultColors} onChangeComplete={handleColor} />
           </div>
         </span>
 
         <span className="btns-container">
           <Button onClick={onClickCancel}>취소</Button>
-          <Button onClick={() => onClickComplete({ name, color })}>
-            {mode === "add" ? "추가" : "수정"}
-          </Button>
+          <Button onClick={() => onClickComplete({ name, color })}>{mode === "add" ? "추가" : "수정"}</Button>
         </span>
       </FormContainer>
     </Wrapper>
@@ -157,42 +148,34 @@ const TagModify = ({
 };
 
 const TagPage = () => {
-  const {
-    allTags,
-    mode,
-    selectedTag,
-    onClickCancel,
-    onClickAdd,
-    onClickModify,
-    onClickComplete
-  } = useTag();
-  
-  return (<>
-    <Head title="Deer - 태그" />
-    <TagListContainer>
-      <Title>
-        <h1>태그 {TagPageMode[mode]}</h1>
-        {mode==="list"
-          ? <div onClick={onClickAdd}><Icons.Plus/></div>
-          : <div onClick={onClickCancel}><Icons.Close/></div>
-        }
-      </Title>
-      <hr/>
-      
-      {mode==="list"
-        ? <TagManage
-          tagList={allTags}
-          onClickTag={onClickModify}
-        />
-        : <TagModify
-          mode={mode}
-          tag={selectedTag}
-          onClickCancel={onClickCancel}
-          onClickComplete={onClickComplete}
-        />
-      }
-    </TagListContainer>
-  </>);
+  const { allTags, mode, selectedTag, onClickCancel, onClickAdd, onClickModify, onClickComplete } = useTag();
+
+  return (
+    <>
+      <Head title="Deer - 태그" />
+      <TagListContainer>
+        <Title>
+          <h1>태그 {TagPageMode[mode]}</h1>
+          {mode === "list" ? (
+            <div onClick={onClickAdd}>
+              <Icons.Plus />
+            </div>
+          ) : (
+            <div onClick={onClickCancel}>
+              <Icons.Close />
+            </div>
+          )}
+        </Title>
+        <hr />
+
+        {mode === "list" ? (
+          <TagManage tagList={allTags} onClickTag={onClickModify} />
+        ) : (
+          <TagModify mode={mode} tag={selectedTag} onClickCancel={onClickCancel} onClickComplete={onClickComplete} />
+        )}
+      </TagListContainer>
+    </>
+  );
 };
 
 export default TagPage;

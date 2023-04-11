@@ -11,6 +11,8 @@ type HeadProps = {
   isMarkdown?: boolean;
 };
 
+const SlickCarouselUrl = "https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0";
+
 const Head = (Props: HeadProps) => {
   return (
     <NextHead>
@@ -50,8 +52,8 @@ const Head = (Props: HeadProps) => {
       <link rel="icon" type="image/png" sizes="16x16" href="/img/favi/favicon-16x16.png" />
       <link rel="manifest" href="/img/favi/manifest.json" />
 
-      <link rel="stylesheet" type="text/css" charSet="UTF-8" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
-      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
+      <link rel="stylesheet" type="text/css" href={`${SlickCarouselUrl}/slick.min.css`} />
+      <link rel="stylesheet" type="text/css" href={`${SlickCarouselUrl}/slick-theme.min.css`} />
     </NextHead>
   );
 };

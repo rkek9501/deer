@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from "react";
+import React, { Suspense, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import Script from "next/script";
@@ -20,16 +20,37 @@ const Container = styled.div`
   }
 `;
 
+const AbsScriptUrl = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js";
+const TagScriptUrl = "https://www.googletagmanager.com/gtag/js";
+const gtagScript = `
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${gtag.FB_STREAM_GID}', {
+  page_path: window.location.pathname,
+});
+`;
+
+const ProdScripts = () => {
+  return (
+    <>
+      <Script id="adsense" async src={`${AbsScriptUrl}?client=${process.env.ADSENSE_CLIENT}`} crossOrigin="anonymous" />
+      <Script strategy="afterInteractive" src={`${TagScriptUrl}?id=${gtag.FB_STREAM_GID}`} />
+      <Script id="gtag-init" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: gtagScript }} />
+    </>
+  );
+};
+
 const App = (appProps: any) => {
   const { Component, pageProps } = appProps;
   const router = useRouter();
 
   useEffect(() => {
     let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', vh + 'px');
-    window.addEventListener('resize', function () {
-        let vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', vh + 'px');
+    document.documentElement.style.setProperty("--vh", vh + "px");
+    window.addEventListener("resize", function () {
+      let vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", vh + "px");
     });
   }, []);
 
@@ -45,37 +66,12 @@ const App = (appProps: any) => {
     };
   }, [router.events]);
 
-  // useEffect(()=>{
-  //   if (process.env.NODE_ENV === "production") {
-  //     ReactGA.initialize(process.env.FB_STREAM_GID || "");
-  //     ReactGA.pageview(location.pathname + location.pathname);
-  //   }
-  // },[]);
+  const isProd = useMemo(() => process.env.NODE_ENV === "production", []);
 
   return (
     <Suspense fallback={<Loading />}>
       <AppProvider>
-        <script
-          id="adsense"
-          async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.ADSENSE_CLIENT}`}
-          crossOrigin="anonymous"
-        />
-        <Script strategy="afterInteractive" src={`https://www.googletagmanager.com/gtag/js?id=${gtag.FB_STREAM_GID}`} />
-        <Script
-          id="gtag-init"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${gtag.FB_STREAM_GID}', {
-            page_path: window.location.pathname,
-          });
-        `
-          }}
-        />
+        {isProd && <ProdScripts />}
         <Header />
         <Container>
           <Component {...pageProps} />

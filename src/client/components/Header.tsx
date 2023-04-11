@@ -180,9 +180,9 @@ const HeaderMenu = () => {
   useEffect(() => {
     const handleClickOutside = (event: any) => {
       if (
-        btnDropdownRef.current
-        && !btnDropdownRef.current?.contains(event.target)
-        && !popoverDropdownRef.current?.contains(event.target)
+        btnDropdownRef.current &&
+        !btnDropdownRef.current?.contains(event.target) &&
+        !popoverDropdownRef.current?.contains(event.target)
       ) {
         closeDropdownPopover();
       }

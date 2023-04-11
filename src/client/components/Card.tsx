@@ -168,9 +168,7 @@ const Textcard = (props: { post: PostType; size?: string }) => {
   const date = useDate(props.post.createdAt);
 
   const firstImgSrc = useMemo(() => {
-    return props.post.files?.length > 0
-      ? props.post.files[0]?.src
-      : `/img/card/default${getThumb(props.post.id)}.jpg`;
+    return props.post.files?.length > 0 ? props.post.files[0]?.src : `/img/card/default${getThumb(props.post.id)}.jpg`;
   }, [props.post]);
 
   return (

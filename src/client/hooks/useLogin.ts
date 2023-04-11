@@ -22,7 +22,7 @@ const useLogin = () => {
       } else {
         alert("로그인 실패");
         if (!isSaveId) setid("");
-        setpw("");  
+        setpw("");
       }
     },
     onError(error) {
@@ -31,7 +31,7 @@ const useLogin = () => {
       setpw("");
     }
   });
-  
+
   useEffect(() => {
     const saveId = localStorage?.getItem("id");
     if (saveId) {
@@ -49,9 +49,12 @@ const useLogin = () => {
     login({ id, pw });
   }, [id, pw, isSaveId]);
 
-  const onChangeCheck = useCallback((checked: boolean) => {
-    setSaveId(checked);
-  }, [id]);
+  const onChangeCheck = useCallback(
+    (checked: boolean) => {
+      setSaveId(checked);
+    },
+    [id]
+  );
 
   const onKeyPressEnter = (key: string) => {
     if (key.toLowerCase() === "enter") btnclick();
@@ -66,7 +69,7 @@ const useLogin = () => {
     isSaveId,
     onChangeCheck,
     btnclick
-  }
-}
+  };
+};
 
 export default useLogin;

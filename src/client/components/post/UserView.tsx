@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Image from "next/image";
 import styled from "styled-components";
 import useDate from "@hooks/useDate";
@@ -53,11 +53,14 @@ type UserData = {
   image?: string | null;
   date: string;
 };
+
+const UserImage = ({ src, alt }: { src: string; alt: string }) => (
+  <Image src={src} alt={alt} width={40} height={40} loader={ProfileImgLoader} />
+);
+
 const UserView = (user: UserData) => {
   const date = useDate(user.date);
-  const icon = user.image
-    ? <Image src={user.image} alt={user.name} width={40} height={40} loader={ProfileImgLoader}/>
-    : user.name?.charAt(0).toUpperCase();
+  const icon = useMemo(() => user.image ? <UserImage src={user.image} alt={user.name} /> : user.name?.charAt(0).toUpperCase(), [user]);
 
   return (
     <UserBoxContainer>

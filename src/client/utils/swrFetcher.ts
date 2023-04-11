@@ -20,7 +20,7 @@ export const getFetcher = (url: string) => {
   return axiosInstance({
     url,
     headers,
-    method: 'GET',
+    method: "GET"
   }).then((response) => response.data);
 };
 
@@ -28,8 +28,8 @@ export async function postFetcher(url: string, { arg }: { arg: any }) {
   return axiosInstance({
     url,
     headers,
-    method: 'POST',
-    data: JSON.stringify(arg),
+    method: "POST",
+    data: JSON.stringify(arg)
   }).then((response) => response.data);
 }
 
@@ -37,8 +37,8 @@ export async function putFetcher(url: string, { arg }: { arg: any }) {
   return axiosInstance({
     url,
     headers,
-    method: 'PUT',
-    data: JSON.stringify(arg),
+    method: "PUT",
+    data: JSON.stringify(arg)
   }).then((response) => response.data);
 }
 
@@ -46,6 +46,6 @@ export async function deleteFetcher(url: string) {
   return axiosInstance({
     url,
     headers,
-    method: 'DELETE'
+    method: "DELETE"
   }).then((response) => response.data);
 }

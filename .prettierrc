@@ -8,7 +8,7 @@
   "endOfLine": "auto",
   "jsxSingleQuote": false,
   "trailingComma": "none",
-  "printWidth": 150,
+  "printWidth": 120,
   "bracketSameLine": false,
-  "jsxBracketSameLine": false
+  "singleAttributePerLine": false
 }

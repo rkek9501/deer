@@ -30,19 +30,22 @@ const Checkbox = (props: CheckboxProps) => {
     const handler = () => {
       const v = Boolean(ref.current?.checked);
       props.onChange?.(!v);
-    }
+    };
     ref.current?.addEventListener("change", handler);
     return () => ref.current?.removeEventListener("change", handler);
   }, []);
 
-  const onClickContainer = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    const v = Boolean(ref.current?.checked);
-    props.onChange?.(!v);
-  }, [ref]);
+  const onClickContainer = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation();
+      const v = Boolean(ref.current?.checked);
+      props.onChange?.(!v);
+    },
+    [ref]
+  );
 
   return (
-    <CheckboxContainer onClick={onClickContainer} >
+    <CheckboxContainer onClick={onClickContainer}>
       <input readOnly ref={ref} type="checkbox" checked={props.checked} />
       {props.label && <label>{props.label}</label>}
     </CheckboxContainer>

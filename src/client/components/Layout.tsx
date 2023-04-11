@@ -44,18 +44,13 @@ interface EditorProviderProps {
 }
 
 const Layout = (props: EditorProviderProps) => {
-  const {
-    isMain,
-    isMobile,
-    ratio,
-    containerRef,
-  } = useLayout();
+  const { isMain, isMobile, ratio, containerRef } = useLayout();
 
   return (
     <Main>
       <SHeader ratio={ratio} />
-      {(!props.noneMenu && !isMobile) && <Menu />}
-      <div id="scroller" className={`${isMain&&"main"}`} ref={containerRef}>
+      {!props.noneMenu && !isMobile && <Menu />}
+      <div id="scroller" className={`${isMain && "main"}`} ref={containerRef}>
         {props.children}
       </div>
     </Main>

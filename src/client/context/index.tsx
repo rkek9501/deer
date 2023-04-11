@@ -53,7 +53,10 @@ const AppProvider = (props: AppProviderProps) => {
   useEffect(() => {
     (async () => {
       const hasToken = checkToken();
-      if (!hasToken && (page.indexOf("/editor") !== -1 || page.indexOf("/user") !== -1 || page.indexOf("/tag") !== -1)) {
+      if (
+        !hasToken &&
+        (page.indexOf("/editor") !== -1 || page.indexOf("/user") !== -1 || page.indexOf("/tag") !== -1)
+      ) {
         alert("로그인 후 이용해주세요.");
         logout("/login");
       }

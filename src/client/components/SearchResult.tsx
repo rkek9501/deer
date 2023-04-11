@@ -117,7 +117,11 @@ const SearchResult = (props: { posts: any }) => {
             총 <b>{filtered.length}개</b>의 글이 있습니다.
           </div>
         </div>
-        {filtered.length === 0 ? <div className="empty-data">해당내용의 게시글이 존재하지 않습니다.</div> : <MasonryView data={filtered} />}
+        {filtered.length === 0 ? (
+          <div className="empty-data">해당내용의 게시글이 존재하지 않습니다.</div>
+        ) : (
+          <MasonryView data={filtered} />
+        )}
       </SearchContainer>
     );
   }

@@ -17,7 +17,7 @@ export const useChangeUserPw = () => {
   const [prevPw, setPrevPw] = useState("");
   const [nextPw, setNextPw] = useState("");
   const [nextPwChk, setNextPwChk] = useState("");
-  const [err, setErr] = useState<string|null>(null);
+  const [err, setErr] = useState<string | null>(null);
 
   const { trigger: requestChangePassword } = useSWRMutation("/api/user/changePassword", putFetcher, {
     throwOnError: false,
@@ -49,19 +49,22 @@ export const useChangeUserPw = () => {
     requestChangePassword({ prevPw: base64.encode(prevPw), nextPw: base64.encode(nextPw) });
   }, [prevPw, nextPw, nextPwChk]);
 
-  const changeValues = useCallback((type: "prewPw"|"nextPw"|"nextPwChk") => (value: string) => {
-    console.log({ type, value });
-    if (type === "prewPw") setPrevPw(value);
-    if (type === "nextPw") setNextPw(value);
-    if (type === "nextPwChk") setNextPwChk(value);
-  }, []);
+  const changeValues = useCallback(
+    (type: "prewPw" | "nextPw" | "nextPwChk") => (value: string) => {
+      console.log({ type, value });
+      if (type === "prewPw") setPrevPw(value);
+      if (type === "nextPw") setNextPw(value);
+      if (type === "nextPwChk") setNextPwChk(value);
+    },
+    []
+  );
 
   return {
     open,
     values: {
       prevPw,
       nextPw,
-      nextPwChk,
+      nextPwChk
     },
     err,
     setOpen,
@@ -137,8 +140,8 @@ const useUser = () => {
       const params: { name?: string; email?: string } = {};
       if (name && name.trim().length !== 0) params.name = name;
       if (email && email.trim().length !== 0) params.email = email;
-  
-      requestChangeUserInfo(params);   
+
+      requestChangeUserInfo(params);
     }
   }, [data, name, email]);
 
@@ -187,11 +190,19 @@ const useUser = () => {
   };
 
   return {
-    image, modal, name, email,
-    isLoading, error,
-    setName, setEmail, openModal,
-    imgChangeCallback, CardImgLoader, save
-  }
+    image,
+    modal,
+    name,
+    email,
+    isLoading,
+    error,
+    setName,
+    setEmail,
+    openModal,
+    imgChangeCallback,
+    CardImgLoader,
+    save
+  };
 };
 
 export default useUser;

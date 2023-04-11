@@ -116,12 +116,11 @@ const TableOfContents = ({ data }: { data: any }) => {
         {loading
           ? null
           : data.map((line: any, key: number) => (
-            <a key={key} className={line.idx === activeId ? "active" : ""} href={`#${line.idx}`}>
-              {line.type !== "h1" && (line.type === "h2" ? <>&ensp;</> : <>&emsp;</>)}
-              {line.line}
-            </a>
-          )
-        )}
+              <a key={key} className={line.idx === activeId ? "active" : ""} href={`#${line.idx}`}>
+                {line.type !== "h1" && (line.type === "h2" ? <>&ensp;</> : <>&emsp;</>)}
+                {line.line}
+              </a>
+            ))}
       </div>
     </BookMarkConatiner>
   );

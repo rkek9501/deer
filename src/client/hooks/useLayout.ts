@@ -34,8 +34,8 @@ const useLayout = () => {
     isMain,
     isMobile,
     ratio,
-    containerRef,
-  }
-}
+    containerRef
+  };
+};
 
 export default useLayout;

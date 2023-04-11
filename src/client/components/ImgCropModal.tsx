@@ -99,10 +99,6 @@ type ImageTypes = {
   url: string | null;
 };
 
-interface ChangeEvent<T = EventTarget> {
-  target: T;
-}
-
 const ImgCropModal = (Props: { open: boolean; existImg: boolean; callback: any }) => {
   const [crop, setCrop] = useState<any>({ unit: "%", width: 50, aspect: 1 });
   const [imgRef, setRef] = useState(null);
@@ -216,7 +212,12 @@ const ImgCropModal = (Props: { open: boolean; existImg: boolean; callback: any }
 
   return (
     <div onClick={(e) => e.stopPropagation()}>
-      <Modal isOpen={Props.open} onRequestClose={() => Props.callback({ type: "close" })} style={customStyles} contentLabel="Example Modal">
+      <Modal
+        isOpen={Props.open}
+        onRequestClose={() => Props.callback({ type: "close" })}
+        style={customStyles}
+        contentLabel="Image Crop Modal"
+      >
         <ModalBody>
           <div className="modal-header">
             <div>프로필 이미지 편집</div>
@@ -231,7 +232,11 @@ const ImgCropModal = (Props: { open: boolean; existImg: boolean; callback: any }
                   {Props.existImg && <Button onClick={gotoRemoveStep}>이미지 삭제</Button>}
                   <Button onClick={(e) => e.stopPropagation()}>
                     이미지 변경
-                    <input type="file" onChange={onClickChangeImgBtn} accept="image/jpg,impge/png,image/jpeg,image/gif" />
+                    <input
+                      type="file"
+                      onChange={onClickChangeImgBtn}
+                      accept="image/jpg,impge/png,image/jpeg,image/gif"
+                    />
                   </Button>
                 </div>
               </div>
@@ -241,7 +246,14 @@ const ImgCropModal = (Props: { open: boolean; existImg: boolean; callback: any }
             <>
               <div className="modal-body">
                 {src && (
-                  <ReactCrop src={src} crop={crop} ruleOfThirds onImageLoaded={onImageLoaded} onComplete={onCropComplete} onChange={onCropChange} />
+                  <ReactCrop
+                    src={src}
+                    crop={crop}
+                    ruleOfThirds
+                    onImageLoaded={onImageLoaded}
+                    onComplete={onCropComplete}
+                    onChange={onCropChange}
+                  />
                 )}
                 <PrevArea>
                   미리보기
