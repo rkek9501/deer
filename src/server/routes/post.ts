@@ -5,7 +5,7 @@ import fs from "fs";
 import path from "path";
 import { Op, Sequelize } from "sequelize";
 import type { Transaction } from "sequelize/types";
-import { parse } from "node-html-parser";
+import { parse as parseHtml } from "node-html-parser";
 
 import clone from "lodash/clone";
 import flatten from "lodash/flatten";
@@ -242,36 +242,33 @@ const isRegValid = (text: string) => {
   const headReg = /^\#.\s*/;
   const blockQuoteReg = /^\>.\s*/;
   const orLiReg = /^[0-9]{1,3}.\s.*/;
-  
+
   const isHead = headReg.test(text);
   const isList = orLiReg.test(text);
   const isQuote = blockQuoteReg.test(text);
-  
+
   const isBoldOrItalic = text.indexOf("*") === 0;
   const isLink = text.indexOf("!") === 0 || text.indexOf("[") === 0;
-  const isCode = text.indexOf("`") === 0;
-  const isImg = text.indexOf("<img") === 0;
+  const isCode = text.indexOf("```") === 0;
+  const isImg = text.indexOf("<img") > -1;
+  const isEmptyStr = text.trim().length === 0;
 
-  return isHead || (!isList && !isQuote && !isBoldOrItalic && !isLink && !isCode && !isImg);
+  return isHead || (!isList && !isQuote && !isBoldOrItalic && !isLink && !isCode && !isImg && !isEmptyStr);
 };
 
 const getSubtitleFromMarkdown = (markdown: string) => {
   const lines = markdown.split("\n");
-  let subtitle: null | string = null;
+  let subtitle: null | string = "";
 
   for (let line of lines) {
-    if (!subtitle) {
-      if (isRegValid(line)) {
+    if (!subtitle && isRegValid(line)) {
       if (line.indexOf("# ") !== -1) {
-          subtitle = line.split("# ")[1];
+        subtitle = parseHtml(line).innerText.split("# ")[1];
       } else {
-          subtitle = line;
-        }
-      } else if (line.length > 0) {
-        subtitle = line;
+        subtitle = parseHtml(line).innerText;
       }
-      break;
     }
+    if (subtitle) break;
   }
   if (!subtitle) {
     subtitle = "";
@@ -296,7 +293,7 @@ appRouter.post("/create", accessCheck, async (req, res) => {
       return res.status(200).send({ result: false, message: "입력값이 잘못되었습니다." });
 
     const subtitle = getSubtitleFromMarkdown(content);
-    const _files = parse(content).querySelectorAll("img");
+    const _files = parseHtml(content).querySelectorAll("img");
     const uploadFiles: { name: string; src: string }[] = [];
     for (const _file of _files) {
       const src = _file.getAttribute("src");
@@ -474,7 +471,7 @@ appRouter.put("/update", accessCheck, async (req, res) => {
         }
 
         // 파일 컨텐츠 업데이트
-        const _files = parse(content).querySelectorAll("img");
+        const _files = parseHtml(content).querySelectorAll("img");
         const uploadFiles: any[] = [];
         for (const [_idx, _file] of _files.entries()) {
           const src = _file.getAttribute("src");
