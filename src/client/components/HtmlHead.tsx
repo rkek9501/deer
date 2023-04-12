@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-css-tags */
 import NextHead from "next/head";
+import React, { useRef } from "react";
 
 type HeadProps = {
   title: string;
@@ -12,6 +13,29 @@ type HeadProps = {
 };
 
 const SlickCarouselUrl = "https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0";
+
+const AsyncLink = ({ href }: { href: string }) => {
+  const linkRef = useRef<HTMLLinkElement>(null);
+  return (
+    <>
+      <link
+        ref={linkRef}
+        rel="preload"
+        href={href}
+        as="style"
+        onLoad={(e) => {
+          console.log({ e });
+          linkRef.current?.setAttribute("onload", "null");
+          linkRef.current?.setAttribute("rel", "stylesheet");
+          linkRef.current?.setAttribute("type", "text/css");
+        }}
+      />
+      <noscript>
+        <link rel="stylesheet" type="text/css" charSet="utf-8" href={href} />
+      </noscript>
+    </>
+  );
+};
 
 const Head = (Props: HeadProps) => {
   return (
@@ -35,9 +59,9 @@ const Head = (Props: HeadProps) => {
       {Props.isHome && <link rel="stylesheet" type="text/css" href="/css/masonry.css" />}
       {/* {Props.isMarkdown && <link rel="stylesheet" type="text/css" href="/css/prism.css" />} */}
       {Props.isMarkdown && <link rel="stylesheet" type="text/css" href="/css/editor.css" />}
-      
-      <link rel="stylesheet" type="text/css" charSet="utf-8" href={`${SlickCarouselUrl}/slick.min.css`} />
-      <link rel="stylesheet" type="text/css" charSet="utf-8" href={`${SlickCarouselUrl}/slick-theme.min.css`} />
+
+      <AsyncLink href={`${SlickCarouselUrl}/slick.css`} />
+      <AsyncLink href={`${SlickCarouselUrl}/slick.min.css`} />
 
       <link rel="shortcut icon" href="/img/favi/favicon.ico" />
       <link rel="apple-touch-icon" sizes="57x57" href="/img/favi/apple-icon-57x57.png" />

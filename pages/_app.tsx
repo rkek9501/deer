@@ -34,9 +34,9 @@ gtag('config', '${gtag.FB_STREAM_GID}', {
 const ProdScripts = () => {
   return (
     <>
-      <Script id="adsense" async src={`${AbsScriptUrl}?client=${process.env.ADSENSE_CLIENT}`} crossOrigin="anonymous" />
-      <Script strategy="afterInteractive" src={`${TagScriptUrl}?id=${gtag.FB_STREAM_GID}`} />
-      <Script id="gtag-init" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: gtagScript }} />
+      <Script id="adsense" defer src={`${AbsScriptUrl}?client=${process.env.ADSENSE_CLIENT}`} crossOrigin="anonymous" />
+      <Script defer strategy="afterInteractive" src={`${TagScriptUrl}?id=${gtag.FB_STREAM_GID}`} />
+      <Script id="gtag-init" defer strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: gtagScript }} />
     </>
   );
 };
