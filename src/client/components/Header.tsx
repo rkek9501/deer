@@ -24,7 +24,7 @@ const Header = () => {
       <div className="header-left">
         <h1 className="title title-deer">
           <Link href="/" passHref>
-            <a>
+            <a aria-label="Go to Main Page" >
               <Icons.Logo />
             </a>
           </Link>
@@ -264,8 +264,8 @@ const HeaderMenu = () => {
               </a>
             </>
           ) : (
-            <Link href="/login" passHref onClick={onClickMemu}>
-              <a className="menu-item">
+            <Link href="/login" passHref >
+              <a className="menu-item" onClick={onClickMemu}>
                 <Icons.Login />
                 로그인
               </a>

@@ -18,7 +18,7 @@ const Head = (Props: HeadProps) => {
     <NextHead>
       <meta charSet="utf-8" />
       <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0" />
       <meta name="description" content={Props.description || "Blog of Doyoung & Osu"} />
       <title>{Props.title}</title>
 
@@ -35,6 +35,9 @@ const Head = (Props: HeadProps) => {
       {Props.isHome && <link rel="stylesheet" type="text/css" href="/css/masonry.css" />}
       {/* {Props.isMarkdown && <link rel="stylesheet" type="text/css" href="/css/prism.css" />} */}
       {Props.isMarkdown && <link rel="stylesheet" type="text/css" href="/css/editor.css" />}
+      
+      <link rel="stylesheet" type="text/css" charSet="utf-8" href={`${SlickCarouselUrl}/slick.min.css`} />
+      <link rel="stylesheet" type="text/css" charSet="utf-8" href={`${SlickCarouselUrl}/slick-theme.min.css`} />
 
       <link rel="shortcut icon" href="/img/favi/favicon.ico" />
       <link rel="apple-touch-icon" sizes="57x57" href="/img/favi/apple-icon-57x57.png" />
@@ -51,9 +54,6 @@ const Head = (Props: HeadProps) => {
       <link rel="icon" type="image/png" sizes="96x96" href="/img/favi/favicon-96x96.png" />
       <link rel="icon" type="image/png" sizes="16x16" href="/img/favi/favicon-16x16.png" />
       <link rel="manifest" href="/img/favi/manifest.json" />
-
-      <link rel="stylesheet" type="text/css" href={`${SlickCarouselUrl}/slick.min.css`} />
-      <link rel="stylesheet" type="text/css" href={`${SlickCarouselUrl}/slick-theme.min.css`} />
     </NextHead>
   );
 };
