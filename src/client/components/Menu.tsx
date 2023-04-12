@@ -137,11 +137,11 @@ const Menu = (Props: { onClick?: () => void }) => {
         <div className="input-box">
           <input
             value={value}
-            aria-label="Search"
+            aria-label="Search Input"
             onChange={(e) => onChangeInput(e.target.value)}
             onKeyPress={(e) => onKeyPressEnter(e.key)}
           />
-          <button type="button" onClick={() => onClickSearch()} name="search">
+          <button type="button" onClick={() => onClickSearch()} aria-label="Search Btn">
             <Icons.Search />
           </button>
         </div>
@@ -160,7 +160,7 @@ const Menu = (Props: { onClick?: () => void }) => {
           />
         ))}
       </div>
-      <button id="tagg-open-btn" type="button" className="add-btn" onClick={() => setTagOpen(!tagOpen)} name="expand">
+      <button id="tagg-open-btn" type="button" className="add-btn" onClick={() => setTagOpen(!tagOpen)} aria-label="TagList Expand Btn">
         <Icons.AddBox />
       </button>
     </SideContainer>
