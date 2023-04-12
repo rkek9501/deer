@@ -1,6 +1,4 @@
 /** @type {import('next').NextConfig} */
-// const { ESBuildMinifyPlugin } = require("esbuild-loader");
-// const Dotenv = require("dotenv-webpack");
 const removeImports = require("next-remove-imports")({
   test: /node_modules([\s\S]*?)\.(tsx|ts|js|mjs|jsx)$/,
   matchImports: "\\.(less|css|scss|sass|styl)$"
@@ -8,31 +6,62 @@ const removeImports = require("next-remove-imports")({
 const path = require("path");
 require("dotenv").config({ path: path.join(process.cwd(), ".env") });
 
+const IS_PROD = Boolean(process.env.NODE_ENV === "prodcution");
 const IS_LOCAL = Boolean(process.env.IS_LOCAL === "yes");
 const SERVER_PORT = Number(process.env.SERVER_PORT) || 5000;
 const SERVER_URL = String(process.env.SERVER_URL) || "localhost";
 const HOST_URL = IS_LOCAL ? `https://${SERVER_URL}:${SERVER_PORT}` : `https://${SERVER_URL}`;
 
+const env = {
+  HOST_URL,
+  FB_STREAM_GID: process.env.FB_STREAM_GID || "",
+  ADSENSE_CLIENT: process.env.ADSENSE_CLIENT || ""
+};
+
+module.exports = removeImports({
+  reactStrictMode: false,
+  swcMinify: true,
+  trailingSlash: true,
+  productionBrowserSourceMaps: IS_PROD,
+  env,
+  compiler: {
+    styledComponents: true,
+  },
+});
+
+/*
+const { ESBuildMinifyPlugin } = require("esbuild-loader");
+const Dotenv = require("dotenv-webpack");
 const eslint = IS_LOCAL ? { dirs: ["./pages", "./src/client"] } : { ignoreDuringBuilds: true };
 const typescript = IS_LOCAL ? {} : { ignoreBuildErrors: true };
 
 module.exports = removeImports({
+  reactStrictMode: false,
+  trailingSlash: true,
+  productionBrowserSourceMaps: false,
+
   // trailingSlash: true,
   // assetPrefix: HOST_URL,
-  swcMinify: true,
-  reactStrictMode: true,
+  // swcMinify: true,
+  // reactStrictMode: true,
   // useFileSystemPublicRoutes: false,
   compiler: {
     styledComponents: true,
-    removeConsole: {
-      exclude: ["error"]
-    }
+    // removeConsole: {
+    //   exclude: ["error"]
+    // }
+  },
+  experimental: {
+    scrollRestoration: true,
   },
   typescript,
   eslint,
   env: {
     HOST_URL: HOST_URL
   },
+  // images: {
+  //   unoptimized: true
+  // },
   async headers() {
     return [
       {
@@ -46,7 +75,6 @@ module.exports = removeImports({
       }
     ];
   },
-  /*
   webpack: (config, { webpack, dev }) => {
     config.resolve = {
       ...config.resolve,
@@ -119,5 +147,5 @@ module.exports = removeImports({
     );
     return config;
   }
-  */
 });
+*/
