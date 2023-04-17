@@ -25,6 +25,10 @@ import { isValidHex } from "../utils/vaild";
 const { posts, tags, post_tag, files, users } = models;
 const appRouter = express.Router();
 
+const getSubPathOfPost = (id: number, writterId: string, title: string) => {
+  return base64.encode(utf8.encode(JSON.stringify({ id, writterId, title })));
+};
+
 const findPaths = async () => {
   const list = await posts
     .findAll({
@@ -136,9 +140,7 @@ appRouter.get("/list", authCheck, async (req, res) => {
     const pathMapping = filtering.map((item: any) => {
       return {
         ...item,
-        subpath: base64.encode(
-          utf8.encode(JSON.stringify({ id: item.id, writterId: item.writterId, title: item.title }))
-        )
+        subpath: getSubPathOfPost(item.id, item.writterId, item.title)
       };
     });
     return res.status(200).send({ result: true, data: pathMapping, message: "게시글 목록이 조회되었습니다." });
@@ -223,7 +225,7 @@ appRouter.get("/recommend/:content", authCheck, async (req, res) => {
             }
             const datas = data;
             datas.overlapCount = overlapCount;
-            datas.subpath = base64.encode(utf8.encode(JSON.stringify({ id: data.id, writterId: data.writterId })));
+            datas.subpath = getSubPathOfPost(data.id, data.writterId, data.title);
             return datas;
           })
           .sort((a: any, b: any) => sortDesc(a, b, "viewCount"))
