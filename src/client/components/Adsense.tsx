@@ -7,14 +7,17 @@ const Container = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
+  width: 100%;
+  height: 100px;
   * {
+    height: 100px;
     max-height: 100px;
   }
 `;
 
-const AdsComponents = () => {
+const AdsComponents = (Props: { isRelative?: boolean; }) => {
   return (
-    <Container style={{ maxHeight: "100px" }}>
+    <Container style={{ maxHeight: "100px", position: Props.isRelative ? "relative" : "absolute" }}>
       <ins
         className="adsbygoogle"
         style={{ display: "block", maxHeight: "100px" }}
