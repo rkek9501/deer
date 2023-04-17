@@ -2,6 +2,7 @@ import React from "react";
 import type { GetStaticPaths, GetStaticProps } from "next";
 import dynamic from "next/dynamic";
 import styled from "styled-components";
+import { BeatLoader } from "react-spinners";
 
 import AdsComponents from "@components/Adsense";
 import { Viewer } from "@components/Editor";
@@ -15,12 +16,22 @@ import UserView from "@components/post/UserView";
 import BookMark from "@components/TableOfContents";
 import Tag from "@components/TagBlock";
 
-const Carousel = dynamic(() => import("@components/Carousel"), { ssr: false });
-const Comment = dynamic(() => import("@components/Comment"), { ssr: false });
-
 import useLoadPost from "@hooks/useLoadPost";
 import RequestHelper from "@utils/requestHelper";
-// import { base64, utf8 } from "@utils/crypto";
+
+const CommentArea = styled.div`
+  max-height: 250px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-contents: center;
+`;
+
+const Carousel = dynamic(() => import("@components/Carousel"), { ssr: false });
+const Comment = dynamic(() => import("@components/Comment"), {
+  ssr: false,
+  loading: () => <CommentArea><BeatLoader color="#005fee" size={30} margin={10} /></CommentArea>
+});
 
 const PageContainer = styled.div`
   height: inherit;

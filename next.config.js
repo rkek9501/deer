@@ -15,7 +15,9 @@ const HOST_URL = IS_LOCAL ? `https://${SERVER_URL}:${SERVER_PORT}` : `https://${
 const env = {
   HOST_URL,
   FB_STREAM_GID: process.env.FB_STREAM_GID || "",
-  ADSENSE_CLIENT: process.env.ADSENSE_CLIENT || ""
+  ADSENSE_CLIENT: process.env.ADSENSE_CLIENT || "",
+  COMMENT_REPO: process.env.COMMENT_REPO || "",
+  COMMENT_LABEL: process.env.COMMENT_LABEL || "",
 };
 
 module.exports = removeImports({

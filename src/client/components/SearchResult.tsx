@@ -4,6 +4,7 @@ import Masonry from "react-masonry-css";
 import styled from "styled-components";
 
 import Card from "./Card";
+import AdsComponents from "./Adsense";
 
 const SearchContainer = styled.div`
   width: 100%;
@@ -102,6 +103,7 @@ const SearchResult = (props: { posts: any }) => {
         </div>
         <div className="date-filter"></div>
         <MasonryView data={props.posts} />
+        <AdsComponents isRelative />
       </SearchContainer>
     );
   } else {
