@@ -188,7 +188,7 @@ appRouter.get("/recommend/:content", authCheck, async (req, res) => {
 
     const list = await posts
       .findAll({
-        where: { id: { [Op.not]: decode.id }, deletedAt: null },
+        where: { id: { [Op.not]: decode.id }, openState: "Y", deletedAt: null },
         // where: { openState: "Y", deletedAt: null, id: { [Op.not]: decode.id } },
         attributes: {
           exclude: ["content", "deletedAt"]
